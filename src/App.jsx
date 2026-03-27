@@ -16,7 +16,7 @@ const DATA = {
   role: "Основатель бутик-турагентства",
   badge: "Влюблена в море",
   // Твоё фото из папки public! Просто положи туда avatar.jpg
-  avatarUrl: ".avatar.jpg",
+  avatarUrl: "avatar.jpg",
   bgUrl: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&q=80&w=1000",
   // Добавили туры сюда, чтобы было удобно менять фото и текст!
   tours: [
@@ -38,7 +38,10 @@ const DATA = {
 // ==========================================
 // ШАБЛОН 1: Живой Океан (Liquid Ocean) - Твой оригинал
 // ==========================================
-const Template1 = () => (
+const Template1 = () => {
+  const [isAboutOpen, setIsAboutOpen] = useState(false);
+
+  return (
   <div className="relative min-h-screen bg-[#f4fbfc] overflow-hidden flex justify-center text-slate-800 font-sans selection:bg-cyan-200 w-full">
     {/* АНИМИРОВАННЫЙ ФОН */}
     <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-cyan-200/50 rounded-full mix-blend-multiply filter blur-[80px] opacity-70 animate-float-slow"></div>
@@ -70,18 +73,21 @@ const Template1 = () => (
         </div>
       </button>
 
-      {/* --- ИНТЕРАКТИВНЫЙ БЛОК ОБО МНЕ (Раскрывается при наведении) --- */}
-      <div className="w-full glass-panel px-6 py-5 rounded-[2rem] mb-8 relative overflow-hidden group cursor-pointer transition-all hover:bg-white/60">
+      {/* --- ИНТЕРАКТИВНЫЙ БЛОК ОБО МНЕ (Раскрывается по клику) --- */}
+      <div 
+        onClick={() => setIsAboutOpen(!isAboutOpen)}
+        className="w-full glass-panel px-6 py-5 rounded-[2rem] mb-8 relative overflow-hidden cursor-pointer transition-all hover:bg-white/60"
+      >
         <div className="absolute top-0 right-0 w-24 h-24 bg-teal-200/40 rounded-full blur-2xl -mr-10 -mt-10"></div>
         <div className="flex items-center justify-between relative z-10">
           <h3 className="text-xl font-bold text-slate-800 flex items-center gap-2">
             <Sparkles className="w-5 h-5 text-teal-500" /> Обо мне
           </h3>
-          <div className="w-8 h-8 rounded-full bg-teal-100 flex items-center justify-center text-teal-500 group-hover:rotate-180 transition-transform duration-500">
+          <div className={`w-8 h-8 rounded-full bg-teal-100 flex items-center justify-center text-teal-500 transition-transform duration-500 ${isAboutOpen ? 'rotate-180' : 'rotate-0'}`}>
              <ChevronRight className="w-5 h-5 rotate-90" />
           </div>
         </div>
-        <div className="grid grid-rows-[0fr] group-hover:grid-rows-[1fr] transition-all duration-500 ease-in-out relative z-10">
+        <div className={`grid transition-all duration-500 ease-in-out relative z-10 ${isAboutOpen ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'}`}>
           <div className="overflow-hidden">
             <p className="text-sm text-slate-600 font-medium leading-relaxed pt-4 border-t border-teal-100/50 mt-4">
               {DATA.aboutText}
@@ -114,16 +120,16 @@ const Template1 = () => (
         </div>
       </div>
 
-      {/* --- ГОРЯЩИЕ ТУРЫ (ВАРИАНТ 1: Живой Океан - Широкие стеклянные карточки) --- */}
+      {/* --- ГОРЯЩИЕ ТУРЫ (ВАРИАНТ 1: Живой Океан - Свайп-карусель стеклянных карточек) --- */}
       <div className="w-full mb-10">
         <div className="flex items-center gap-2 px-2 mb-4">
           <div className="w-8 h-8 rounded-full bg-orange-100 flex items-center justify-center text-orange-500 animate-pulse"><Flame className="w-4 h-4" /></div>
           <h3 className="text-xl font-bold text-slate-800">Горящие туры</h3>
         </div>
-        <div className="flex flex-col gap-4">
+        <div className="flex overflow-x-auto gap-4 hide-scrollbar snap-x snap-mandatory pb-4 px-2">
           {DATA.hotTours.map(tour => (
-            <div key={tour.id} className="glass-panel p-2 rounded-[2rem] flex items-center gap-4 group cursor-pointer hover:bg-white/70 transition-all hover:shadow-[0_15px_30px_rgba(13,148,136,0.15)] hover:-translate-y-1">
-              <div className="w-24 h-24 rounded-[1.5rem] overflow-hidden relative shadow-inner border border-white">
+            <div key={tour.id} className="min-w-[85%] snap-center glass-panel p-2 rounded-[2rem] flex items-center gap-4 group cursor-pointer hover:bg-white/70 transition-all hover:shadow-[0_15px_30px_rgba(13,148,136,0.15)] hover:-translate-y-1">
+              <div className="w-24 h-24 rounded-[1.5rem] overflow-hidden relative shadow-inner border border-white shrink-0">
                 <img src={tour.img} alt={tour.hotelName} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
                 <div className="absolute top-1 left-1 bg-white/90 backdrop-blur-md rounded-full px-2 py-0.5 text-[8px] font-bold text-orange-500 uppercase tracking-wider">-25%</div>
               </div>
@@ -132,9 +138,12 @@ const Template1 = () => (
                 <div className="flex items-center gap-1 text-[10px] text-slate-500 mb-2 font-medium">
                   <CalendarDays className="w-3 h-3 text-cyan-500" /> {tour.dates}
                 </div>
-                <div className="flex items-end gap-2">
-                  <span className="font-extrabold text-lg text-teal-600 leading-none">{tour.price}</span>
-                  <span className="text-xs text-slate-400 line-through decoration-orange-400/50 mb-0.5">{tour.oldPrice}</span>
+                <div className="flex items-end justify-between pr-1">
+                  <div>
+                    <div className="text-[10px] text-slate-400 line-through decoration-orange-400/50 mb-0.5">{tour.oldPrice}</div>
+                    <div className="font-extrabold text-lg text-teal-600 leading-none">{tour.price}</div>
+                  </div>
+                  <ArrowRight className="w-4 h-4 text-cyan-400 opacity-50 group-hover:opacity-100 transition-opacity" />
                 </div>
               </div>
             </div>
@@ -211,7 +220,8 @@ const Template1 = () => (
       </div>
     </div>
   </div>
-);
+  );
+};
 
 // ==========================================
 // ШАБЛОН 2: Тропическая Арка (Tropical Arch)
@@ -284,16 +294,16 @@ const Template2 = () => {
         </div>
       </div>
 
-      {/* --- ГОРЯЩИЕ ТУРЫ (ВАРИАНТ 2: Тропическая Арка - Элегантный билет) --- */}
+      {/* --- ГОРЯЩИЕ ТУРЫ (ВАРИАНТ 2: Тропическая Арка - Горизонтальный скролл карточек) --- */}
       <div className="w-full mb-12 font-sans relative z-10">
         <h3 className="text-lg font-serif italic text-[#8B7E66] mb-4 px-2 flex items-center gap-2"><Flame className="w-5 h-5 text-[#F4A460]" /> Специальные предложения:</h3>
-        <div className="flex flex-col gap-5">
+        <div className="flex overflow-x-auto gap-4 hide-scrollbar snap-x snap-mandatory pb-6 px-2">
           {DATA.hotTours.map(tour => (
-            <div key={tour.id} className="bg-white/80 backdrop-blur-md border border-white rounded-3xl p-3 flex gap-4 shadow-[0_10px_30px_rgba(0,0,0,0.03)] hover:shadow-[0_15px_40px_rgba(32,178,170,0.1)] transition-all cursor-pointer group">
-              <div className="w-20 h-full min-h-[100px] rounded-2xl overflow-hidden rounded-t-[50px] relative">
+            <div key={tour.id} className="min-w-[90%] snap-center bg-white/80 backdrop-blur-md border border-white rounded-3xl p-3 flex gap-4 shadow-[0_10px_30px_rgba(0,0,0,0.03)] hover:shadow-[0_15px_40px_rgba(32,178,170,0.1)] transition-all cursor-pointer group shrink-0">
+              <div className="w-20 h-full min-h-[100px] rounded-2xl overflow-hidden rounded-t-[50px] relative shrink-0">
                 <img src={tour.img} alt={tour.hotelName} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
               </div>
-              <div className="flex-1 py-1 flex flex-col justify-between">
+              <div className="flex-1 py-1 flex flex-col justify-between pr-1">
                 <div>
                   <h4 className="font-medium text-[#2C3E50] text-[16px] leading-tight">{tour.hotelName}</h4>
                   <p className="text-[10px] text-[#8B7E66] uppercase tracking-widest mt-1 mb-2">{tour.loc}</p>
@@ -303,7 +313,7 @@ const Template2 = () => {
                     <span className="text-[10px] text-[#8B7E66] block mb-0.5 line-through">{tour.oldPrice}</span>
                     <span className="font-serif italic text-[#20B2AA] font-bold text-lg leading-none">{tour.price}</span>
                   </div>
-                  <div className="bg-[#F4EFE6] text-[#8B7E66] text-[9px] px-2 py-1 rounded-full uppercase tracking-widest">
+                  <div className="bg-[#F4EFE6] text-[#8B7E66] text-[9px] px-2 py-1 rounded-full uppercase tracking-widest flex items-center h-fit">
                     {tour.dates}
                   </div>
                 </div>
@@ -434,7 +444,7 @@ const Template3 = () => {
         </p>
       </div>
 
-      {/* --- ИНТЕРАКТИВНЫЙ БЛОК ОБО МНЕ (Кнопка + Всплывающий Попап) --- */}
+      {/* --- ИНТЕРАКТИВНЫЙ БЛОК ОБО МНЕ (Кнопка + Всплывающий Попап с плавным переходом) --- */}
       <button 
         onClick={() => setShowAbout(true)} 
         className="w-full p-5 rounded-3xl backdrop-blur-xl bg-white/30 shadow-[0_8px_32px_rgba(0,100,100,0.05)] border border-white/60 mb-8 flex justify-between items-center hover:bg-white/50 transition-all group"
@@ -448,10 +458,13 @@ const Template3 = () => {
         </div>
       </button>
 
-      {/* Само Модальное окно */}
-      <div className={`fixed inset-0 z-50 flex items-center justify-center px-4 transition-all duration-500 ${showAbout ? 'opacity-100 visible' : 'opacity-0 invisible pointer-events-none'}`}>
-        <div className="absolute inset-0 bg-[#004d40]/20 backdrop-blur-md" onClick={() => setShowAbout(false)}></div>
-        <div className={`bg-white/90 backdrop-blur-xl p-8 rounded-[2rem] border border-white/50 max-w-sm w-full relative transform transition-transform duration-500 ${showAbout ? 'translate-y-0 scale-100' : 'translate-y-10 scale-95'}`}>
+      {/* Само Модальное окно (Исправлена резкость!) */}
+      <div className={`fixed inset-0 z-50 flex items-center justify-center px-4 transition-all duration-700 ease-in-out ${showAbout ? 'opacity-100 visible' : 'opacity-0 invisible pointer-events-none'}`}>
+        <div 
+          className={`absolute inset-0 bg-[#004d40]/20 transition-all duration-700 ease-in-out ${showAbout ? 'backdrop-blur-md opacity-100' : 'backdrop-blur-none opacity-0'}`} 
+          onClick={() => setShowAbout(false)}
+        ></div>
+        <div className={`bg-white/90 backdrop-blur-xl p-8 rounded-[2rem] border border-white/50 max-w-sm w-full relative transform transition-all duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] ${showAbout ? 'translate-y-0 scale-100 opacity-100' : 'translate-y-12 scale-95 opacity-0'}`}>
           <button onClick={() => setShowAbout(false)} className="absolute top-5 right-5 w-8 h-8 flex items-center justify-center bg-[#F0FFFF] rounded-full text-[#00695c] hover:bg-[#E0FFFF] transition-colors"><X className="w-4 h-4" /></button>
           <div className="w-12 h-12 bg-[#E0FFFF] rounded-2xl flex items-center justify-center mb-5 text-[#004d40]">
             <Heart className="w-6 h-6" />
@@ -513,7 +526,7 @@ const Template3 = () => {
         </div>
       </div>
 
-      {/* --- ОТЗЫВЫ (ВАРИАНТ 3: Жемчужный слайдер с точками) --- */}
+      {/* --- ОТЗЫВЫ (ВАРИАНТ 3: Жемчужный слайдер с удобной навигацией) --- */}
       <div className="w-full mb-12 relative z-10 px-4">
         <h3 className="text-lg font-medium text-[#00695c] opacity-90 mb-6 text-center">Истории путешественников</h3>
         
@@ -539,14 +552,30 @@ const Template3 = () => {
             ))}
           </div>
 
-          <div className="flex justify-center gap-2 mt-4 relative z-10">
-            {DATA.reviews.map((_, idx) => (
-              <button 
-                key={idx}
-                onClick={() => setActiveReview(idx)}
-                className={`transition-all duration-300 rounded-full ${idx === activeReview ? 'w-6 h-1.5 bg-[#00695c]' : 'w-1.5 h-1.5 bg-[#00695c]/30 hover:bg-[#00695c]/50'}`}
-              />
-            ))}
+          <div className="flex justify-between items-center mt-2 relative z-10 w-full">
+            <button 
+              onClick={() => setActiveReview((prev) => (prev - 1 + DATA.reviews.length) % DATA.reviews.length)} 
+              className="p-3 -ml-3 text-[#00695c]/40 hover:text-[#00695c] transition-colors"
+            >
+              <ChevronRight className="w-6 h-6 rotate-180" />
+            </button>
+            <div className="flex justify-center gap-1">
+              {DATA.reviews.map((_, idx) => (
+                <button 
+                  key={idx}
+                  onClick={() => setActiveReview(idx)}
+                  className="p-3 -m-3 group" // Большая зона клика!
+                >
+                  <div className={`transition-all duration-300 rounded-full mx-auto ${idx === activeReview ? 'w-6 h-1.5 bg-[#00695c]' : 'w-1.5 h-1.5 bg-[#00695c]/30 group-hover:bg-[#00695c]/50'}`} />
+                </button>
+              ))}
+            </div>
+            <button 
+              onClick={() => setActiveReview((prev) => (prev + 1) % DATA.reviews.length)} 
+              className="p-3 -mr-3 text-[#00695c]/40 hover:text-[#00695c] transition-colors"
+            >
+              <ChevronRight className="w-6 h-6" />
+            </button>
           </div>
         </div>
       </div>
@@ -662,12 +691,12 @@ const Template4 = () => {
         </div>
       </div>
 
-      {/* --- ГОРЯЩИЕ ТУРЫ (ВАРИАНТ 4: Небесный Эффект - Билеты-отрывные талоны) --- */}
+      {/* --- ГОРЯЩИЕ ТУРЫ (ВАРИАНТ 4: Небесный Эффект - Горизонтальный скролл Билетов) --- */}
       <div className="w-full mb-12">
         <h3 className="text-lg font-bold text-slate-700 mb-4 px-4 flex items-center gap-2"><Flame className="w-5 h-5 text-orange-400" /> Горящие туры</h3>
-        <div className="flex flex-col gap-5 px-2">
+        <div className="flex overflow-x-auto gap-5 px-4 pb-6 pt-2 snap-x snap-mandatory hide-scrollbar">
           {DATA.hotTours.map((tour) => (
-            <div key={tour.id} className="flex bg-white rounded-3xl shadow-lg shadow-[#87CEFA]/15 border border-[#E6F3FF] cursor-pointer group hover:-translate-y-1 hover:shadow-xl transition-all overflow-hidden">
+            <div key={tour.id} className="min-w-[90%] snap-center flex bg-white rounded-3xl shadow-[0_10px_20px_rgba(135,206,250,0.1)] border border-[#E6F3FF] cursor-pointer group hover:-translate-y-1 hover:shadow-[0_15px_30px_rgba(135,206,250,0.15)] transition-all overflow-hidden shrink-0">
               <div className="w-2/5 relative">
                 <img src={tour.img} alt={tour.hotelName} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                 <div className="absolute top-0 left-0 bg-orange-400 text-white text-[9px] font-bold uppercase tracking-wider px-2 py-1 rounded-br-xl">Promo</div>
@@ -853,14 +882,14 @@ const Template5 = () => {
         ))}
       </div>
 
-      {/* --- ГОРЯЩИЕ ТУРЫ (ВАРИАНТ 5: Кристальный Оазис - Диагональные ленты и жесткие блики) --- */}
+      {/* --- ГОРЯЩИЕ ТУРЫ (ВАРИАНТ 5: Кристальный Оазис - Горизонтальный скролл) --- */}
       <div className="w-full mb-12 px-2">
         <h3 className="font-bold text-gray-900 text-lg uppercase tracking-wider mb-4 flex items-center gap-2">
           <Flame className="w-6 h-6 text-[#FF6347]" /> Горящие туры
         </h3>
-        <div className="grid grid-cols-1 gap-6">
+        <div className="flex overflow-x-auto gap-5 pb-6 pt-2 snap-x snap-mandatory hide-scrollbar">
           {DATA.hotTours.map(tour => (
-            <div key={tour.id} className="relative bg-white/80 backdrop-blur-xl rounded-xl border border-white shadow-md overflow-hidden group cursor-pointer hover:shadow-xl transition-shadow">
+            <div key={tour.id} className="min-w-[85%] snap-center relative bg-white/80 backdrop-blur-xl rounded-xl border border-white shadow-md overflow-hidden group cursor-pointer hover:shadow-xl transition-shadow shrink-0">
               {/* Диагональная лента */}
               <div className="absolute -right-8 top-4 bg-[#FF6347] text-white text-[10px] font-black uppercase tracking-widest px-10 py-1 rotate-45 z-20 shadow-md">
                 SALE
