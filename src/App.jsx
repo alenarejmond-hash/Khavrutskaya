@@ -701,12 +701,12 @@ const Template4 = () => {
         </div>
       </div>
 
-      {/* --- ГОРЯЩИЕ ТУРЫ (ВАРИАНТ 4: ПОЛНАЯ ПЕРЕДЕЛКА - ВЕРТИКАЛЬНЫЕ ПАРЯЩИЕ КАРТОЧКИ) --- */}
+      {/* --- ГОРЯЩИЕ ТУРЫ (ВАРИАНТ 4: ПОЛНАЯ ПЕРЕДЕЛКА - ГОРИЗОНТАЛЬНЫЕ ПАРЯЩИЕ КАРТОЧКИ) --- */}
       <div className="w-full mb-12">
         <h3 className="text-lg font-bold text-slate-700 mb-4 px-4 flex items-center gap-2"><Flame className="w-5 h-5 text-orange-400" /> Горящие туры</h3>
-        <div className="flex flex-col gap-6 px-4">
+        <div className="flex overflow-x-auto gap-5 px-4 pb-6 pt-2 snap-x snap-mandatory hide-scrollbar">
           {DATA.hotTours.map((tour) => (
-             <div key={tour.id} className="bg-white rounded-3xl p-3 shadow-[0_10px_20px_rgba(135,206,250,0.1)] border border-[#E6F3FF] hover:-translate-y-1 transition-all group cursor-pointer">
+             <div key={tour.id} className="min-w-[85%] snap-center shrink-0 bg-white rounded-3xl p-3 shadow-[0_10px_20px_rgba(135,206,250,0.1)] border border-[#E6F3FF] hover:-translate-y-1 transition-all group cursor-pointer">
                 <div className="w-full h-40 rounded-2xl overflow-hidden relative mb-3">
                    <img src={tour.img} alt={tour.hotelName} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"/>
                    <div className="absolute top-2 left-2 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-[10px] font-bold text-[#87CEFA] uppercase tracking-widest shadow-sm">Promo</div>
@@ -832,7 +832,10 @@ const Template5 = () => {
 
       <div className="text-center mb-10">
         <h1 className="text-4xl font-black tracking-tight mb-2 uppercase">{DATA.name}</h1>
-        <h2 className="text-xl font-medium text-[#00CED1] uppercase tracking-widest">{DATA.lastName}</h2>
+        <h2 className="text-xl font-medium text-[#00CED1] uppercase tracking-widest mb-3">{DATA.lastName}</h2>
+        <p className="text-gray-500 font-bold text-[10px] uppercase tracking-[0.2em] flex items-center justify-center gap-2">
+          <Gem className="w-3 h-3 text-[#FF7F50]" /> {DATA.role} <Gem className="w-3 h-3 text-[#FF7F50]" />
+        </p>
       </div>
 
       {/* --- ИНТЕРАКТИВНЫЙ БЛОК ОБО МНЕ (Горизонтальный свайп-карусель) --- */}
