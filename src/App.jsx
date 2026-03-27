@@ -8,7 +8,7 @@ const DATA = {
   role: "Основатель бутик-турагентства",
   badge: "Влюблена в море",
   // Твоё фото из папки public! Просто положи туда avatar.jpg
-  avatarUrl: ".avatar.jpg",
+  avatarUrl: "avatar.jpg",
   bgUrl: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&q=80&w=1000",
   // Добавили туры сюда, чтобы было удобно менять фото и текст!
   tours: [
