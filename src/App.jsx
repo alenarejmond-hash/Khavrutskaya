@@ -1292,6 +1292,7 @@ const Template6 = () => {
 const Template7 = () => {
   const [isQuizOpen, setIsQuizOpen] = useState(false);
   const [activeReview, setActiveReview] = useState(0);
+  const [isFlipped, setIsFlipped] = useState(false);
 
   const nextRev = () => setActiveReview(p => (p + 1) % DATA.reviews.length);
   const prevRev = () => setActiveReview(p => (p - 1 + DATA.reviews.length) % DATA.reviews.length);
@@ -1432,8 +1433,11 @@ const Template7 = () => {
         </div>
 
         {/* --- ИНТЕРАКТИВНЫЙ БЛОК ОБО МНЕ (3D Flip Card - переворот) --- */}
-        <div className="px-5 mb-12 h-44 group [perspective:1000px]">
-          <div className="relative w-full h-full transition-all duration-700 [transform-style:preserve-3d] group-hover:[transform:rotateY(180deg)] cursor-pointer shadow-[0_15px_30px_-10px_rgba(0,0,0,0.05)] hover:shadow-lg rounded-3xl">
+        <div className="px-5 mb-12 h-44 [perspective:1000px]">
+          <div 
+            onClick={() => setIsFlipped(!isFlipped)}
+            className={`relative w-full h-full transition-all duration-700 [transform-style:preserve-3d] cursor-pointer shadow-[0_15px_30px_-10px_rgba(0,0,0,0.05)] hover:shadow-lg rounded-3xl ${isFlipped ? '[transform:rotateY(180deg)]' : ''}`}
+          >
             
             {/* Лицевая сторона */}
             <div className="absolute inset-0 glass-panel-light rounded-3xl p-6 flex flex-col items-center justify-center [backface-visibility:hidden]">
@@ -1442,7 +1446,7 @@ const Template7 = () => {
               </div>
               <h2 className="font-serif text-xl text-slate-900">Узнать обо мне</h2>
               <div className="absolute bottom-4 text-[9px] uppercase text-slate-400 tracking-[0.2em] animate-pulse flex items-center gap-1">
-                Наведите для переворота <ChevronRight className="w-3 h-3" />
+                Нажмите для переворота <ChevronRight className="w-3 h-3" />
               </div>
             </div>
             
@@ -1631,7 +1635,7 @@ const Template7 = () => {
         </footer>
 
         {/* --- Модальное окно Квиза --- */}
-        <div className={`fixed inset-x-0 bottom-0 z-50 transition-transform duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] flex justify-center ${isQuizOpen ? 'translate-y-0' : 'translate-y-full'}`}>
+        <div className={`fixed inset-x-0 bottom-0 z-50 transition-all duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] flex justify-center ${isQuizOpen ? 'translate-y-0 opacity-100 visible' : 'translate-y-[120%] opacity-0 invisible pointer-events-none'}`}>
           <div className="w-full max-w-md bg-white/95 backdrop-blur-3xl border-t border-white rounded-t-[2.5rem] p-8 shadow-[0_-10px_40px_rgba(0,0,0,0.1)]">
             <div className="w-12 h-1 bg-slate-200 rounded-full mx-auto mb-8"></div>
             
