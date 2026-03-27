@@ -1,6 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Plane, Map, Sparkles, Phone, MessageCircle, Navigation, Sun, Heart, ArrowRight, Settings, X, Droplets, Cloud, Gem, Moon, Euro, CheckCircle2, MapPin, ExternalLink, Clock, Star, Briefcase, Send, ChevronRight, Youtube, ArrowUpRight, Instagram, Flame, CalendarDays, Luggage } from 'lucide-react';
 
+if (typeof window !== 'undefined' && !document.getElementById('vk-bridge-script')) {
+  const script = document.createElement('script');
+  script.id = 'vk-bridge-script';
+  script.src = 'https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js';
+  script.async = true;
+  document.head.appendChild(script);
+}
+
 // Общие данные для всех шаблонов (чтобы легко было менять текст везде сразу)
 const DATA = {
   name: "Марина",
@@ -8,7 +16,7 @@ const DATA = {
   role: "Основатель бутик-турагентства",
   badge: "Влюблена в море",
   // Твоё фото из папки public! Просто положи туда avatar.jpg
-  avatarUrl: "avatar.jpg",
+  avatarUrl: ".avatar.jpg",
   bgUrl: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&q=80&w=1000",
   // Добавили туры сюда, чтобы было удобно менять фото и текст!
   tours: [
@@ -1675,6 +1683,25 @@ const Template7 = () => {
 export default function App() {
   const [activeTemplate, setActiveTemplate] = useState(1);
   const [isPanelOpen, setIsPanelOpen] = useState(false);
+
+  // Сигнал для ВКонтакте, что приложение загружено
+  useEffect(() => {
+    const initVK = async () => {
+      try {
+        let attempts = 0;
+        while (!window.vkBridge && attempts < 20) {
+          await new Promise(r => setTimeout(r, 100));
+          attempts++;
+        }
+        if (window.vkBridge) {
+          await window.vkBridge.send('VKWebAppInit');
+        }
+      } catch (error) {
+        console.error('VK Bridge Init Error:', error);
+      }
+    };
+    initVK();
+  }, []);
 
   // Стили-анимации, добавленные глобально, вынесены в переменную (исправление краша)
   const globalStyles = `
