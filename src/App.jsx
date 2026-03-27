@@ -208,7 +208,10 @@ const Template1 = () => (
 // ==========================================
 // ШАБЛОН 2: Тропическая Арка (Tropical Arch)
 // ==========================================
-const Template2 = () => (
+const Template2 = () => {
+  const [activeReview, setActiveReview] = useState(0);
+
+  return (
   <div className="relative min-h-screen bg-[#FDFBF7] overflow-hidden flex justify-center text-[#2C3E50] font-serif w-full">
     {/* Декор арки на фоне */}
     <div className="absolute top-0 w-full max-w-md h-[40vh] bg-[#F4EFE6] rounded-b-[5rem] shadow-sm"></div>
@@ -302,33 +305,59 @@ const Template2 = () => (
         </div>
       </div>
 
-      {/* --- ОТЗЫВЫ (ВАРИАНТ 2: Элегантные арки с цитатами) --- */}
-      <div className="w-full mb-12 font-sans relative z-10 px-2">
+      {/* --- ОТЗЫВЫ (ВАРИАНТ 2: Элегантная интерактивная колода карт) --- */}
+      <div className="w-full mb-12 font-sans relative z-10 px-4">
         <h3 className="text-lg font-serif italic text-[#8B7E66] mb-6 flex items-center justify-center gap-2">
           <span className="w-8 h-[1px] bg-[#E5DCC5]"></span> Что говорят клиенты <span className="w-8 h-[1px] bg-[#E5DCC5]"></span>
         </h3>
-        <div className="flex flex-col gap-6">
-          {DATA.reviews.map(review => (
-            <div key={review.id} className="bg-white/60 backdrop-blur-sm border border-[#E5DCC5]/50 rounded-2xl p-5 relative shadow-sm">
-              <div className="absolute -top-4 right-4 text-4xl text-[#20B2AA]/20 font-serif leading-none">"</div>
-              <div className="flex items-center gap-4 mb-3">
-                <div className="w-12 h-14 rounded-t-full rounded-b-md overflow-hidden border-2 border-white shadow-sm">
-                  <img src={review.avatar} alt={review.name} className="w-full h-full object-cover" />
-                </div>
-                <div>
-                  <h4 className="font-bold text-[#2C3E50] text-sm">{review.name}</h4>
-                  <div className="flex gap-0.5 mt-1">
-                    {[...Array(5)].map((_, i) => (
-                      <Star key={i} className="w-3 h-3 text-[#F4A460] fill-[#F4A460]" />
-                    ))}
+        <div 
+          className="relative h-[220px] w-full cursor-pointer group"
+          onClick={() => setActiveReview(prev => (prev + 1) % DATA.reviews.length)}
+        >
+          {DATA.reviews.map((review, i) => {
+            const offset = (i - activeReview + DATA.reviews.length) % DATA.reviews.length;
+            const isTop = offset === 0;
+            const scale = 1 - (offset * 0.05);
+            const translateY = offset * 12; 
+            const zIndex = 30 - offset;
+            const opacity = offset > 2 ? 0 : 1 - (offset * 0.15);
+
+            return (
+              <div 
+                key={review.id} 
+                className="absolute top-0 left-0 w-full bg-white/95 backdrop-blur-md border border-[#E5DCC5]/60 rounded-2xl p-5 shadow-[0_10px_30px_rgba(0,0,0,0.06)] transition-all duration-500 ease-[cubic-bezier(0.25,0.1,0.25,1)]"
+                style={{ 
+                  zIndex, 
+                  transform: `translateY(${translateY}px) scale(${scale})`, 
+                  opacity,
+                  visibility: opacity === 0 ? 'hidden' : 'visible'
+                }}
+              >
+                <div className="absolute -top-4 right-4 text-4xl text-[#20B2AA]/20 font-serif leading-none">"</div>
+                <div className="flex items-center gap-4 mb-3">
+                  <div className="w-12 h-14 rounded-t-full rounded-b-md overflow-hidden border-2 border-white shadow-sm">
+                    <img src={review.avatar} alt={review.name} className="w-full h-full object-cover" />
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-[#2C3E50] text-sm">{review.name}</h4>
+                    <div className="flex gap-0.5 mt-1">
+                      {[...Array(5)].map((_, idx) => (
+                        <Star key={idx} className="w-3 h-3 text-[#F4A460] fill-[#F4A460]" />
+                      ))}
+                    </div>
                   </div>
                 </div>
+                <p className="text-sm text-[#8B7E66] font-serif italic leading-relaxed line-clamp-3">
+                  {review.text}
+                </p>
+                {isTop && (
+                  <div className="absolute -bottom-3 right-4 bg-[#F4EFE6] text-[#8B7E66] text-[9px] uppercase tracking-widest px-3 py-1 rounded-full border border-[#E5DCC5] opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1 shadow-sm">
+                    След. <ArrowRight className="w-3 h-3" />
+                  </div>
+                )}
               </div>
-              <p className="text-sm text-[#8B7E66] font-serif italic leading-relaxed">
-                {review.text}
-              </p>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
 
@@ -367,12 +396,14 @@ const Template2 = () => (
     </div>
   </div>
 );
+};
 
 // ==========================================
 // ШАБЛОН 3: Жемчужный Бриз (Pearl Breeze)
 // ==========================================
 const Template3 = () => {
   const [showAbout, setShowAbout] = useState(false);
+  const [activeReview, setActiveReview] = useState(0);
 
   return (
   <div className="relative min-h-screen bg-gradient-to-br from-[#F0FFFF] to-[#E0FFFF] overflow-hidden flex justify-center text-[#004d40] font-sans w-full">
@@ -474,27 +505,41 @@ const Template3 = () => {
         </div>
       </div>
 
-      {/* --- ОТЗЫВЫ (ВАРИАНТ 3: Каскадные размытые карточки) --- */}
-      <div className="w-full mb-12 relative z-10 px-2">
+      {/* --- ОТЗЫВЫ (ВАРИАНТ 3: Жемчужный слайдер с точками) --- */}
+      <div className="w-full mb-12 relative z-10 px-4">
         <h3 className="text-lg font-medium text-[#00695c] opacity-90 mb-6 text-center">Истории путешественников</h3>
-        <div className="flex flex-col gap-4">
-          {DATA.reviews.map((review, i) => (
-            <div key={review.id} className={`p-5 rounded-[2rem] backdrop-blur-xl bg-white/20 shadow-[0_8px_32px_rgba(0,100,100,0.05)] border border-white/50 relative overflow-hidden ${i % 2 !== 0 ? 'ml-6' : 'mr-6'}`}>
-              <div className="absolute top-0 right-0 w-16 h-16 bg-[#E0FFFF]/30 rounded-full blur-xl"></div>
-              <div className="flex gap-1 mb-2 relative z-10">
-                {[...Array(5)].map((_, idx) => (
-                  <Star key={idx} className="w-3.5 h-3.5 text-[#00695c] fill-white/50" />
-                ))}
+        
+        <div className="relative p-6 rounded-[2rem] backdrop-blur-xl bg-white/20 shadow-[0_8px_32px_rgba(0,100,100,0.05)] border border-white/50 overflow-hidden min-h-[230px] flex flex-col justify-between">
+          <div className="absolute top-0 right-0 w-24 h-24 bg-[#E0FFFF]/40 rounded-full blur-2xl"></div>
+          
+          <div className="relative z-10 flex-1 relative min-h-[140px] w-full">
+            {DATA.reviews.map((review, i) => (
+              <div key={review.id} className={`absolute inset-0 transition-all duration-500 ease-in-out flex flex-col justify-center ${i === activeReview ? 'opacity-100 translate-x-0 z-10' : 'opacity-0 translate-x-8 pointer-events-none z-0'}`}>
+                <div className="flex gap-1 mb-3">
+                  {[...Array(5)].map((_, idx) => (
+                    <Star key={idx} className="w-3.5 h-3.5 text-[#00695c] fill-white/50" />
+                  ))}
+                </div>
+                <p className="text-sm text-[#004d40] font-medium leading-relaxed mb-5 italic line-clamp-3">
+                  "{review.text}"
+                </p>
+                <div className="flex items-center gap-3">
+                  <img src={review.avatar} alt={review.name} className="w-10 h-10 rounded-full object-cover border-2 border-[#00695c]/20 shadow-sm" />
+                  <span className="text-xs font-bold text-[#00695c] uppercase tracking-widest">{review.name}</span>
+                </div>
               </div>
-              <p className="text-sm text-[#004d40] font-medium leading-relaxed mb-4 relative z-10">
-                {review.text}
-              </p>
-              <div className="flex items-center gap-3 relative z-10">
-                <img src={review.avatar} alt={review.name} className="w-8 h-8 rounded-full object-cover border border-[#00695c]/30" />
-                <span className="text-xs font-bold text-[#00695c] uppercase tracking-widest">{review.name}</span>
-              </div>
-            </div>
-          ))}
+            ))}
+          </div>
+
+          <div className="flex justify-center gap-2 mt-4 relative z-10">
+            {DATA.reviews.map((_, idx) => (
+              <button 
+                key={idx}
+                onClick={() => setActiveReview(idx)}
+                className={`transition-all duration-300 rounded-full ${idx === activeReview ? 'w-6 h-1.5 bg-[#00695c]' : 'w-1.5 h-1.5 bg-[#00695c]/30 hover:bg-[#00695c]/50'}`}
+              />
+            ))}
+          </div>
         </div>
       </div>
 
@@ -539,6 +584,10 @@ const Template3 = () => {
 // ==========================================
 const Template4 = () => {
   const [isExpanded, setIsExpanded] = useState(false);
+  const [activeReview, setActiveReview] = useState(0);
+
+  const nextReview = () => setActiveReview(p => (p + 1) % DATA.reviews.length);
+  const prevReview = () => setActiveReview(p => (p - 1 + DATA.reviews.length) % DATA.reviews.length);
 
   return (
   <div className="relative min-h-screen bg-gradient-to-b from-[#E6F3FF] via-white to-white overflow-hidden flex justify-center text-slate-700 font-sans w-full">
@@ -633,32 +682,45 @@ const Template4 = () => {
         </div>
       </div>
 
-      {/* --- ОТЗЫВЫ (ВАРИАНТ 4: Парящие облачка с тенью) --- */}
-      <div className="w-full mb-12 px-2">
+      {/* --- ОТЗЫВЫ (ВАРИАНТ 4: Парящее облако с навигацией) --- */}
+      <div className="w-full mb-12 px-4">
         <h3 className="text-lg font-bold text-slate-700 mb-6 text-center">Счастливые туристы</h3>
-        <div className="space-y-6">
-          {DATA.reviews.map((review) => (
-            <div key={review.id} className="bg-white rounded-3xl p-5 shadow-[0_15px_30px_rgba(135,206,250,0.15)] border border-[#E6F3FF] relative group hover:-translate-y-1 transition-transform">
-              {/* Хвостик "облачка" чата */}
-              <div className="absolute -bottom-3 left-10 w-6 h-6 bg-white border-b border-r border-[#E6F3FF] transform rotate-45 shadow-[5px_5px_10px_rgba(135,206,250,0.05)]"></div>
-              
-              <div className="flex justify-between items-start mb-3">
-                <div className="flex gap-1">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="w-4 h-4 text-[#FFD700] fill-[#FFD700] group-hover:animate-bounce-slow" style={{animationDelay: `${i * 0.1}s`}} />
-                  ))}
+        
+        <div className="relative bg-white rounded-3xl p-6 shadow-[0_15px_30px_rgba(135,206,250,0.15)] border border-[#E6F3FF] min-h-[220px] flex flex-col justify-between overflow-hidden">
+          <div className="absolute -bottom-3 left-10 w-6 h-6 bg-white border-b border-r border-[#E6F3FF] transform rotate-45 shadow-[5px_5px_10px_rgba(135,206,250,0.05)]"></div>
+          
+          <div className="relative z-10 flex-1 relative min-h-[140px] w-full">
+            {DATA.reviews.map((review, i) => (
+              <div key={review.id} className={`absolute inset-0 transition-all duration-500 ease-out flex flex-col justify-between ${i === activeReview ? 'opacity-100 scale-100 z-10' : 'opacity-0 scale-95 pointer-events-none z-0'}`}>
+                <div>
+                  <div className="flex justify-between items-start mb-4">
+                    <div className="flex gap-1">
+                      {[...Array(5)].map((_, idx) => (
+                        <Star key={idx} className="w-4 h-4 text-[#FFD700] fill-[#FFD700]" />
+                      ))}
+                    </div>
+                    <Sparkles className="w-4 h-4 text-[#87CEFA] opacity-50" />
+                  </div>
+                  <p className="text-sm text-slate-500 font-medium leading-relaxed line-clamp-3">
+                    "{review.text}"
+                  </p>
                 </div>
-                <Sparkles className="w-4 h-4 text-[#87CEFA] opacity-50" />
+                <div className="flex items-center gap-3">
+                  <img src={review.avatar} alt={review.name} className="w-10 h-10 rounded-full object-cover border-2 border-[#E6F3FF]" />
+                  <span className="font-bold text-slate-700 text-sm">{review.name}</span>
+                </div>
               </div>
-              <p className="text-sm text-slate-500 font-medium leading-relaxed mb-4">
-                "{review.text}"
-              </p>
-              <div className="flex items-center gap-3">
-                <img src={review.avatar} alt={review.name} className="w-9 h-9 rounded-full object-cover border-2 border-[#E6F3FF]" />
-                <span className="font-bold text-slate-700 text-sm">{review.name}</span>
-              </div>
-            </div>
-          ))}
+            ))}
+          </div>
+
+          <div className="flex justify-end gap-2 mt-4 relative z-10">
+            <button onClick={prevReview} className="w-8 h-8 rounded-full bg-[#E6F3FF] flex items-center justify-center text-[#87CEFA] hover:bg-[#87CEFA] hover:text-white transition-colors">
+              <ChevronRight className="w-4 h-4 rotate-180" />
+            </button>
+            <button onClick={nextReview} className="w-8 h-8 rounded-full bg-[#E6F3FF] flex items-center justify-center text-[#87CEFA] hover:bg-[#87CEFA] hover:text-white transition-colors">
+              <ChevronRight className="w-4 h-4" />
+            </button>
+          </div>
         </div>
       </div>
 
@@ -701,7 +763,10 @@ const Template4 = () => {
 // ==========================================
 // ШАБЛОН 5: Кристальный Оазис (Crystal Oasis)
 // ==========================================
-const Template5 = () => (
+const Template5 = () => {
+  const [activeRev, setActiveRev] = useState(0);
+
+  return (
   <div className="relative min-h-screen bg-[#FAFAFA] overflow-hidden flex justify-center text-gray-900 font-sans w-full">
     {/* Водные и песочные блики */}
     <div className="absolute top-[-20%] left-[-20%] w-[70%] h-[70%] bg-[#00CED1]/10 rounded-full blur-[100px]"></div>
@@ -817,33 +882,55 @@ const Template5 = () => (
         </div>
       </div>
 
-      {/* --- ОТЗЫВЫ (ВАРИАНТ 5: Кристальные блоки с градиентами) --- */}
-      <div className="w-full mb-12 px-2">
+      {/* --- ОТЗЫВЫ (ВАРИАНТ 5: Интерактивный кристальный блок с переключением аватаров) --- */}
+      <div className="w-full mb-12 px-4">
         <h3 className="font-bold text-gray-900 text-lg uppercase tracking-wider mb-5 flex items-center gap-2">
           <Gem className="w-5 h-5 text-[#00CED1]" /> Отзывы
         </h3>
-        <div className="grid grid-cols-1 gap-5">
-          {DATA.reviews.map((review, i) => (
-            <div key={review.id} className="relative group">
-              <div className={`absolute inset-0 bg-gradient-to-br ${i % 2 === 0 ? 'from-[#00CED1]/20 to-[#20B2AA]/20' : 'from-[#FF7F50]/20 to-[#FF6347]/20'} rounded-2xl transform -translate-x-1 -translate-y-1`}></div>
-              <div className="relative bg-white/90 backdrop-blur-md border border-white p-5 rounded-2xl shadow-sm">
-                <div className="flex items-center gap-4 mb-3">
-                  <img src={review.avatar} alt={review.name} className="w-12 h-12 rounded-xl object-cover shadow-sm" />
-                  <div>
-                    <h4 className="font-bold text-gray-900 text-sm uppercase tracking-wider">{review.name}</h4>
-                    <div className="flex gap-0.5 mt-1">
-                      {[...Array(5)].map((_, idx) => (
-                        <Star key={idx} className={`w-3.5 h-3.5 ${i % 2 === 0 ? 'text-[#00CED1] fill-[#00CED1]' : 'text-[#FF7F50] fill-[#FF7F50]'}`} />
-                      ))}
-                    </div>
+        
+        <div className="relative group min-h-[240px]">
+          <div className="absolute inset-0 bg-gradient-to-br from-[#00CED1]/20 to-[#FF7F50]/20 rounded-3xl transform -translate-x-1.5 -translate-y-1.5 transition-transform duration-500"></div>
+          <div className="relative h-full bg-white/95 backdrop-blur-xl border border-white p-6 rounded-3xl shadow-sm flex flex-col justify-between">
+            
+            <div className="relative min-h-[120px] w-full">
+              {DATA.reviews.map((review, i) => (
+                <div key={review.id} className={`absolute inset-0 transition-all duration-500 ease-in-out ${i === activeRev ? 'opacity-100 translate-y-0 z-10' : 'opacity-0 translate-y-4 pointer-events-none z-0'}`}>
+                  <div className="flex gap-1 mb-3">
+                    {[...Array(5)].map((_, idx) => (
+                      <Star key={idx} className="w-4 h-4 text-[#00CED1] fill-[#00CED1]" />
+                    ))}
                   </div>
+                  <p className="text-sm text-gray-600 font-medium leading-relaxed italic line-clamp-3">
+                    "{review.text}"
+                  </p>
                 </div>
-                <p className="text-sm text-gray-600 font-medium leading-relaxed">
-                  {review.text}
-                </p>
+              ))}
+            </div>
+
+            <div className="flex justify-between items-end border-t border-gray-100 pt-4 mt-4 relative z-20">
+              <div className="relative min-w-[120px] h-[36px]">
+                {DATA.reviews.map((review, i) => (
+                   <div key={`name-${review.id}`} className={`absolute inset-0 transition-all duration-300 ${i === activeRev ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-4 pointer-events-none'}`}>
+                      <span className="text-[10px] text-gray-400 font-bold uppercase tracking-widest block mb-0.5">Путешественник</span>
+                      <h4 className="font-black text-gray-900 text-sm uppercase tracking-wider truncate">{review.name}</h4>
+                   </div>
+                ))}
+              </div>
+              
+              <div className="flex gap-1.5 bg-gray-50/80 p-1.5 rounded-full border border-gray-100 shadow-inner">
+                {DATA.reviews.map((r, i) => (
+                  <button 
+                    key={r.id}
+                    onClick={() => setActiveRev(i)}
+                    className={`relative w-8 h-8 rounded-full overflow-hidden transition-all duration-300 ${i === activeRev ? 'scale-110 ring-2 ring-[#FF7F50] z-10 shadow-md' : 'opacity-50 hover:opacity-100 grayscale-[50%]'}`}
+                  >
+                    <img src={r.avatar} alt={r.name} className="w-full h-full object-cover" />
+                  </button>
+                ))}
               </div>
             </div>
-          ))}
+            
+          </div>
         </div>
       </div>
 
@@ -891,12 +978,17 @@ const Template5 = () => (
     </div>
   </div>
 );
+};
 
 // ==========================================
 // ШАБЛОН 6: Oasis Quiet Luxury (Мой дизайн)
 // ==========================================
 const Template6 = () => {
   const [isQuizOpen, setIsQuizOpen] = useState(false);
+  const [activeReview, setActiveReview] = useState(0);
+
+  const nextRev = () => setActiveReview(p => (p + 1) % DATA.reviews.length);
+  const prevRev = () => setActiveReview(p => (p - 1 + DATA.reviews.length) % DATA.reviews.length);
 
   return (
     // Светлый, теплый кремово-персиковый фон с мягким скроллом
@@ -1099,33 +1191,49 @@ const Template6 = () => {
           </div>
         </div>
 
-        {/* --- ОТЗЫВЫ (ВАРИАНТ 6: Quiet Luxury - Минимализм, классика) --- */}
-        <div className="mb-14 px-2">
+        {/* --- ОТЗЫВЫ (ВАРИАНТ 6: Quiet Luxury - Элегантное затухание) --- */}
+        <div className="mb-14 px-5">
           <div className="flex items-center gap-4 mb-8">
             <div className="h-[1px] flex-1 bg-gradient-to-r from-transparent to-amber-200"></div>
             <h2 className="font-serif text-xl text-slate-800 font-medium italic">Впечатления</h2>
             <div className="h-[1px] flex-1 bg-gradient-to-l from-transparent to-amber-200"></div>
           </div>
           
-          <div className="flex overflow-x-auto hide-scrollbar snap-x snap-mandatory gap-4 pb-4 -mx-5 px-5">
-            {DATA.reviews.map(review => (
-              <div key={review.id} className="min-w-[280px] snap-center bg-transparent border-t border-b border-amber-200/40 py-6 px-2 flex flex-col justify-between">
-                <div>
-                  <div className="flex justify-center gap-1 mb-4">
-                    {[...Array(5)].map((_, i) => (
-                      <Star key={i} className="w-4 h-4 text-amber-400 fill-amber-400" />
-                    ))}
-                  </div>
-                  <p className="text-center font-serif text-slate-600 italic text-sm leading-relaxed mb-6 px-4">
+          <div className="relative border-t border-b border-amber-200/40 py-8 px-2 text-center flex flex-col justify-between bg-white/20 backdrop-blur-sm rounded-3xl min-h-[260px] shadow-[inset_0_0_20px_rgba(255,255,255,0.5)]">
+            <div className="absolute top-6 left-1/2 -translate-x-1/2 flex gap-1 z-20">
+              {[...Array(5)].map((_, i) => (
+                <Star key={i} className="w-3 h-3 text-amber-300 fill-amber-300" />
+              ))}
+            </div>
+
+            <div className="relative flex-1 flex flex-col justify-center items-center mt-6 mb-8 w-full min-h-[100px]">
+              {DATA.reviews.map((review, i) => (
+                <div key={review.id} className={`absolute inset-0 px-4 transition-all duration-700 ease-in-out flex items-center justify-center ${i === activeReview ? 'opacity-100 blur-none z-10' : 'opacity-0 blur-sm pointer-events-none z-0'}`}>
+                  <p className="font-serif text-slate-700 italic text-[15px] leading-relaxed line-clamp-4">
                     "{review.text}"
                   </p>
                 </div>
-                <div className="flex flex-col items-center justify-center mt-auto">
-                  <img src={review.avatar} alt={review.name} className="w-10 h-10 rounded-full object-cover mb-2 ring-1 ring-amber-200" />
-                  <span className="text-[10px] uppercase tracking-[0.2em] font-bold text-slate-800">{review.name}</span>
-                </div>
+              ))}
+            </div>
+            
+            <div className="flex items-center justify-between w-full px-4 relative z-20 h-[70px]">
+              <button onClick={prevRev} className="w-8 h-8 rounded-full border border-amber-200/60 flex items-center justify-center hover:bg-white hover:border-amber-400 transition-all text-amber-600/70 hover:text-amber-500 bg-white/50">
+                <ChevronRight className="w-4 h-4 rotate-180" />
+              </button>
+              
+              <div className="relative w-[120px] h-full flex justify-center">
+                {DATA.reviews.map((review, i) => (
+                  <div key={review.id} className={`absolute inset-0 flex flex-col items-center transition-all duration-500 ${i === activeReview ? 'opacity-100 translate-y-0 z-10' : 'opacity-0 translate-y-2 pointer-events-none z-0'}`}>
+                    <img src={review.avatar} alt="avatar" className="w-10 h-10 rounded-full object-cover mb-1.5 ring-2 ring-amber-100 shadow-sm" />
+                    <span className="text-[8px] uppercase tracking-[0.2em] font-bold text-slate-800 truncate w-full text-center">{review.name}</span>
+                  </div>
+                ))}
               </div>
-            ))}
+              
+              <button onClick={nextRev} className="w-8 h-8 rounded-full border border-amber-200/60 flex items-center justify-center hover:bg-white hover:border-amber-400 transition-all text-amber-600/70 hover:text-amber-500 bg-white/50">
+                <ChevronRight className="w-4 h-4" />
+              </button>
+            </div>
           </div>
         </div>
 
@@ -1183,6 +1291,10 @@ const Template6 = () => {
 // ==========================================
 const Template7 = () => {
   const [isQuizOpen, setIsQuizOpen] = useState(false);
+  const [activeReview, setActiveReview] = useState(0);
+
+  const nextRev = () => setActiveReview(p => (p + 1) % DATA.reviews.length);
+  const prevRev = () => setActiveReview(p => (p - 1 + DATA.reviews.length) % DATA.reviews.length);
 
   return (
     <div className="min-h-screen bg-resort-chic text-slate-900 font-sans selection:bg-[#C5A059]/30 flex justify-center overflow-hidden relative w-full">
@@ -1415,30 +1527,58 @@ const Template7 = () => {
             <div className="w-8 h-[1px] bg-[#D4AF37] mx-auto"></div>
           </div>
           
-          <div className="space-y-6">
-            {DATA.reviews.map((review, i) => (
-              <div key={review.id} className="relative glass-panel rounded-[2rem] p-6 pt-8 mt-6">
-                {/* Аватар вылезает наверх */}
-                <div className="absolute -top-6 left-1/2 -translate-x-1/2">
-                  <div className="w-14 h-14 rounded-full border-4 border-[#FDFBF7] shadow-md overflow-hidden bg-white">
+          <div className="relative glass-panel rounded-[2rem] p-6 pt-10 mt-8 min-h-[260px] flex flex-col justify-between items-center shadow-[0_15px_40px_rgba(0,0,0,0.06)] border border-white/60">
+            {/* Интерактивные аватары сверху */}
+            <div className="absolute -top-8 left-1/2 -translate-x-1/2 flex items-center justify-center h-16 w-full">
+               {DATA.reviews.map((review, i) => (
+                  <div 
+                    key={review.id} 
+                    onClick={() => setActiveReview(i)}
+                    className={`transition-all duration-500 rounded-full border-4 border-[#FDFBF7] shadow-md overflow-hidden bg-white absolute cursor-pointer ${
+                      i === activeReview ? 'w-16 h-16 z-20 scale-100 opacity-100 shadow-[0_10px_20px_rgba(212,175,55,0.2)]' : 
+                      i === (activeReview - 1 + DATA.reviews.length) % DATA.reviews.length ? 'w-12 h-12 z-10 -translate-x-14 opacity-60 hover:opacity-100' :
+                      i === (activeReview + 1) % DATA.reviews.length ? 'w-12 h-12 z-10 translate-x-14 opacity-60 hover:opacity-100' :
+                      'w-8 h-8 z-0 opacity-0'
+                    }`}
+                  >
                     <img src={review.avatar} alt={review.name} className="w-full h-full object-cover" />
                   </div>
+               ))}
+            </div>
+            
+            <div className="flex justify-center gap-1 mb-4 mt-6">
+              {[...Array(5)].map((_, idx) => (
+                <Star key={idx} className="w-4 h-4 text-[#D4AF37] fill-[#D4AF37]" />
+              ))}
+            </div>
+            
+            <div className="relative flex-1 w-full flex items-center justify-center min-h-[100px]">
+              {DATA.reviews.map((review, i) => (
+                <div key={review.id} className={`absolute inset-0 transition-all duration-700 ease-in-out flex items-center justify-center ${i === activeReview ? 'opacity-100 translate-y-0 z-10' : 'opacity-0 translate-y-4 pointer-events-none z-0'}`}>
+                  <p className="text-center text-sm text-slate-600 font-light leading-relaxed px-2">
+                    "{review.text}"
+                  </p>
                 </div>
-                
-                <div className="flex justify-center gap-1 mb-4 mt-2">
-                  {[...Array(5)].map((_, idx) => (
-                    <Star key={idx} className="w-4 h-4 text-[#D4AF37] fill-[#D4AF37]" />
-                  ))}
-                </div>
-                
-                <p className="text-center text-sm text-slate-600 font-light leading-relaxed mb-4">
-                  "{review.text}"
-                </p>
-                <div className="text-center">
-                  <span className="font-serif text-slate-900 italic text-lg">{review.name}</span>
-                </div>
+              ))}
+            </div>
+            
+            <div className="flex items-center justify-between w-full mt-4 border-t border-[#D4AF37]/20 pt-4">
+              <button onClick={prevRev} className="p-2 rounded-full border border-[#D4AF37]/30 text-[#D4AF37] hover:bg-[#D4AF37] hover:text-white transition-colors bg-white/50">
+                <ChevronRight className="w-4 h-4 rotate-180" />
+              </button>
+              
+              <div className="relative h-6 w-32 flex justify-center items-center">
+                 {DATA.reviews.map((review, i) => (
+                   <span key={review.id} className={`absolute font-serif text-slate-900 italic text-lg transition-all duration-500 ${i === activeReview ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}>
+                     {review.name}
+                   </span>
+                 ))}
               </div>
-            ))}
+              
+              <button onClick={nextRev} className="p-2 rounded-full border border-[#D4AF37]/30 text-[#D4AF37] hover:bg-[#D4AF37] hover:text-white transition-colors bg-white/50">
+                <ChevronRight className="w-4 h-4" />
+              </button>
+            </div>
           </div>
         </div>
 
@@ -1532,10 +1672,8 @@ export default function App() {
   const [activeTemplate, setActiveTemplate] = useState(1);
   const [isPanelOpen, setIsPanelOpen] = useState(false);
 
-  // Стили-анимации, добавленные глобально, чтобы работали во всех шаблонах
-  useEffect(() => {
-    const style = document.createElement('style');
-    style.innerHTML = `
+  // Стили-анимации, добавленные глобально, вынесены в переменную (исправление краша)
+  const globalStyles = `
       /* iOS Safari Fix: предотвращает исчезновение картинок при скруглении */
       .overflow-hidden {
         -webkit-mask-image: -webkit-radial-gradient(white, black);
@@ -1601,10 +1739,7 @@ export default function App() {
         transform: translateY(-2px); box-shadow: 0 8px 25px rgba(13,148,136,0.25);
         background: linear-gradient(135deg, rgba(255,255,255,1) 0%, rgba(255,255,255,0.6) 100%);
       }
-    `;
-    document.head.appendChild(style);
-    return () => document.head.removeChild(style);
-  }, []);
+  `;
 
   const renderTemplate = () => {
     switch(activeTemplate) {
@@ -1622,6 +1757,9 @@ export default function App() {
   return (
     <div className="relative w-full h-full min-h-screen">
       
+      {/* Безопасное внедрение стилей (исправляет проблему белого экрана и крашей) */}
+      <style dangerouslySetInnerHTML={{ __html: globalStyles }} />
+
       {/* --- СКРЫТАЯ ПАНЕЛЬ ПЕРЕКЛЮЧЕНИЯ ДЛЯ ПРЕЗЕНТАЦИИ --- */}
       <div 
         className={`fixed top-4 right-4 z-[100] transition-all duration-300 ${
