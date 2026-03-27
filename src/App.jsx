@@ -15,7 +15,7 @@ const DATA = {
   lastName: "Хавруцкая",
   role: "Основатель бутик-турагентства",
   badge: "Влюблена в море",
-  // Твоё фото из папки public! Просто положи туда avatar.jpg
+  // Твоё фото из папки public! Просто положи туда avatar.jpg (БЕЗ СЛЕШЕЙ И ТОЧЕК)
   avatarUrl: "avatar.jpg",
   bgUrl: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&q=80&w=1000",
   // Добавили туры сюда, чтобы было удобно менять фото и текст!
@@ -28,9 +28,9 @@ const DATA = {
     { id: 2, hotelName: "Four Seasons", loc: "Сейшелы", dates: "02 - 10 Декабря", price: "$5 100", oldPrice: "$7 000", img: "https://images.unsplash.com/photo-1540541338287-41700207dee6?auto=format&fit=crop&q=80&w=600" }
   ],
   reviews: [
-    { id: 1, name: "Анна С.", avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&q=80&w=150", text: "Это был лучший отпуск в моей жизни! Все продумано до мелочей. Огромное спасибо за этот рай на земле!" },
-    { id: 2, name: "Михаил В.", avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=150", text: "Сервис на высшем уровне. Отель превзошел все ожидания, а индивидуальный трансфер был очень кстати." },
-    { id: 3, name: "Ольга К.", avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=150", text: "Настоящий Quiet Luxury. Никаких забот, только океан, солнце и безупречный комфорт. Обязательно вернемся!" }
+    { id: 1, name: "Анна С.", text: "Это был лучший отпуск в моей жизни! Все продумано до мелочей. Огромное спасибо за этот рай на земле!" },
+    { id: 2, name: "Михаил В.", text: "Сервис на высшем уровне. Отель превзошел все ожидания, а индивидуальный трансфер был очень кстати." },
+    { id: 3, name: "Ольга К.", text: "Настоящий Quiet Luxury. Никаких забот, только океан, солнце и безупречный комфорт. Обязательно вернемся!" }
   ],
   aboutText: "Я организую премиальные путешествия более 10 лет. Знаю скрытые жемчужины по всему миру, лично инспектирую отели и создаю безупречный сервис, в котором продумана каждая деталь вашего отдыха."
 };
@@ -76,10 +76,10 @@ const Template1 = () => {
       {/* --- ИНТЕРАКТИВНЫЙ БЛОК ОБО МНЕ (Раскрывается по клику) --- */}
       <div 
         onClick={() => setIsAboutOpen(!isAboutOpen)}
-        className="w-full glass-panel px-6 py-5 rounded-[2rem] mb-8 relative overflow-hidden cursor-pointer transition-all hover:bg-white/60"
+        className="w-full glass-panel px-6 py-5 rounded-[2rem] mb-8 relative overflow-hidden cursor-pointer transition-all hover:bg-white/60 z-20 select-none"
       >
-        <div className="absolute top-0 right-0 w-24 h-24 bg-teal-200/40 rounded-full blur-2xl -mr-10 -mt-10"></div>
-        <div className="flex items-center justify-between relative z-10">
+        <div className="absolute top-0 right-0 w-24 h-24 bg-teal-200/40 rounded-full blur-2xl -mr-10 -mt-10 pointer-events-none"></div>
+        <div className="flex items-center justify-between relative z-10 pointer-events-none">
           <h3 className="text-xl font-bold text-slate-800 flex items-center gap-2">
             <Sparkles className="w-5 h-5 text-teal-500" /> Обо мне
           </h3>
@@ -87,7 +87,7 @@ const Template1 = () => {
              <ChevronRight className="w-5 h-5 rotate-90" />
           </div>
         </div>
-        <div className={`grid transition-all duration-500 ease-in-out relative z-10 ${isAboutOpen ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'}`}>
+        <div className={`grid transition-all duration-500 ease-in-out relative z-10 pointer-events-none ${isAboutOpen ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'}`}>
           <div className="overflow-hidden">
             <p className="text-sm text-slate-600 font-medium leading-relaxed pt-4 border-t border-teal-100/50 mt-4">
               {DATA.aboutText}
@@ -166,7 +166,10 @@ const Template1 = () => {
               </div>
               <p className="text-sm text-slate-600 italic mb-5">«{review.text}»</p>
               <div className="flex items-center gap-3">
-                <img src={review.avatar} alt={review.name} className="w-10 h-10 rounded-full object-cover border-2 border-white shadow-sm" />
+                {/* ИНИЦИАЛ ВМЕСТО ФОТО */}
+                <div className="w-10 h-10 rounded-full border-2 border-white shadow-sm flex items-center justify-center bg-gradient-to-br from-cyan-400 to-teal-400 text-white font-bold font-serif text-lg shrink-0">
+                  {review.name.charAt(0)}
+                </div>
                 <span className="font-bold text-slate-800 text-sm">{review.name}</span>
               </div>
             </div>
@@ -353,8 +356,9 @@ const Template2 = () => {
               >
                 <div className="absolute -top-4 right-4 text-4xl text-[#20B2AA]/20 font-serif leading-none">"</div>
                 <div className="flex items-center gap-4 mb-3">
-                  <div className="w-12 h-14 rounded-t-full rounded-b-md overflow-hidden border-2 border-white shadow-sm">
-                    <img src={review.avatar} alt={review.name} className="w-full h-full object-cover" />
+                  {/* ИНИЦИАЛ ВМЕСТО ФОТО */}
+                  <div className="w-12 h-14 rounded-t-full rounded-b-md border-2 border-white shadow-sm flex items-center justify-center bg-gradient-to-br from-[#F4A460] to-[#E5DCC5] text-white font-bold font-serif text-xl shrink-0">
+                    {review.name.charAt(0)}
                   </div>
                   <div>
                     <h4 className="font-bold text-[#2C3E50] text-sm">{review.name}</h4>
@@ -458,13 +462,13 @@ const Template3 = () => {
         </div>
       </button>
 
-      {/* Само Модальное окно (Исправлена резкость!) */}
-      <div className={`fixed inset-0 z-50 flex items-center justify-center px-4 transition-all duration-700 ease-in-out ${showAbout ? 'opacity-100 visible' : 'opacity-0 invisible pointer-events-none'}`}>
+      {/* Само Модальное окно (Плавное появление и затухание) */}
+      <div className={`fixed inset-0 z-50 flex items-center justify-center px-4 transition-all duration-[600ms] ease-in-out ${showAbout ? 'opacity-100 visible' : 'opacity-0 invisible pointer-events-none'}`}>
         <div 
-          className={`absolute inset-0 bg-[#004d40]/20 transition-all duration-700 ease-in-out ${showAbout ? 'backdrop-blur-md opacity-100' : 'backdrop-blur-none opacity-0'}`} 
+          className={`absolute inset-0 bg-[#004d40]/30 transition-all duration-[600ms] ease-in-out ${showAbout ? 'backdrop-blur-md opacity-100' : 'backdrop-blur-none opacity-0'}`} 
           onClick={() => setShowAbout(false)}
         ></div>
-        <div className={`bg-white/90 backdrop-blur-xl p-8 rounded-[2rem] border border-white/50 max-w-sm w-full relative transform transition-all duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] ${showAbout ? 'translate-y-0 scale-100 opacity-100' : 'translate-y-12 scale-95 opacity-0'}`}>
+        <div className={`bg-white/90 backdrop-blur-xl p-8 rounded-[2rem] border border-white/50 max-w-sm w-full relative transform transition-all duration-[600ms] ease-[cubic-bezier(0.23,1,0.32,1)] ${showAbout ? 'translate-y-0 scale-100 opacity-100' : 'translate-y-16 scale-95 opacity-0'}`}>
           <button onClick={() => setShowAbout(false)} className="absolute top-5 right-5 w-8 h-8 flex items-center justify-center bg-[#F0FFFF] rounded-full text-[#00695c] hover:bg-[#E0FFFF] transition-colors"><X className="w-4 h-4" /></button>
           <div className="w-12 h-12 bg-[#E0FFFF] rounded-2xl flex items-center justify-center mb-5 text-[#004d40]">
             <Heart className="w-6 h-6" />
@@ -526,14 +530,15 @@ const Template3 = () => {
         </div>
       </div>
 
-      {/* --- ОТЗЫВЫ (ВАРИАНТ 3: Жемчужный слайдер с удобной навигацией) --- */}
+      {/* --- ОТЗЫВЫ (ВАРИАНТ 3: Жемчужный слайдер - УВЕЛИЧЕНА ВЫСОТА И ТОЧКИ) --- */}
       <div className="w-full mb-12 relative z-10 px-4">
         <h3 className="text-lg font-medium text-[#00695c] opacity-90 mb-6 text-center">Истории путешественников</h3>
         
-        <div className="relative p-6 rounded-[2rem] backdrop-blur-xl bg-white/20 shadow-[0_8px_32px_rgba(0,100,100,0.05)] border border-white/50 overflow-hidden min-h-[230px] flex flex-col justify-between">
+        {/* min-h-[300px] чтобы текст не обрезался */}
+        <div className="relative p-6 rounded-[2rem] backdrop-blur-xl bg-white/20 shadow-[0_8px_32px_rgba(0,100,100,0.05)] border border-white/50 overflow-hidden min-h-[300px] flex flex-col justify-between">
           <div className="absolute top-0 right-0 w-24 h-24 bg-[#E0FFFF]/40 rounded-full blur-2xl"></div>
           
-          <div className="relative z-10 flex-1 relative min-h-[140px] w-full">
+          <div className="relative z-10 flex-1 relative min-h-[190px] w-full">
             {DATA.reviews.map((review, i) => (
               <div key={review.id} className={`absolute inset-0 transition-all duration-500 ease-in-out flex flex-col justify-center ${i === activeReview ? 'opacity-100 translate-x-0 z-10' : 'opacity-0 translate-x-8 pointer-events-none z-0'}`}>
                 <div className="flex gap-1 mb-3">
@@ -541,11 +546,15 @@ const Template3 = () => {
                     <Star key={idx} className="w-3.5 h-3.5 text-[#00695c] fill-white/50" />
                   ))}
                 </div>
-                <p className="text-sm text-[#004d40] font-medium leading-relaxed mb-5 italic line-clamp-3">
+                {/* line-clamp-5 чтобы больше текста влезло */}
+                <p className="text-sm text-[#004d40] font-medium leading-relaxed mb-5 italic line-clamp-5">
                   "{review.text}"
                 </p>
                 <div className="flex items-center gap-3">
-                  <img src={review.avatar} alt={review.name} className="w-10 h-10 rounded-full object-cover border-2 border-[#00695c]/20 shadow-sm" />
+                  {/* ИНИЦИАЛ ВМЕСТО ФОТО */}
+                  <div className="w-10 h-10 rounded-full border-2 border-[#00695c]/20 shadow-sm flex items-center justify-center bg-gradient-to-br from-[#E0FFFF] to-white text-[#00695c] font-bold font-serif text-lg shrink-0">
+                    {review.name.charAt(0)}
+                  </div>
                   <span className="text-xs font-bold text-[#00695c] uppercase tracking-widest">{review.name}</span>
                 </div>
               </div>
@@ -553,6 +562,7 @@ const Template3 = () => {
           </div>
 
           <div className="flex justify-between items-center mt-2 relative z-10 w-full">
+            {/* Огромная зона клика для мобилок (p-3) */}
             <button 
               onClick={() => setActiveReview((prev) => (prev - 1 + DATA.reviews.length) % DATA.reviews.length)} 
               className="p-3 -ml-3 text-[#00695c]/40 hover:text-[#00695c] transition-colors"
@@ -564,7 +574,7 @@ const Template3 = () => {
                 <button 
                   key={idx}
                   onClick={() => setActiveReview(idx)}
-                  className="p-3 -m-3 group" // Большая зона клика!
+                  className="p-3 -m-3 group" // Увеличенная зона клика вокруг точек!
                 >
                   <div className={`transition-all duration-300 rounded-full mx-auto ${idx === activeReview ? 'w-6 h-1.5 bg-[#00695c]' : 'w-1.5 h-1.5 bg-[#00695c]/30 group-hover:bg-[#00695c]/50'}`} />
                 </button>
@@ -691,30 +701,28 @@ const Template4 = () => {
         </div>
       </div>
 
-      {/* --- ГОРЯЩИЕ ТУРЫ (ВАРИАНТ 4: Небесный Эффект - Горизонтальный скролл Билетов) --- */}
+      {/* --- ГОРЯЩИЕ ТУРЫ (ВАРИАНТ 4: ПОЛНАЯ ПЕРЕДЕЛКА - ВЕРТИКАЛЬНЫЕ ПАРЯЩИЕ КАРТОЧКИ) --- */}
       <div className="w-full mb-12">
         <h3 className="text-lg font-bold text-slate-700 mb-4 px-4 flex items-center gap-2"><Flame className="w-5 h-5 text-orange-400" /> Горящие туры</h3>
-        <div className="flex overflow-x-auto gap-5 px-4 pb-6 pt-2 snap-x snap-mandatory hide-scrollbar">
+        <div className="flex flex-col gap-6 px-4">
           {DATA.hotTours.map((tour) => (
-            <div key={tour.id} className="min-w-[90%] snap-center flex bg-white rounded-3xl shadow-[0_10px_20px_rgba(135,206,250,0.1)] border border-[#E6F3FF] cursor-pointer group hover:-translate-y-1 hover:shadow-[0_15px_30px_rgba(135,206,250,0.15)] transition-all overflow-hidden shrink-0">
-              <div className="w-2/5 relative">
-                <img src={tour.img} alt={tour.hotelName} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                <div className="absolute top-0 left-0 bg-orange-400 text-white text-[9px] font-bold uppercase tracking-wider px-2 py-1 rounded-br-xl">Promo</div>
-              </div>
-              {/* Линия отрыва билета */}
-              <div className="w-0 border-l-2 border-dashed border-[#E6F3FF] relative">
-                <div className="absolute -top-3 -left-3 w-6 h-6 bg-gradient-to-b from-[#E6F3FF] via-white to-white rounded-full"></div>
-                <div className="absolute -bottom-3 -left-3 w-6 h-6 bg-white rounded-full"></div>
-              </div>
-              <div className="w-3/5 p-4 flex flex-col justify-center">
-                <h4 className="font-extrabold text-slate-700 text-sm leading-tight mb-1">{tour.hotelName}</h4>
-                <div className="flex items-center gap-1 text-[9px] text-slate-400 mb-3 font-medium uppercase tracking-widest"><MapPin className="w-3 h-3 text-[#87CEFA]" /> {tour.loc}</div>
-                <div className="text-[10px] text-slate-400 line-through mb-0.5">{tour.oldPrice}</div>
-                <div className="font-black text-[#87CEFA] text-lg leading-none flex items-center justify-between">
-                  {tour.price} <CalendarDays className="w-4 h-4 text-slate-300" />
+             <div key={tour.id} className="bg-white rounded-3xl p-3 shadow-[0_10px_20px_rgba(135,206,250,0.1)] border border-[#E6F3FF] hover:-translate-y-1 transition-all group cursor-pointer">
+                <div className="w-full h-40 rounded-2xl overflow-hidden relative mb-3">
+                   <img src={tour.img} alt={tour.hotelName} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"/>
+                   <div className="absolute top-2 left-2 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-[10px] font-bold text-[#87CEFA] uppercase tracking-widest shadow-sm">Promo</div>
                 </div>
-              </div>
-            </div>
+                <div className="px-2">
+                   <div className="flex justify-between items-start mb-1">
+                      <h4 className="font-extrabold text-slate-700 text-lg leading-tight">{tour.hotelName}</h4>
+                      <div className="text-[10px] text-slate-400 line-through mt-1">{tour.oldPrice}</div>
+                   </div>
+                   <div className="flex items-center gap-1 text-xs text-slate-400 mb-3 font-medium uppercase tracking-widest"><MapPin className="w-3 h-3 text-[#87CEFA]" /> {tour.loc}</div>
+                   <div className="flex justify-between items-center border-t border-[#E6F3FF] pt-3">
+                      <div className="flex items-center gap-1.5 text-[10px] font-bold text-slate-400 bg-[#E6F3FF]/50 px-2 py-1 rounded-md uppercase"><CalendarDays className="w-3 h-3 text-[#87CEFA]"/> {tour.dates}</div>
+                      <div className="font-black text-[#87CEFA] text-xl">{tour.price}</div>
+                   </div>
+                </div>
+             </div>
           ))}
         </div>
       </div>
@@ -743,7 +751,10 @@ const Template4 = () => {
                   </p>
                 </div>
                 <div className="flex items-center gap-3">
-                  <img src={review.avatar} alt={review.name} className="w-10 h-10 rounded-full object-cover border-2 border-[#E6F3FF]" />
+                  {/* ИНИЦИАЛ ВМЕСТО ФОТО */}
+                  <div className="w-10 h-10 rounded-full border-2 border-[#E6F3FF] flex items-center justify-center bg-gradient-to-br from-[#87CEFA] to-[#E6F3FF] text-white font-bold font-serif text-lg shadow-inner shrink-0">
+                    {review.name.charAt(0)}
+                  </div>
                   <span className="font-bold text-slate-700 text-sm">{review.name}</span>
                 </div>
               </div>
@@ -778,7 +789,7 @@ const Template4 = () => {
       </div>
 
       <div className="w-full flex flex-col items-center mt-2 pb-8 relative z-10">
-        <h3 className="text-[10px] font-bold text-[#87CEFA] uppercase tracking-widest mb-5 flex items-center gap-2">Связь с экипажем</h3>
+        <h3 className="text-[10px] font-bold text-[#87CEFA] uppercase tracking-widest mb-5 flex items-center gap-2">Контакты</h3>
         <div className="flex justify-center gap-5">
            <a href="#" className="w-12 h-12 bg-white/80 backdrop-blur-sm rounded-full shadow-[0_5px_15px_rgba(135,206,250,0.1)] border border-[#E6F3FF] flex items-center justify-center hover:-translate-y-1 hover:shadow-[0_8px_20px_rgba(135,206,250,0.2)] hover:bg-[#87CEFA] group transition-all">
              <Send className="w-5 h-5 text-[#87CEFA] group-hover:text-white transition-colors" />
@@ -959,9 +970,9 @@ const Template5 = () => {
                   <button 
                     key={r.id}
                     onClick={() => setActiveRev(i)}
-                    className={`relative w-8 h-8 rounded-full overflow-hidden transition-all duration-300 ${i === activeRev ? 'scale-110 ring-2 ring-[#FF7F50] z-10 shadow-md' : 'opacity-50 hover:opacity-100 grayscale-[50%]'}`}
+                    className={`relative w-8 h-8 rounded-full flex items-center justify-center font-bold font-serif text-sm transition-all duration-300 ${i === activeRev ? 'scale-110 ring-2 ring-[#FF7F50] z-10 shadow-md bg-gradient-to-br from-[#FF7F50] to-[#FF6347] text-white' : 'opacity-50 hover:opacity-100 bg-gray-200 text-gray-500'}`}
                   >
-                    <img src={r.avatar} alt={r.name} className="w-full h-full object-cover" />
+                    {r.name.charAt(0)}
                   </button>
                 ))}
               </div>
@@ -1022,10 +1033,17 @@ const Template5 = () => {
 // ==========================================
 const Template6 = () => {
   const [isQuizOpen, setIsQuizOpen] = useState(false);
+  const [quizStep, setQuizStep] = useState(1);
+  const [phone, setPhone] = useState('');
   const [activeReview, setActiveReview] = useState(0);
 
   const nextRev = () => setActiveReview(p => (p + 1) % DATA.reviews.length);
   const prevRev = () => setActiveReview(p => (p - 1 + DATA.reviews.length) % DATA.reviews.length);
+
+  const closeQuiz = () => {
+    setIsQuizOpen(false);
+    setTimeout(() => setQuizStep(1), 500);
+  };
 
   return (
     // Светлый, теплый кремово-персиковый фон с мягким скроллом
@@ -1134,25 +1152,82 @@ const Template6 = () => {
               )}
             </button>
 
-            {/* Выезжающая панель квиза */}
-            <div className={`absolute top-10 left-0 w-full bg-white/90 backdrop-blur-xl border border-white/80 rounded-[2rem] shadow-2xl p-6 transition-all duration-500 z-30 ${isQuizOpen ? 'translate-y-0 opacity-100 visible' : 'translate-y-20 opacity-0 invisible pointer-events-none'}`}>
-              <button 
-                onClick={() => setIsQuizOpen(false)}
-                className="absolute top-4 right-4 p-2 bg-slate-100 rounded-full text-slate-400 hover:text-slate-700"
-              >
-                <X className="w-4 h-4" />
-              </button>
-              <h3 className="font-serif text-xl font-bold text-slate-800 mb-2">Шаг 1 из 3</h3>
-              <p className="text-sm text-slate-500 mb-6">Какой тип отдыха вы предпочитаете?</p>
+            {/* --- ВЫЕЗЖАЮЩАЯ ПАНЕЛЬ КВИЗА (МНОГОШАГОВАЯ) --- */}
+            <div className={`absolute top-10 left-0 w-full bg-white/95 backdrop-blur-3xl border border-white/80 rounded-[2rem] shadow-2xl p-6 transition-all duration-500 z-30 ${isQuizOpen ? 'translate-y-0 opacity-100 visible' : 'translate-y-20 opacity-0 invisible pointer-events-none'}`}>
               
-              <div className="space-y-3">
-                {['Белоснежные пляжи и релакс', 'Активный отдых и горы', 'Городские джунгли и шопинг'].map((option, i) => (
-                  <button key={i} className="w-full text-left px-5 py-4 rounded-2xl bg-slate-50 border border-slate-100 text-sm font-medium text-slate-700 hover:bg-amber-50 hover:border-amber-200 hover:text-amber-700 transition-colors">
-                    {option}
-                  </button>
-                ))}
+              <div className="flex justify-between items-center mb-6">
+                <span className="text-[10px] text-amber-600 uppercase tracking-[0.2em] font-medium">
+                  {quizStep < 4 ? `Шаг ${quizStep} из 3` : 'Готово'}
+                </span>
+                <button onClick={closeQuiz} className="p-2 bg-slate-100 rounded-full text-slate-500 hover:text-slate-800 transition">
+                  <X className="w-4 h-4" />
+                </button>
               </div>
+
+              {quizStep === 1 && (
+                <div className="animate-in fade-in zoom-in-95 duration-300">
+                  <h3 className="font-serif text-2xl font-bold text-slate-800 mb-2">Куда тянет душу?</h3>
+                  <p className="text-sm text-slate-500 mb-6">Выберите идеальную картинку отдыха</p>
+                  <div className="space-y-3">
+                    {['Белоснежные пляжи и релакс', 'Активный отдых и горы', 'Европейские улочки', 'Экзотика и джунгли'].map((option, i) => (
+                      <button key={i} onClick={() => setQuizStep(2)} className="w-full text-left px-5 py-4 rounded-2xl bg-slate-50 border border-slate-100 text-sm font-medium text-slate-700 hover:bg-amber-50 hover:border-amber-200 hover:text-amber-700 transition-colors flex justify-between group">
+                        {option} <ChevronRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity" />
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {quizStep === 2 && (
+                <div className="animate-in fade-in slide-in-from-right-4 duration-300">
+                  <h3 className="font-serif text-2xl font-bold text-slate-800 mb-2">С кем полетите?</h3>
+                  <p className="text-sm text-slate-500 mb-6">Это поможет подобрать правильный отель</p>
+                  <div className="space-y-3">
+                    {['Вдвоем (Романтика)', 'Семьей (С детьми)', 'Соло (Перезагрузка)', 'Шумной компанией'].map((option, i) => (
+                      <button key={i} onClick={() => setQuizStep(3)} className="w-full text-left px-5 py-4 rounded-2xl bg-slate-50 border border-slate-100 text-sm font-medium text-slate-700 hover:bg-amber-50 hover:border-amber-200 hover:text-amber-700 transition-colors flex justify-between group">
+                        {option} <ChevronRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity" />
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {quizStep === 3 && (
+                <div className="animate-in fade-in slide-in-from-right-4 duration-300">
+                  <h3 className="font-serif text-2xl font-bold text-slate-800 mb-2">Куда прислать варианты?</h3>
+                  <p className="text-sm text-slate-500 mb-6">Оставьте WhatsApp, я пришлю 3 лучших варианта под ваш запрос.</p>
+                  <div className="space-y-4">
+                    <input 
+                      type="tel" 
+                      placeholder="+7 (999) 000-00-00" 
+                      value={phone}
+                      onChange={(e) => setPhone(e.target.value)}
+                      className="w-full bg-white border border-slate-200 rounded-2xl px-5 py-4 text-slate-800 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400"
+                    />
+                    <button 
+                      onClick={() => setQuizStep(4)} 
+                      className="w-full bg-gradient-to-r from-amber-500 to-amber-600 text-white font-bold rounded-2xl py-4 hover:shadow-lg hover:shadow-amber-500/30 transition-all"
+                    >
+                      Получить подборку
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {quizStep === 4 && (
+                <div className="text-center py-6 animate-in zoom-in-90 duration-500">
+                  <div className="w-20 h-20 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <CheckCircle2 className="w-10 h-10 text-emerald-500" />
+                  </div>
+                  <h3 className="font-serif text-2xl font-bold text-slate-800 mb-3">Запрос принят!</h3>
+                  <p className="text-slate-600 text-sm leading-relaxed mb-8">Я уже начала готовить для вас идеальные варианты. Напишу в WhatsApp в течение 15 минут.</p>
+                  <button onClick={closeQuiz} className="w-full bg-slate-100 text-slate-700 font-bold rounded-2xl py-4 hover:bg-slate-200 transition-colors">
+                    Отлично, жду
+                  </button>
+                </div>
+              )}
             </div>
+
           </div>
         </div>
 
@@ -1261,7 +1336,10 @@ const Template6 = () => {
               <div className="relative w-[120px] h-full flex justify-center">
                 {DATA.reviews.map((review, i) => (
                   <div key={review.id} className={`absolute inset-0 flex flex-col items-center transition-all duration-500 ${i === activeReview ? 'opacity-100 translate-y-0 z-10' : 'opacity-0 translate-y-2 pointer-events-none z-0'}`}>
-                    <img src={review.avatar} alt="avatar" className="w-10 h-10 rounded-full object-cover mb-1.5 ring-2 ring-amber-100 shadow-sm" />
+                    {/* ИНИЦИАЛ ВМЕСТО ФОТО */}
+                    <div className="w-10 h-10 rounded-full mb-1.5 ring-2 ring-amber-100 shadow-sm flex items-center justify-center bg-gradient-to-br from-amber-100 to-amber-50 text-amber-700 font-bold font-serif text-lg shrink-0">
+                      {review.name.charAt(0)}
+                    </div>
                     <span className="text-[8px] uppercase tracking-[0.2em] font-bold text-slate-800 truncate w-full text-center">{review.name}</span>
                   </div>
                 ))}
@@ -1330,9 +1408,16 @@ const Template7 = () => {
   const [isQuizOpen, setIsQuizOpen] = useState(false);
   const [activeReview, setActiveReview] = useState(0);
   const [isFlipped, setIsFlipped] = useState(false);
+  const [quizStep, setQuizStep] = useState(1);
+  const [phone, setPhone] = useState('');
 
   const nextRev = () => setActiveReview(p => (p + 1) % DATA.reviews.length);
   const prevRev = () => setActiveReview(p => (p - 1 + DATA.reviews.length) % DATA.reviews.length);
+
+  const closeQuiz = () => {
+    setIsQuizOpen(false);
+    setTimeout(() => setQuizStep(1), 500);
+  };
 
   return (
     <div className="min-h-screen bg-resort-chic text-slate-900 font-sans selection:bg-[#C5A059]/30 flex justify-center overflow-hidden relative w-full">
@@ -1500,7 +1585,7 @@ const Template7 = () => {
         {/* --- 4. Блок «Авторские Туры» --- */}
         <div className="px-5 mt-16 mb-12">
           <div className="mb-6 flex items-center justify-between">
-            <h2 className="font-serif text-2xl text-slate-900">Летняя коллекция</h2>
+            <h2 className="font-serif text-2xl text-slate-900">Авторские туры</h2>
             <div className="h-[1px] flex-1 bg-gradient-to-r from-slate-200 to-transparent ml-6"></div>
           </div>
           
@@ -1564,7 +1649,7 @@ const Template7 = () => {
         {/* --- ОТЗЫВЫ (ВАРИАНТ 7: Secret Resort - Золотая элегантность) --- */}
         <div className="px-5 mb-14">
           <div className="text-center mb-8">
-            <h2 className="font-serif text-2xl text-slate-900 mb-2">Голоса гостей</h2>
+            <h2 className="font-serif text-2xl text-slate-900 mb-2">Отзывы</h2>
             <div className="w-8 h-[1px] bg-[#D4AF37] mx-auto"></div>
           </div>
           
@@ -1575,14 +1660,14 @@ const Template7 = () => {
                   <div 
                     key={review.id} 
                     onClick={() => setActiveReview(i)}
-                    className={`transition-all duration-500 rounded-full border-4 border-[#FDFBF7] shadow-md overflow-hidden bg-white absolute cursor-pointer ${
-                      i === activeReview ? 'w-16 h-16 z-20 scale-100 opacity-100 shadow-[0_10px_20px_rgba(212,175,55,0.2)]' : 
-                      i === (activeReview - 1 + DATA.reviews.length) % DATA.reviews.length ? 'w-12 h-12 z-10 -translate-x-14 opacity-60 hover:opacity-100' :
-                      i === (activeReview + 1) % DATA.reviews.length ? 'w-12 h-12 z-10 translate-x-14 opacity-60 hover:opacity-100' :
-                      'w-8 h-8 z-0 opacity-0'
+                    className={`transition-all duration-500 rounded-full border-4 border-[#FDFBF7] shadow-md flex items-center justify-center font-serif font-bold text-white bg-gradient-to-br from-[#D4AF37] to-[#B58500] absolute cursor-pointer ${
+                      i === activeReview ? 'w-16 h-16 z-20 scale-100 opacity-100 text-2xl shadow-[0_10px_20px_rgba(212,175,55,0.2)]' : 
+                      i === (activeReview - 1 + DATA.reviews.length) % DATA.reviews.length ? 'w-12 h-12 z-10 -translate-x-14 opacity-60 text-lg hover:opacity-100' :
+                      i === (activeReview + 1) % DATA.reviews.length ? 'w-12 h-12 z-10 translate-x-14 opacity-60 text-lg hover:opacity-100' :
+                      'w-8 h-8 z-0 opacity-0 text-sm'
                     }`}
                   >
-                    <img src={review.avatar} alt={review.name} className="w-full h-full object-cover" />
+                    {review.name.charAt(0)}
                   </div>
                ))}
             </div>
@@ -1654,7 +1739,7 @@ const Template7 = () => {
         <footer className="px-5 pb-10 flex flex-col items-center w-full relative z-10">
           <div className="w-12 h-[1px] bg-gradient-to-r from-transparent via-[#D4AF37] to-transparent mb-5"></div>
           <p className="text-[9px] text-[#B58500] uppercase tracking-[0.25em] mb-6 font-bold text-center">
-            Консьерж-сервис
+            Контакты
           </p>
           
           <div className="flex justify-center gap-5">
@@ -1671,33 +1756,81 @@ const Template7 = () => {
           </div>
         </footer>
 
-        {/* --- Модальное окно Квиза --- */}
+        {/* --- Модальное окно Квиза (Многошаговое) --- */}
         <div className={`fixed inset-x-0 bottom-0 z-50 transition-all duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] flex justify-center ${isQuizOpen ? 'translate-y-0 opacity-100 visible' : 'translate-y-[120%] opacity-0 invisible pointer-events-none'}`}>
           <div className="w-full max-w-md bg-white/95 backdrop-blur-3xl border-t border-white rounded-t-[2.5rem] p-8 shadow-[0_-10px_40px_rgba(0,0,0,0.1)]">
-            <div className="w-12 h-1 bg-slate-200 rounded-full mx-auto mb-8"></div>
             
             <div className="flex justify-between items-center mb-6">
-              <span className="text-[10px] text-sky-600 uppercase tracking-[0.2em] font-medium">Шаг 1 / 3</span>
-              <button onClick={() => setIsQuizOpen(false)} className="p-2 bg-slate-100 rounded-full text-slate-500 hover:text-slate-800 transition">
-                <X className="w-5 h-5" />
+              <span className="text-[10px] text-amber-600 uppercase tracking-[0.2em] font-medium">
+                {quizStep < 4 ? `Шаг ${quizStep} из 3` : 'Готово'}
+              </span>
+              <button onClick={closeQuiz} className="p-2 bg-slate-100 rounded-full text-slate-500 hover:text-slate-800 transition">
+                <X className="w-4 h-4" />
               </button>
             </div>
-            
-            <h3 className="font-serif text-3xl text-slate-900 mb-8 leading-tight">Какая картинка<br/>вас манит?</h3>
-            
-            <div className="space-y-3">
-              {[
-                'Бирюзовый океан и белый песок', 
-                'Прогулки по уютной Европе', 
-                'Экзотика и дикая природа', 
-                'Шопинг и ритм мегаполиса'
-              ].map((option, idx) => (
-                <button key={idx} className="w-full text-left p-5 bg-slate-50 border border-slate-100 rounded-2xl text-sm text-slate-700 hover:bg-white hover:border-[#D4AF37] hover:shadow-md transition-all flex justify-between items-center group">
-                  <span className="font-medium tracking-wide">{option}</span>
-                  <ChevronRight className="w-4 h-4 opacity-0 group-hover:opacity-100 text-[#D4AF37] transition-opacity transform group-hover:translate-x-1" />
+
+            {quizStep === 1 && (
+              <div className="animate-in fade-in zoom-in-95 duration-300">
+                <h3 className="font-serif text-2xl font-bold text-slate-800 mb-2">Куда тянет душу?</h3>
+                <p className="text-sm text-slate-500 mb-6">Выберите идеальную картинку отдыха</p>
+                <div className="space-y-3">
+                  {['Белоснежные пляжи и релакс', 'Активный отдых и горы', 'Европейские улочки', 'Экзотика и джунгли'].map((option, i) => (
+                    <button key={i} onClick={() => setQuizStep(2)} className="w-full text-left px-5 py-4 rounded-2xl bg-slate-50 border border-slate-100 text-sm font-medium text-slate-700 hover:bg-amber-50 hover:border-amber-200 hover:text-amber-700 transition-colors flex justify-between group">
+                      {option} <ChevronRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity" />
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {quizStep === 2 && (
+              <div className="animate-in fade-in slide-in-from-right-4 duration-300">
+                <h3 className="font-serif text-2xl font-bold text-slate-800 mb-2">С кем полетите?</h3>
+                <p className="text-sm text-slate-500 mb-6">Это поможет подобрать правильный отель</p>
+                <div className="space-y-3">
+                  {['Вдвоем (Романтика)', 'Семьей (С детьми)', 'Соло (Перезагрузка)', 'Шумной компанией'].map((option, i) => (
+                    <button key={i} onClick={() => setQuizStep(3)} className="w-full text-left px-5 py-4 rounded-2xl bg-slate-50 border border-slate-100 text-sm font-medium text-slate-700 hover:bg-amber-50 hover:border-amber-200 hover:text-amber-700 transition-colors flex justify-between group">
+                      {option} <ChevronRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity" />
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {quizStep === 3 && (
+              <div className="animate-in fade-in slide-in-from-right-4 duration-300">
+                <h3 className="font-serif text-2xl font-bold text-slate-800 mb-2">Куда прислать варианты?</h3>
+                <p className="text-sm text-slate-500 mb-6">Оставьте WhatsApp, я пришлю 3 лучших варианта под ваш запрос.</p>
+                <div className="space-y-4">
+                  <input 
+                    type="tel" 
+                    placeholder="+7 (999) 000-00-00" 
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                    className="w-full bg-white border border-slate-200 rounded-2xl px-5 py-4 text-slate-800 focus:outline-none focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37]"
+                  />
+                  <button 
+                    onClick={() => setQuizStep(4)} 
+                    className="w-full bg-gradient-to-r from-[#D4AF37] to-[#B58500] text-white font-bold rounded-2xl py-4 hover:shadow-lg hover:shadow-[#D4AF37]/30 transition-all"
+                  >
+                    Получить подборку
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {quizStep === 4 && (
+              <div className="text-center py-6 animate-in zoom-in-90 duration-500">
+                <div className="w-20 h-20 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-6 border border-emerald-200">
+                  <CheckCircle2 className="w-10 h-10 text-emerald-500" />
+                </div>
+                <h3 className="font-serif text-2xl font-bold text-slate-800 mb-3">Запрос принят!</h3>
+                <p className="text-slate-600 text-sm leading-relaxed mb-8">Я уже начала готовить для вас идеальные варианты. Напишу в WhatsApp в течение 15 минут.</p>
+                <button onClick={closeQuiz} className="w-full bg-slate-100 text-slate-700 font-bold rounded-2xl py-4 hover:bg-slate-200 transition-colors">
+                  Отлично, жду
                 </button>
-              ))}
-            </div>
+              </div>
+            )}
           </div>
         </div>
 
@@ -1857,7 +1990,7 @@ export default function App() {
             
             <div className="mt-5 p-3 bg-blue-50 rounded-xl">
               <p className="text-[10px] text-blue-600 leading-tight">
-                <strong>Секретный пульт:</strong> Клиент не видит эту панель. Переключайте стили во время звонка для создания Вау-эффекта! 🪄
+                <strong>Секретный пульт:</strong> Для создания Вау-эффекта! 🪄
               </p>
             </div>
           </div>
