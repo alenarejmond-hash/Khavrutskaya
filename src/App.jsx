@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Plane, Map, Sparkles, Phone, MessageCircle, Navigation, Sun, Heart, ArrowRight, Settings, X, Droplets, Cloud, Gem, Moon, Euro, CheckCircle2, MapPin, ExternalLink, Clock, Star, Briefcase, Send, ChevronRight, Youtube, ArrowUpRight, Instagram, Flame, CalendarDays } from 'lucide-react';
+import { Plane, Map, Sparkles, Phone, MessageCircle, Navigation, Sun, Heart, ArrowRight, Settings, X, Droplets, Cloud, Gem, Moon, Euro, CheckCircle2, MapPin, ExternalLink, Clock, Star, Briefcase, Send, ChevronRight, Youtube, ArrowUpRight, Instagram, Flame, CalendarDays, Luggage } from 'lucide-react';
 
 // Общие данные для всех шаблонов (чтобы легко было менять текст везде сразу)
 const DATA = {
@@ -157,11 +157,48 @@ const Template1 = () => (
         </div>
       </div>
 
-      <div className="w-full">
-        <div className="flex justify-center gap-4">
-          <a href="#" className="glass-button w-14 h-14 rounded-full flex items-center justify-center text-emerald-500"><Phone className="w-6 h-6" /></a>
-          <a href="#" className="glass-button w-14 h-14 rounded-[1.5rem] flex items-center justify-center text-sky-500"><Navigation fill="currentColor" className="opacity-80 w-6 h-6" /></a>
-          <a href="#" className="glass-button w-14 h-14 rounded-full flex items-center justify-center text-purple-500"><MessageCircle className="w-6 h-6" /></a>
+      {/* --- LEAD-МАГНИТ (ВАРИАНТ 1: Живой Океан - Изящная тонкая кнопка) --- */}
+      <div className="w-full mb-12 px-4">
+        <button className="w-full glass-panel p-1.5 rounded-[1.5rem] group hover:bg-white/80 transition-all shadow-sm relative overflow-hidden cursor-pointer">
+          <div className="absolute inset-0 bg-gradient-to-r from-teal-400/10 to-cyan-400/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
+          <div className="relative bg-white/60 backdrop-blur-md rounded-2xl p-2.5 flex items-center justify-between border border-white">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-cyan-400 to-teal-400 flex items-center justify-center text-white shadow-inner group-hover:scale-105 transition-transform duration-500">
+                <Luggage className="w-5 h-5" />
+              </div>
+              <div className="text-left">
+                <h3 className="font-extrabold text-slate-800 text-xs uppercase tracking-wide leading-tight">Чек-лист</h3>
+                <p className="text-[9px] text-teal-600 font-medium mt-0.5">Секреты сборов (PDF)</p>
+              </div>
+            </div>
+            <div className="w-6 h-6 rounded-full bg-cyan-100 text-cyan-600 flex items-center justify-center group-hover:bg-cyan-500 group-hover:text-white transition-colors mr-1">
+              <ArrowRight className="w-3 h-3" />
+            </div>
+          </div>
+        </button>
+      </div>
+
+      <div className="w-full mt-2 pb-8">
+        <div className="flex flex-col items-center">
+          <span className="text-[10px] uppercase tracking-widest text-cyan-600 font-bold mb-5 relative z-10">На связи 24/7</span>
+          <div className="flex justify-center gap-5 relative">
+            <div className="absolute inset-0 bg-cyan-400/20 blur-2xl rounded-full"></div>
+            {/* Telegram */}
+            <a href="#" className="relative group w-16 h-16 flex items-center justify-center">
+              <div className="absolute inset-0 bg-gradient-to-br from-cyan-400 to-teal-400 rounded-[40%_60%_70%_30%/40%_50%_60%_50%] organic-blob opacity-80 group-hover:opacity-100 transition-opacity"></div>
+              <Send className="w-6 h-6 text-white relative z-10 group-hover:scale-110 transition-transform" />
+            </a>
+            {/* WhatsApp */}
+            <a href="#" className="relative group w-16 h-16 flex items-center justify-center">
+              <div className="absolute inset-0 bg-gradient-to-br from-teal-400 to-cyan-500 rounded-[60%_40%_30%_70%/50%_60%_40%_50%] organic-blob opacity-80 group-hover:opacity-100 transition-opacity" style={{animationDelay: '1s'}}></div>
+              <Phone className="w-6 h-6 text-white relative z-10 group-hover:scale-110 transition-transform" />
+            </a>
+            {/* Instagram */}
+            <a href="#" className="relative group w-16 h-16 flex items-center justify-center">
+              <div className="absolute inset-0 bg-gradient-to-br from-cyan-300 to-sky-400 rounded-[50%_50%_60%_40%/60%_40%_70%_50%] organic-blob opacity-80 group-hover:opacity-100 transition-opacity" style={{animationDelay: '2s'}}></div>
+              <Instagram className="w-6 h-6 text-white relative z-10 group-hover:scale-110 transition-transform" />
+            </a>
+          </div>
         </div>
       </div>
     </div>
@@ -295,16 +332,37 @@ const Template2 = () => (
         </div>
       </div>
 
-      {/* Контакты-леденцы */}
-      <div className="flex justify-center gap-6">
-        {['Phone', 'MessageCircle', 'Navigation'].map((icon, i) => {
-          const Icon = icon === 'Phone' ? Phone : icon === 'MessageCircle' ? MessageCircle : Navigation;
-          return (
-            <a key={i} href="#" className="w-12 h-12 bg-white/60 backdrop-blur-md border border-white rounded-xl shadow-sm flex items-center justify-center text-[#20B2AA] hover:bg-white hover:-translate-y-1 transition-all">
-              <Icon className="w-5 h-5" />
-            </a>
-          )
-        })}
+      {/* --- LEAD-МАГНИТ (ВАРИАНТ 2: Тропическая Арка - Элегантная карточка) --- */}
+      <div className="w-full mb-12 px-4 relative z-10">
+        <div className="bg-white/80 backdrop-blur-md border border-[#E5DCC5] rounded-2xl p-3 flex items-center gap-4 shadow-sm relative overflow-hidden group cursor-pointer hover:shadow-[0_8px_20px_rgba(0,0,0,0.04)] transition-all">
+          <div className="w-10 h-10 bg-[#F4EFE6] rounded-full flex items-center justify-center border border-[#E5DCC5] shadow-sm shrink-0 group-hover:-translate-y-0.5 transition-transform">
+            <Luggage className="w-5 h-5 text-[#F4A460]" />
+          </div>
+          <div className="text-left flex-1">
+            <h3 className="font-serif text-[15px] text-[#2C3E50] leading-none mb-1">Гайд путешественника</h3>
+            <p className="text-[8px] text-[#8B7E66] uppercase tracking-widest">Бесплатный чеклист</p>
+          </div>
+          <ArrowRight className="w-4 h-4 text-[#20B2AA] opacity-50 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
+        </div>
+      </div>
+
+      <div className="w-full mt-2 pb-8 flex flex-col items-center relative z-10">
+        <div className="flex items-center gap-4 mb-6">
+          <span className="w-8 h-[1px] bg-[#E5DCC5]"></span>
+          <span className="font-serif italic text-[#8B7E66] text-sm">Связаться со мной</span>
+          <span className="w-8 h-[1px] bg-[#E5DCC5]"></span>
+        </div>
+        <div className="flex justify-center gap-5">
+          <a href="#" className="w-12 h-12 rounded-full border border-[#E5DCC5] flex items-center justify-center text-[#2C3E50] hover:bg-[#20B2AA] hover:text-white hover:border-[#20B2AA] transition-all duration-300 group shadow-sm hover:shadow-md">
+            <Send className="w-5 h-5 group-hover:scale-110 transition-transform" />
+          </a>
+          <a href="#" className="w-12 h-12 rounded-full border border-[#E5DCC5] flex items-center justify-center text-[#2C3E50] hover:bg-[#F4A460] hover:text-white hover:border-[#F4A460] transition-all duration-300 group shadow-sm hover:shadow-md">
+            <Phone className="w-5 h-5 group-hover:scale-110 transition-transform" />
+          </a>
+          <a href="#" className="w-12 h-12 rounded-full border border-[#E5DCC5] flex items-center justify-center text-[#2C3E50] hover:bg-[#20B2AA] hover:text-white hover:border-[#20B2AA] transition-all duration-300 group shadow-sm hover:shadow-md">
+            <Instagram className="w-5 h-5 group-hover:scale-110 transition-transform" />
+          </a>
+        </div>
       </div>
     </div>
   </div>
@@ -440,10 +498,36 @@ const Template3 = () => {
         </div>
       </div>
 
-      <div className="flex justify-center gap-8">
-        <Phone className="w-6 h-6 text-[#004d40] hover:scale-110 cursor-pointer transition-transform" />
-        <MessageCircle className="w-6 h-6 text-[#004d40] hover:scale-110 cursor-pointer transition-transform" />
-        <Navigation className="w-6 h-6 text-[#004d40] hover:scale-110 cursor-pointer transition-transform" />
+      {/* --- LEAD-МАГНИТ (ВАРИАНТ 3: Жемчужный Бриз - Компактная кнопка) --- */}
+      <div className="w-full mb-12 px-4 relative z-10">
+        <button className="w-full relative group">
+          <div className="absolute -inset-0.5 bg-gradient-to-r from-[#00695c]/20 to-[#004d40]/20 rounded-2xl blur opacity-0 group-hover:opacity-100 transition duration-500 pointer-events-none"></div>
+          <div className="relative py-3 px-4 rounded-2xl backdrop-blur-xl bg-white/40 border border-white flex items-center gap-4 shadow-sm hover:bg-white/60 transition-colors text-left cursor-pointer">
+            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#E0FFFF] to-white flex items-center justify-center shadow-inner text-[#00695c] shrink-0 group-hover:scale-105 transition-transform">
+              <Luggage className="w-5 h-5" />
+            </div>
+            <div className="flex-1">
+              <h3 className="font-bold text-[#004d40] text-xs uppercase tracking-wider mb-0.5">Чек-лист в дорогу</h3>
+              <span className="text-[#00695c] text-[9px] uppercase tracking-widest font-medium">Забрать PDF</span>
+            </div>
+            <ArrowRight className="w-4 h-4 text-[#00695c]" />
+          </div>
+        </button>
+      </div>
+
+      <div className="w-full flex flex-col items-center mt-2 pb-8 relative z-10">
+        <p className="text-[#00695c] opacity-70 font-medium text-[10px] mb-5 tracking-widest uppercase">Жду вашего сообщения</p>
+        <div className="flex justify-center gap-5">
+          <a href="#" className="w-12 h-12 rounded-full backdrop-blur-md bg-white/40 border border-white/60 flex items-center justify-center hover:bg-white hover:shadow-[0_4px_15px_rgba(0,100,100,0.15)] transition-all duration-300 group">
+            <Send className="w-5 h-5 text-[#00695c] group-hover:scale-110 transition-transform" />
+          </a>
+          <a href="#" className="w-12 h-12 rounded-full backdrop-blur-md bg-white/40 border border-white/60 flex items-center justify-center hover:bg-white hover:shadow-[0_4px_15px_rgba(0,100,100,0.15)] transition-all duration-300 group">
+            <Phone className="w-5 h-5 text-[#00695c] group-hover:scale-110 transition-transform" />
+          </a>
+          <a href="#" className="w-12 h-12 rounded-full backdrop-blur-md bg-white/40 border border-white/60 flex items-center justify-center hover:bg-white hover:shadow-[0_4px_15px_rgba(0,100,100,0.15)] transition-all duration-300 group">
+            <Instagram className="w-5 h-5 text-[#00695c] group-hover:scale-110 transition-transform" />
+          </a>
+        </div>
       </div>
     </div>
   </div>
@@ -578,9 +662,35 @@ const Template4 = () => {
         </div>
       </div>
 
-      <div className="bg-white px-8 py-3 rounded-full shadow-lg shadow-[#87CEFA]/10 border border-[#E6F3FF] flex gap-6">
-        <Phone className="w-5 h-5 text-slate-400 hover:text-[#87CEFA] cursor-pointer" />
-        <MessageCircle className="w-5 h-5 text-slate-400 hover:text-[#87CEFA] cursor-pointer" />
+      {/* --- LEAD-МАГНИТ (ВАРИАНТ 4: Небесный Эффект - Компактный) --- */}
+      <div className="w-full mb-12 px-6 relative z-10">
+        <button className="w-full bg-white/90 backdrop-blur-sm p-1 rounded-[1.5rem] shadow-[0_8px_20px_rgba(135,206,250,0.1)] hover:-translate-y-1 hover:shadow-[0_15px_25px_rgba(135,206,250,0.2)] transition-all border border-[#E6F3FF] group cursor-pointer">
+          <div className="py-2.5 px-4 flex items-center gap-4">
+             <div className="w-9 h-9 bg-gradient-to-br from-[#87CEFA] to-[#B0E0E6] rounded-full flex items-center justify-center text-white shadow-inner shrink-0 group-hover:animate-bounce-slow">
+               <Luggage className="w-4 h-4" />
+             </div>
+             <div className="flex flex-col items-start text-left flex-1">
+               <h3 className="font-extrabold text-slate-700 text-xs">Секретный чек-лист</h3>
+               <span className="text-[9px] text-[#87CEFA] font-bold uppercase tracking-widest mt-0.5">Подарок внутри</span>
+             </div>
+             <ArrowUpRight className="w-4 h-4 text-slate-300 group-hover:text-[#87CEFA] transition-colors" />
+          </div>
+        </button>
+      </div>
+
+      <div className="w-full flex flex-col items-center mt-2 pb-8 relative z-10">
+        <h3 className="text-[10px] font-bold text-[#87CEFA] uppercase tracking-widest mb-5 flex items-center gap-2">Связь с экипажем</h3>
+        <div className="flex justify-center gap-5">
+           <a href="#" className="w-12 h-12 bg-white/80 backdrop-blur-sm rounded-full shadow-[0_5px_15px_rgba(135,206,250,0.1)] border border-[#E6F3FF] flex items-center justify-center hover:-translate-y-1 hover:shadow-[0_8px_20px_rgba(135,206,250,0.2)] hover:bg-[#87CEFA] group transition-all">
+             <Send className="w-5 h-5 text-[#87CEFA] group-hover:text-white transition-colors" />
+           </a>
+           <a href="#" className="w-12 h-12 bg-white/80 backdrop-blur-sm rounded-full shadow-[0_5px_15px_rgba(135,206,250,0.1)] border border-[#E6F3FF] flex items-center justify-center hover:-translate-y-1 hover:shadow-[0_8px_20px_rgba(135,206,250,0.2)] hover:bg-[#87CEFA] group transition-all" style={{animationDelay: '0.1s'}}>
+             <Phone className="w-5 h-5 text-[#87CEFA] group-hover:text-white transition-colors" />
+           </a>
+           <a href="#" className="w-12 h-12 bg-white/80 backdrop-blur-sm rounded-full shadow-[0_5px_15px_rgba(135,206,250,0.1)] border border-[#E6F3FF] flex items-center justify-center hover:-translate-y-1 hover:shadow-[0_8px_20px_rgba(135,206,250,0.2)] hover:bg-[#87CEFA] group transition-all" style={{animationDelay: '0.2s'}}>
+             <Instagram className="w-5 h-5 text-[#87CEFA] group-hover:text-white transition-colors" />
+           </a>
+        </div>
       </div>
 
     </div>
@@ -737,9 +847,45 @@ const Template5 = () => (
         </div>
       </div>
 
-      <div className="flex justify-center gap-3 w-full">
-        <a href="#" className="flex-1 bg-white/70 backdrop-blur-md border border-white/80 py-3 rounded-xl flex justify-center text-gray-600 hover:text-[#00CED1] hover:bg-white transition-all shadow-sm"><Phone className="w-5 h-5" /></a>
-        <a href="#" className="flex-1 bg-white/70 backdrop-blur-md border border-white/80 py-3 rounded-xl flex justify-center text-gray-600 hover:text-[#00CED1] hover:bg-white transition-all shadow-sm"><MessageCircle className="w-5 h-5" /></a>
+      {/* --- LEAD-МАГНИТ (ВАРИАНТ 5: Кристальный Оазис - Компактный) --- */}
+      <div className="w-full mb-12 px-4">
+        <div className="relative group cursor-pointer">
+          <div className="absolute inset-0 bg-gradient-to-r from-[#FF7F50] to-[#FF6347] rounded-xl transform translate-x-1 translate-y-1 opacity-40 group-hover:translate-x-1.5 group-hover:translate-y-1.5 transition-transform duration-300 pointer-events-none"></div>
+          <div className="relative bg-white/90 backdrop-blur-xl border border-white p-3 rounded-xl shadow-sm flex items-center gap-3 group-hover:-translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-300">
+            <div className="w-10 h-10 bg-gray-50 rounded-lg flex items-center justify-center text-[#FF7F50] border border-gray-100 shadow-inner shrink-0">
+              <Luggage className="w-5 h-5" />
+            </div>
+            <div className="flex-1 text-left">
+              <h3 className="font-black text-gray-900 text-xs uppercase tracking-wider mb-0.5">Чек-лист</h3>
+              <p className="text-[8px] text-gray-500 font-bold uppercase tracking-widest">Идеальный чемодан</p>
+            </div>
+            <div className="w-6 h-6 rounded bg-[#FF7F50] text-white flex items-center justify-center shadow-md">
+              <ArrowUpRight className="w-3 h-3" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="w-full flex flex-col items-center mt-2 pb-8 px-2">
+        <div className="flex items-center justify-center gap-2 mb-5">
+           <Gem className="w-3 h-3 text-[#FF7F50]" />
+           <span className="font-black text-gray-400 uppercase tracking-widest text-[10px]">Ваш турагент</span>
+           <Gem className="w-3 h-3 text-[#00CED1]" />
+        </div>
+        <div className="flex justify-center gap-5">
+           <a href="#" className="relative group w-12 h-12 bg-white backdrop-blur-xl border border-gray-100 rounded-xl shadow-sm flex items-center justify-center hover:-translate-y-1 transition-transform">
+              <div className="absolute inset-0 bg-gradient-to-br from-[#00CED1]/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-xl"></div>
+              <Send className="w-5 h-5 text-[#00CED1] relative z-10 group-hover:scale-110 transition-transform" />
+           </a>
+           <a href="#" className="relative group w-12 h-12 bg-white backdrop-blur-xl border border-gray-100 rounded-xl shadow-sm flex items-center justify-center hover:-translate-y-1 transition-transform">
+              <div className="absolute inset-0 bg-gradient-to-br from-[#FF7F50]/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-xl"></div>
+              <Phone className="w-5 h-5 text-[#FF7F50] relative z-10 group-hover:scale-110 transition-transform" />
+           </a>
+           <a href="#" className="relative group w-12 h-12 bg-white backdrop-blur-xl border border-gray-100 rounded-xl shadow-sm flex items-center justify-center hover:-translate-y-1 transition-transform">
+              <div className="absolute inset-0 bg-gradient-to-br from-gray-900/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-xl"></div>
+              <Instagram className="w-5 h-5 text-gray-800 relative z-10 group-hover:scale-110 transition-transform" />
+           </a>
+        </div>
       </div>
 
     </div>
@@ -798,7 +944,7 @@ const Template6 = () => {
           </div>
 
           <h1 className="font-serif text-[26px] font-semibold text-transparent bg-clip-text bg-gradient-to-r from-amber-600 to-yellow-600 tracking-wide">
-            Марина Хавруцкая
+            {DATA.name} {DATA.lastName}
           </h1>
           <p className="text-cyan-700 font-bold text-[9px] uppercase tracking-[0.3em] mt-2 mb-5">
             Руководитель агентства
@@ -939,83 +1085,92 @@ const Template6 = () => {
                     <MapPin className="w-3 h-3 text-cyan-500" /> {deal.loc}
                   </div>
                   <div className="flex items-end justify-between">
-                  <div>
-                    <p className="text-[9px] uppercase tracking-widest text-slate-400 font-bold mb-0.5">Стоимость</p>
-                    <p className="font-serif text-xl font-bold text-amber-600">{deal.price}</p>
+                    <div>
+                      <p className="text-[9px] uppercase tracking-widest text-slate-400 font-bold mb-0.5">Стоимость</p>
+                      <p className="font-serif text-xl font-bold text-amber-600">{deal.price}</p>
+                    </div>
+                    <button className="w-10 h-10 rounded-full bg-cyan-50 flex items-center justify-center text-cyan-600 hover:bg-cyan-600 hover:text-white transition-colors">
+                      <ArrowUpRight className="w-5 h-5" />
+                    </button>
                   </div>
-                  <button className="w-10 h-10 rounded-full bg-cyan-50 flex items-center justify-center text-cyan-600 hover:bg-cyan-600 hover:text-white transition-colors">
-                    <ArrowUpRight className="w-5 h-5" />
-                  </button>
                 </div>
               </div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* --- ОТЗЫВЫ (ВАРИАНТ 6: Quiet Luxury - Минимализм, классика) --- */}
-      <div className="mb-14 px-2">
-        <div className="flex items-center gap-4 mb-8">
-          <div className="h-[1px] flex-1 bg-gradient-to-r from-transparent to-amber-200"></div>
-          <h2 className="font-serif text-xl text-slate-800 font-medium italic">Впечатления</h2>
-          <div className="h-[1px] flex-1 bg-gradient-to-l from-transparent to-amber-200"></div>
-        </div>
-        
-        <div className="flex overflow-x-auto hide-scrollbar snap-x snap-mandatory gap-4 pb-4 -mx-5 px-5">
-          {DATA.reviews.map(review => (
-            <div key={review.id} className="min-w-[280px] snap-center bg-transparent border-t border-b border-amber-200/40 py-6 px-2 flex flex-col justify-between">
-              <div>
-                <div className="flex justify-center gap-1 mb-4">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="w-4 h-4 text-amber-400 fill-amber-400" />
-                  ))}
-                </div>
-                <p className="text-center font-serif text-slate-600 italic text-sm leading-relaxed mb-6 px-4">
-                  "{review.text}"
-                </p>
-              </div>
-              <div className="flex flex-col items-center justify-center mt-auto">
-                <img src={review.avatar} alt={review.name} className="w-10 h-10 rounded-full object-cover mb-2 ring-1 ring-amber-200" />
-                <span className="text-[10px] uppercase tracking-[0.2em] font-bold text-slate-800">{review.name}</span>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* --- 6. БЛОК: СЕКРЕТНЫЙ ЧЕМОДАН & ФУТЕР --- */}
-      <div className="mt-8 mb-12">
-          {/* Кнопка "Чемодан" (Открывает чат) */}
-          <button className="w-full group relative bg-white/80 backdrop-blur-xl border border-white shadow-[0_15px_30px_-10px_rgba(6,182,212,0.15)] rounded-3xl p-5 flex items-center justify-between overflow-hidden transition-all hover:-translate-y-1 hover:shadow-[0_20px_40px_-10px_rgba(6,182,212,0.25)]">
-            <div className="absolute inset-0 bg-gradient-to-r from-cyan-50 to-amber-50 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-            
-            <div className="relative z-10 flex items-center gap-4">
-              <div className="w-14 h-14 bg-gradient-to-br from-amber-100 to-amber-200 rounded-2xl flex items-center justify-center shadow-inner border border-white">
-                <Briefcase className="w-7 h-7 text-amber-600" />
-              </div>
-              <div className="text-left">
-                <h3 className="font-serif text-[17px] font-bold text-slate-800">Забрать чеклисты</h3>
-                <p className="text-xs text-slate-500 font-medium">Секреты идеального сбора в отпуск</p>
-              </div>
-            </div>
-            
-            <div className="relative z-10 w-10 h-10 bg-cyan-600 rounded-full flex items-center justify-center text-white shadow-md group-hover:bg-cyan-500 transition-colors">
-              <MessageCircle className="w-5 h-5" />
-            </div>
-          </button>
-
-          {/* Минималистичные золотые соцсети */}
-          <div className="flex justify-center gap-6 mt-12">
-            {[Instagram, Send, MessageCircle].map((Icon, idx) => (
-              <a key={idx} href="#" className="w-12 h-12 rounded-full bg-white/50 backdrop-blur-sm border border-white/80 flex items-center justify-center shadow-sm text-amber-600/80 hover:text-amber-500 hover:bg-white hover:scale-110 transition-all">
-                <Icon className="w-5 h-5" />
-              </a>
             ))}
           </div>
+        </div>
+
+        {/* --- ОТЗЫВЫ (ВАРИАНТ 6: Quiet Luxury - Минимализм, классика) --- */}
+        <div className="mb-14 px-2">
+          <div className="flex items-center gap-4 mb-8">
+            <div className="h-[1px] flex-1 bg-gradient-to-r from-transparent to-amber-200"></div>
+            <h2 className="font-serif text-xl text-slate-800 font-medium italic">Впечатления</h2>
+            <div className="h-[1px] flex-1 bg-gradient-to-l from-transparent to-amber-200"></div>
+          </div>
           
-          <p className="text-center text-[10px] uppercase tracking-[0.2em] font-bold text-slate-400 mt-8 pb-8">
-            © Oasis Quiet Luxury
-          </p>
+          <div className="flex overflow-x-auto hide-scrollbar snap-x snap-mandatory gap-4 pb-4 -mx-5 px-5">
+            {DATA.reviews.map(review => (
+              <div key={review.id} className="min-w-[280px] snap-center bg-transparent border-t border-b border-amber-200/40 py-6 px-2 flex flex-col justify-between">
+                <div>
+                  <div className="flex justify-center gap-1 mb-4">
+                    {[...Array(5)].map((_, i) => (
+                      <Star key={i} className="w-4 h-4 text-amber-400 fill-amber-400" />
+                    ))}
+                  </div>
+                  <p className="text-center font-serif text-slate-600 italic text-sm leading-relaxed mb-6 px-4">
+                    "{review.text}"
+                  </p>
+                </div>
+                <div className="flex flex-col items-center justify-center mt-auto">
+                  <img src={review.avatar} alt={review.name} className="w-10 h-10 rounded-full object-cover mb-2 ring-1 ring-amber-200" />
+                  <span className="text-[10px] uppercase tracking-[0.2em] font-bold text-slate-800">{review.name}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* --- LEAD-МАГНИТ (ВАРИАНТ 6: Quiet Luxury - Минимализм) --- */}
+        <div className="w-full mb-12 px-5">
+          <button className="w-full bg-white/50 backdrop-blur-md border border-amber-200/50 hover:border-amber-400/80 rounded-2xl py-4 px-5 flex items-center justify-between transition-all group relative overflow-hidden shadow-sm cursor-pointer">
+            <div className="absolute inset-0 bg-gradient-to-r from-amber-50/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"></div>
+            <div className="flex items-center gap-4 relative z-10">
+              <div className="w-10 h-10 rounded-full border border-amber-200/60 flex items-center justify-center bg-white shrink-0 group-hover:scale-105 transition-transform">
+                <Luggage className="w-4 h-4 text-amber-600/80 stroke-[1.5]" />
+              </div>
+              <div className="text-left">
+                <h3 className="font-serif text-[15px] text-slate-800 leading-none mb-1.5">Чек-лист путешественника</h3>
+                <div className="text-[8px] uppercase tracking-[0.2em] font-bold text-amber-600/80">Забрать руководство</div>
+              </div>
+            </div>
+            <ChevronRight className="w-4 h-4 text-amber-300 relative z-10 group-hover:text-amber-500 transition-colors" />
+          </button>
+        </div>
+
+        {/* --- ФУТЕР --- */}
+        <div className="mb-8 w-full">
+          <div className="flex flex-col items-center px-5">
+             <div className="flex items-center justify-center gap-3 mb-6 w-full max-w-[200px]">
+               <div className="h-[1px] flex-1 bg-amber-200/50"></div>
+               <span className="font-serif italic text-slate-500 text-sm">Свяжитесь со мной</span>
+               <div className="h-[1px] flex-1 bg-amber-200/50"></div>
+             </div>
+             
+             <div className="flex justify-center gap-6">
+               <a href="#" className="w-12 h-12 rounded-full border border-amber-200/50 bg-white/40 backdrop-blur-md flex items-center justify-center hover:bg-white hover:border-amber-400 hover:shadow-sm transition-all group">
+                 <Send className="w-5 h-5 text-amber-600/70 group-hover:text-amber-500 group-hover:scale-110 transition-all" />
+               </a>
+               <a href="#" className="w-12 h-12 rounded-full border border-amber-200/50 bg-white/40 backdrop-blur-md flex items-center justify-center hover:bg-white hover:border-amber-400 hover:shadow-sm transition-all group">
+                 <Phone className="w-5 h-5 text-amber-600/70 group-hover:text-amber-500 group-hover:scale-110 transition-all" />
+               </a>
+               <a href="#" className="w-12 h-12 rounded-full border border-amber-200/50 bg-white/40 backdrop-blur-md flex items-center justify-center hover:bg-white hover:border-amber-400 hover:shadow-sm transition-all group">
+                 <Instagram className="w-5 h-5 text-amber-600/70 group-hover:text-amber-500 group-hover:scale-110 transition-all" />
+               </a>
+             </div>
+             
+             <p className="text-center text-[9px] uppercase tracking-[0.2em] font-bold text-slate-400 mt-10 pb-4">
+               © Oasis Quiet Luxury
+             </p>
+          </div>
         </div>
 
       </div>
@@ -1128,7 +1283,7 @@ const Template7 = () => {
             </div>
             
             <div className="mt-6 relative z-10">
-              <h1 className="text-3xl font-serif text-slate-900 tracking-wide mb-1">Марина Хавруцкая</h1>
+              <h1 className="text-3xl font-serif text-slate-900 tracking-wide mb-1">{DATA.name} {DATA.lastName}</h1>
               <p className="gold-accent text-[10px] uppercase tracking-[0.25em] font-medium opacity-90">Executive Travel Expert</p>
               
               <div className="flex items-center justify-center gap-3 my-6">
@@ -1287,48 +1442,50 @@ const Template7 = () => {
           </div>
         </div>
 
-        {/* --- 6. Блок «Lead-Магнит» (Чеклист) --- */}
+        {/* --- LEAD-МАГНИТ (ВАРИАНТ 7: Secret Resort) --- */}
         <div className="px-5 mb-12">
-          <button 
-            onClick={() => { /* Открытие чата */ }}
-            className="w-full relative overflow-hidden glass-panel rounded-3xl p-1 group shadow-[0_15px_30px_rgba(212,175,55,0.1)] hover:shadow-[0_15px_30px_rgba(212,175,55,0.2)] transition-shadow"
-          >
-            <div className="relative z-10 bg-white/60 backdrop-blur-sm rounded-[1.35rem] p-6 flex items-center justify-between border border-white">
-              <div className="flex items-center gap-5">
-                <div className="w-14 h-14 rounded-full bg-yellow-50 flex items-center justify-center border border-yellow-200 shadow-sm">
-                  <Briefcase className="w-6 h-6 text-[#D4AF37]" />
+          <button className="w-full relative group rounded-2xl overflow-hidden shadow-[0_10px_20px_rgba(212,175,55,0.1)] hover:shadow-[0_15px_30px_rgba(212,175,55,0.2)] transition-all duration-500 transform hover:-translate-y-0.5 cursor-pointer">
+            {/* Золотой фон с текстурой */}
+            <div className="absolute inset-0 bg-gradient-to-br from-[#D4AF37] via-[#B58500] to-[#805B00]"></div>
+            <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-20 mix-blend-overlay"></div>
+            
+            <div className="relative p-[1px]">
+              <div className="bg-[#FDFBF7]/95 backdrop-blur-md rounded-[15px] p-3 px-4 flex items-center gap-4 border border-white/40">
+                <div className="relative w-10 h-10 flex-shrink-0">
+                  <div className="absolute inset-0 bg-gradient-to-br from-[#FDFBF7] to-[#F4EFE6] rounded-lg border border-[#E5DCC5] flex items-center justify-center shadow-inner group-hover:-translate-y-1 transition-transform duration-500">
+                    <Luggage className="w-5 h-5 text-[#B58500]" />
+                  </div>
                 </div>
-                <div className="text-left">
-                  <h3 className="text-slate-900 font-serif text-xl mb-1">Секреты отпуска</h3>
-                  <p className="text-[9px] text-slate-500 uppercase tracking-widest">Чеклисты для сборов (PDF)</p>
+                <div className="text-left flex-1">
+                  <h3 className="font-serif text-[15px] font-bold text-slate-900 leading-none mb-1">Чек-лист (PDF)</h3>
+                  <div className="flex items-center gap-1.5 mt-1">
+                    <span className="w-4 h-[1px] bg-[#D4AF37]"></span>
+                    <p className="text-[8px] text-[#B58500] uppercase tracking-[0.15em] font-bold">Скачать</p>
+                  </div>
                 </div>
-              </div>
-              <div className="w-10 h-10 rounded-full border border-slate-200 flex items-center justify-center bg-white group-hover:bg-slate-50 transition-colors shadow-sm">
-                <Send className="w-4 h-4 text-sky-600" />
+                <ArrowRight className="w-4 h-4 text-[#D4AF37] opacity-70 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
               </div>
             </div>
           </button>
         </div>
 
         {/* --- 7. Футер «Контакты» --- */}
-        <footer className="px-5 pb-10 flex flex-col items-center">
-          <div className="w-12 h-[1px] bg-slate-300 mb-6"></div>
-          <p className="text-[10px] text-slate-500 uppercase tracking-[0.2em] mb-6 font-medium">Персональная связь</p>
+        <footer className="px-5 pb-10 flex flex-col items-center w-full relative z-10">
+          <div className="w-12 h-[1px] bg-gradient-to-r from-transparent via-[#D4AF37] to-transparent mb-5"></div>
+          <p className="text-[9px] text-[#B58500] uppercase tracking-[0.25em] mb-6 font-bold text-center">
+            Консьерж-сервис
+          </p>
           
-          <div className="flex gap-4">
-            {/* Telegram */}
-            <a href="#" className="w-12 h-12 rounded-full glass-panel-light flex items-center justify-center text-slate-600 hover:text-sky-500 hover:border-sky-500/30 transition-all shadow-sm group">
-              <Send className="w-5 h-5 transform -translate-y-[1px] -translate-x-[1px] group-hover:scale-110 transition-transform" />
+          <div className="flex justify-center gap-5">
+            <a href="#" className="w-12 h-12 rounded-full bg-[#FDFBF7] border border-[#E5DCC5] flex items-center justify-center shadow-[0_5px_15px_rgba(0,0,0,0.03)] hover:border-[#D4AF37] hover:shadow-[0_5px_15px_rgba(212,175,55,0.15)] transition-all group">
+               <Send className="w-5 h-5 text-slate-700 group-hover:text-[#D4AF37] transition-colors" />
             </a>
-            
-            {/* VK (Используем стилизованный текст, так как официальной иконки нет в стандартном пакете) */}
-            <a href="#" className="w-12 h-12 rounded-full glass-panel-light flex items-center justify-center text-slate-600 hover:text-blue-600 hover:border-blue-600/30 transition-all shadow-sm group">
-              <span className="font-bold text-sm tracking-wider group-hover:scale-110 transition-transform">VK</span>
+            <a href="#" className="w-12 h-12 rounded-full bg-[#1A1A1A] border border-[#1A1A1A] flex items-center justify-center shadow-[0_5px_15px_rgba(0,0,0,0.05)] hover:bg-[#2A2A2A] hover:border-[#D4AF37] transition-all group relative overflow-hidden">
+               <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-10 mix-blend-overlay"></div>
+               <Phone className="w-5 h-5 text-[#D4AF37] relative z-10 group-hover:scale-110 transition-transform" />
             </a>
-            
-            {/* YouTube */}
-            <a href="#" className="w-12 h-12 rounded-full glass-panel-light flex items-center justify-center text-slate-600 hover:text-red-500 hover:border-red-500/30 transition-all shadow-sm group">
-              <Youtube className="w-5 h-5 group-hover:scale-110 transition-transform" />
+            <a href="#" className="w-12 h-12 rounded-full bg-[#FDFBF7] border border-[#E5DCC5] flex items-center justify-center shadow-[0_5px_15px_rgba(0,0,0,0.03)] hover:border-[#D4AF37] hover:shadow-[0_5px_15px_rgba(212,175,55,0.15)] transition-all group">
+               <Instagram className="w-5 h-5 text-slate-700 group-hover:text-[#D4AF37] transition-colors" />
             </a>
           </div>
         </footer>
@@ -1379,6 +1536,12 @@ export default function App() {
   useEffect(() => {
     const style = document.createElement('style');
     style.innerHTML = `
+      /* iOS Safari Fix: предотвращает исчезновение картинок при скруглении */
+      .overflow-hidden {
+        -webkit-mask-image: -webkit-radial-gradient(white, black);
+        isolation: isolate;
+      }
+      
       @keyframes morph {
         0% { border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%; }
         34% { border-radius: 70% 30% 50% 50% / 30% 30% 70% 70%; }
