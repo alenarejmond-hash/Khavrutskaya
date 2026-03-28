@@ -1587,7 +1587,7 @@ const Template7 = () => {
         {/* --- 4. Блок «Авторские Туры» --- */}
         <div className="px-5 mt-16 mb-12">
           <div className="mb-6 flex items-center justify-between">
-            <h2 className="font-serif text-2xl text-slate-900">Летняя коллекция</h2>
+            <h2 className="font-serif text-2xl text-slate-900">Авторские туры</h2>
             <div className="h-[1px] flex-1 bg-gradient-to-r from-slate-200 to-transparent ml-6"></div>
           </div>
           
@@ -1651,7 +1651,7 @@ const Template7 = () => {
         {/* --- ОТЗЫВЫ (ВАРИАНТ 7: Secret Resort - Золотая элегантность) --- */}
         <div className="px-5 mb-14">
           <div className="text-center mb-8">
-            <h2 className="font-serif text-2xl text-slate-900 mb-2">Голоса гостей</h2>
+            <h2 className="font-serif text-2xl text-slate-900 mb-2">Отзывы</h2>
             <div className="w-8 h-[1px] bg-[#D4AF37] mx-auto"></div>
           </div>
           
@@ -1979,7 +1979,7 @@ export default function App() {
 
       {/* --- СКРЫТАЯ ПАНЕЛЬ ПЕРЕКЛЮЧЕНИЯ ДЛЯ ПРЕЗЕНТАЦИИ --- */}
       <div 
-        className={`fixed top-20 right-4 z-[100] transition-all duration-300 ${
+        className={`fixed top-4 right-4 z-[100] transition-all duration-300 ${
           isPanelOpen ? 'bg-white/90 backdrop-blur-xl p-5 rounded-2xl shadow-2xl border border-gray-200 w-80' : 'bg-transparent'
         }`}
       >
