@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Plane, Map, Sparkles, Phone, MessageCircle, Navigation, Sun, Heart, ArrowRight, Settings, X, Droplets, Cloud, Gem, Moon, Euro, CircleCheck as CheckCircle2, MapPin, ExternalLink, Clock, Star, Briefcase, Send, ChevronRight, ArrowUpRight, Flame, CalendarDays, Luggage } from 'lucide-react';
+import { Plane, Map, Sparkles, Phone, MessageCircle, Navigation, Sun, Heart, ArrowRight, Settings, X, Droplets, Cloud, Gem, Moon, Euro, CircleCheck as CheckCircle2, MapPin, ExternalLink, Clock, Star, Briefcase, Send, ChevronRight, ArrowUpRight, Flame, CalendarDays, Luggage, Lock, Unlock } from 'lucide-react';
 
 // Кастомная иконка Instagram (так как бренды были удалены из новых версий lucide-react)
 const Instagram = ({ className }) => (
@@ -41,7 +41,112 @@ const DATA = {
     { id: 2, name: "Михаил В.", text: "Сервис на высшем уровне. Отель превзошел все ожидания, а индивидуальный трансфер был очень кстати." },
     { id: 3, name: "Ольга К.", text: "Настоящий Quiet Luxury. Никаких забот, только океан, солнце и безупречный комфорт. Обязательно вернемся!" }
   ],
-  aboutText: "Я организую премиальные путешествия более 10 лет. Знаю скрытые жемчужины по всему миру, лично инспектирую отели и создаю безупречный сервис, в котором продумана каждая деталь вашего отдыха."
+  aboutText: "Я организую премиальные путешествия более 10 лет. Знаю скрытые жемчужины по всему миру, лично инспектирую отели и создаю безупречный сервис, в котором продумана каждая деталь вашего отдыха.",
+  secretPin: "7777",
+  secretTour: {
+    title: "Private Island Resort",
+    desc: "Полная приватность, личный батлер и перелет на гидроплане. Скрыто от посторонних глаз.",
+    price: "По запросу",
+    img: "https://i0.wp.com/images.unsplash.com/photo-1599619351208-3e6c839d6828?w=800&strip=all"
+  }
+};
+
+// --- ОБЩИЙ КОМПОНЕНТ: СЕКРЕТНЫЙ КЛУБ (PIN-КОД) ---
+const SecretClubModal = ({ isOpen, onClose }) => {
+  const [pin, setPin] = useState('');
+  const [isUnlocked, setIsUnlocked] = useState(false);
+  const [error, setError] = useState(false);
+
+  useEffect(() => {
+    if (!isOpen) {
+      setTimeout(() => { setPin(''); setIsUnlocked(false); setError(false); }, 300);
+    }
+  }, [isOpen]);
+
+  const handlePress = (val) => {
+    if (isUnlocked) return;
+    if (val === 'del') {
+      setPin(p => p.slice(0, -1));
+      setError(false);
+      return;
+    }
+    if (pin.length < 4) {
+      const newPin = pin + val;
+      setPin(newPin);
+      if (newPin.length === 4) {
+        if (newPin === DATA.secretPin) {
+          setTimeout(() => setIsUnlocked(true), 300);
+        } else {
+          setError(true);
+          setTimeout(() => { setPin(''); setError(false); }, 800);
+        }
+      }
+    }
+  };
+
+  return (
+    <div className={`fixed inset-0 z-[110] flex items-center justify-center transition-all duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] ${isOpen ? 'opacity-100 visible' : 'opacity-0 invisible pointer-events-none'}`}>
+      <div className="absolute inset-0 bg-slate-900/70 backdrop-blur-md" onClick={onClose}></div>
+      
+      <div className={`w-full max-w-sm mx-4 bg-white/10 backdrop-blur-2xl border border-white/20 rounded-[2.5rem] p-8 shadow-2xl relative transform transition-all duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] ${isOpen ? 'translate-y-0 scale-100' : 'translate-y-16 scale-95'}`}>
+        <button onClick={onClose} className="absolute top-5 right-5 p-2 bg-white/10 rounded-full text-white/70 hover:text-white hover:bg-white/20 transition-all">
+          <X className="w-5 h-5" />
+        </button>
+
+        {!isUnlocked ? (
+          <div className="flex flex-col items-center animate-in fade-in zoom-in-95 duration-500">
+            <div className="w-14 h-14 bg-white/10 rounded-full flex items-center justify-center mb-4 border border-white/20">
+              <Lock className="w-6 h-6 text-amber-400" />
+            </div>
+            <h3 className="font-serif text-2xl text-white mb-2 text-center">Private Club</h3>
+            <p className="text-xs text-white/60 mb-8 text-center">Введите PIN для доступа к эксклюзивной коллекции</p>
+
+            <div className="flex gap-4 mb-8">
+              {[0, 1, 2, 3].map(i => (
+                <div key={i} className={`w-4 h-4 rounded-full border transition-all duration-300 ${pin.length > i ? 'bg-amber-400 border-amber-400 shadow-[0_0_10px_rgba(251,191,36,0.5)]' : error ? 'border-red-500 bg-red-500/30' : 'border-white/30 bg-transparent'}`} />
+              ))}
+            </div>
+
+            <div className="grid grid-cols-3 gap-x-8 gap-y-4 w-full max-w-[240px]">
+              {[1, 2, 3, 4, 5, 6, 7, 8, 9, '', 0, 'del'].map((val, i) => (
+                <div key={i} className="flex justify-center items-center h-14">
+                  {val !== '' ? (
+                    <button 
+                      onClick={() => handlePress(val)}
+                      className="w-14 h-14 rounded-full flex items-center justify-center text-white text-2xl font-light hover:bg-white/10 active:bg-white/20 transition-colors"
+                    >
+                      {val === 'del' ? <X className="w-6 h-6" /> : val}
+                    </button>
+                  ) : null}
+                </div>
+              ))}
+            </div>
+          </div>
+        ) : (
+          <div className="flex flex-col items-center animate-in fade-in slide-in-from-bottom-4 duration-700">
+             <div className="w-14 h-14 bg-emerald-500/20 rounded-full flex items-center justify-center mb-4 border border-emerald-500/30">
+              <Unlock className="w-6 h-6 text-emerald-400" />
+            </div>
+            <h3 className="font-serif text-2xl text-white mb-2 text-center">Доступ открыт</h3>
+            <p className="text-xs text-white/60 mb-6 text-center">Эксклюзивное предложение для вас</p>
+            
+            <div className="w-full bg-white/5 border border-white/10 rounded-2xl overflow-hidden mb-6 group cursor-pointer hover:bg-white/10 transition-all">
+              <img src={DATA.secretTour.img} alt="Secret" className="w-full h-32 object-cover group-hover:scale-105 transition-transform duration-700" />
+              <div className="p-4">
+                <h4 className="font-serif text-lg text-white mb-1">{DATA.secretTour.title}</h4>
+                <p className="text-[10px] text-white/60 mb-3">{DATA.secretTour.desc}</p>
+                <div className="text-amber-400 font-bold text-sm">{DATA.secretTour.price}</div>
+              </div>
+            </div>
+
+            <button onClick={onClose} className="w-full bg-amber-500 text-slate-900 font-bold rounded-xl py-3 hover:bg-amber-400 transition-colors shadow-[0_0_20px_rgba(245,158,11,0.3)]">
+              Связаться в WhatsApp
+            </button>
+          </div>
+        )}
+      </div>
+    </div>
+  );
 };
 
 // ==========================================
@@ -49,6 +154,7 @@ const DATA = {
 // ==========================================
 const Template1 = () => {
   const [isAboutOpen, setIsAboutOpen] = useState(false);
+  const [isSecretOpen, setIsSecretOpen] = useState(false);
 
   return (
   <div className="relative min-h-screen bg-[#f4fbfc] overflow-hidden flex justify-center text-slate-800 font-sans selection:bg-cyan-200 w-full">
@@ -186,6 +292,15 @@ const Template1 = () => {
         </div>
       </div>
 
+      {/* --- СЕКРЕТНЫЙ КЛУБ (PIN-КОД) --- */}
+      <div className="w-full mb-8 px-4 relative z-10">
+        <button onClick={() => setIsSecretOpen(true)} className="w-full glass-panel py-4 rounded-2xl flex items-center justify-center gap-3 group hover:bg-white/90 transition-all border border-cyan-200/50 shadow-sm hover:shadow-md">
+          <Lock className="w-5 h-5 text-cyan-600 group-hover:scale-110 transition-transform" />
+          <span className="font-bold text-cyan-800 uppercase tracking-widest text-xs">Закрытый клуб</span>
+        </button>
+      </div>
+      <SecretClubModal isOpen={isSecretOpen} onClose={() => setIsSecretOpen(false)} />
+
       {/* --- LEAD-МАГНИТ (ВАРИАНТ 1: Живой Океан - Изящная тонкая кнопка) --- */}
       <div className="w-full mb-12 px-4">
         <button className="w-full glass-panel p-1.5 rounded-[1.5rem] group hover:bg-white/90 transition-all shadow-md relative overflow-hidden cursor-pointer">
@@ -240,6 +355,7 @@ const Template1 = () => {
 // ==========================================
 const Template2 = () => {
   const [activeReview, setActiveReview] = useState(0);
+  const [isSecretOpen, setIsSecretOpen] = useState(false);
 
   return (
   <div className="relative min-h-screen bg-[#FDFBF7] overflow-hidden flex justify-center text-[#2C3E50] font-serif w-full">
@@ -394,6 +510,15 @@ const Template2 = () => {
         </div>
       </div>
 
+      {/* --- СЕКРЕТНЫЙ КЛУБ (PIN-КОД) --- */}
+      <div className="w-full mb-10 px-4 relative z-10">
+        <button onClick={() => setIsSecretOpen(true)} className="w-full bg-[#2C3E50] text-[#E5DCC5] py-4 rounded-2xl flex items-center justify-center gap-3 group hover:bg-[#1a252f] transition-all shadow-md">
+          <Lock className="w-4 h-4 text-[#F4A460] group-hover:scale-110 transition-transform" />
+          <span className="font-serif italic text-lg tracking-wide">Private Collection</span>
+        </button>
+      </div>
+      <SecretClubModal isOpen={isSecretOpen} onClose={() => setIsSecretOpen(false)} />
+
       {/* --- LEAD-МАГНИТ (ВАРИАНТ 2: Тропическая Арка - Элегантная карточка) --- */}
       <div className="w-full mb-12 px-4 relative z-10">
         <div className="bg-white backdrop-blur-md border border-[#E5DCC5] rounded-2xl p-3 flex items-center gap-4 shadow-md relative overflow-hidden group cursor-pointer hover:shadow-[0_12px_25px_rgba(0,0,0,0.06)] transition-all">
@@ -437,6 +562,7 @@ const Template2 = () => {
 const Template3 = () => {
   const [showAbout, setShowAbout] = useState(false);
   const [activeReview, setActiveReview] = useState(0);
+  const [isSecretOpen, setIsSecretOpen] = useState(false);
 
   return (
   <div className="relative min-h-screen bg-gradient-to-br from-[#F0FFFF] to-[#E0FFFF] overflow-hidden flex justify-center text-[#004d40] font-sans w-full">
@@ -601,6 +727,15 @@ const Template3 = () => {
         </div>
       </div>
 
+      {/* --- СЕКРЕТНЫЙ КЛУБ (PIN-КОД) --- */}
+      <div className="w-full mb-10 px-4 relative z-10">
+        <button onClick={() => setIsSecretOpen(true)} className="w-full bg-white/60 backdrop-blur-md border border-white/50 text-[#004d40] py-4 rounded-3xl flex items-center justify-center gap-3 group hover:bg-white/80 transition-all shadow-[0_10px_30px_rgba(0,100,100,0.08)]">
+          <Lock className="w-5 h-5 opacity-70 group-hover:scale-110 transition-transform" />
+          <span className="font-bold uppercase tracking-widest text-xs">VIP Клуб</span>
+        </button>
+      </div>
+      <SecretClubModal isOpen={isSecretOpen} onClose={() => setIsSecretOpen(false)} />
+
       {/* --- LEAD-МАГНИТ (ВАРИАНТ 3: Жемчужный Бриз - Компактная кнопка) --- */}
       <div className="w-full mb-12 px-4 relative z-10">
         <button className="w-full relative group">
@@ -643,6 +778,7 @@ const Template3 = () => {
 const Template4 = () => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [activeReview, setActiveReview] = useState(0);
+  const [isSecretOpen, setIsSecretOpen] = useState(false);
 
   const nextReview = () => setActiveReview(p => (p + 1) % DATA.reviews.length);
   const prevReview = () => setActiveReview(p => (p - 1 + DATA.reviews.length) % DATA.reviews.length);
@@ -785,6 +921,15 @@ const Template4 = () => {
         </div>
       </div>
 
+      {/* --- СЕКРЕТНЫЙ КЛУБ (PIN-КОД) --- */}
+      <div className="w-full mb-10 px-6 relative z-10">
+        <button onClick={() => setIsSecretOpen(true)} className="w-full bg-gradient-to-r from-[#87CEFA] to-[#B0E0E6] text-white py-4 rounded-full flex items-center justify-center gap-3 group hover:-translate-y-1 hover:shadow-lg transition-all shadow-md">
+          <Lock className="w-5 h-5 group-hover:scale-110 transition-transform" />
+          <span className="font-bold uppercase tracking-widest text-xs">Secret Club</span>
+        </button>
+      </div>
+      <SecretClubModal isOpen={isSecretOpen} onClose={() => setIsSecretOpen(false)} />
+
       {/* --- LEAD-МАГНИТ (ВАРИАНТ 4: Небесный Эффект - Компактный) --- */}
       <div className="w-full mb-12 px-6 relative z-10">
         <button className="w-full bg-white shadow-[0_12px_25px_rgba(135,206,250,0.2)] p-1 rounded-[1.5rem] hover:-translate-y-1 hover:shadow-[0_15px_30px_rgba(135,206,250,0.25)] transition-all border border-[#E6F3FF] group cursor-pointer">
@@ -826,6 +971,7 @@ const Template4 = () => {
 // ==========================================
 const Template5 = () => {
   const [activeRev, setActiveRev] = useState(0);
+  const [isSecretOpen, setIsSecretOpen] = useState(false);
 
   return (
   <div className="relative min-h-screen bg-[#FAFAFA] overflow-hidden flex justify-center text-gray-900 font-sans w-full">
@@ -999,6 +1145,15 @@ const Template5 = () => {
         </div>
       </div>
 
+      {/* --- СЕКРЕТНЫЙ КЛУБ (PIN-КОД) --- */}
+      <div className="w-full mb-10 px-4 relative z-10">
+        <button onClick={() => setIsSecretOpen(true)} className="w-full bg-gray-900 text-white py-4 rounded-xl flex items-center justify-center gap-3 group hover:bg-black transition-all shadow-lg border border-gray-800">
+          <Lock className="w-4 h-4 text-[#FF7F50] group-hover:scale-110 transition-transform" />
+          <span className="font-black uppercase tracking-widest text-[10px]">Private Offers</span>
+        </button>
+      </div>
+      <SecretClubModal isOpen={isSecretOpen} onClose={() => setIsSecretOpen(false)} />
+
       {/* --- LEAD-МАГНИТ (ВАРИАНТ 5: Кристальный Оазис - Компактный) --- */}
       <div className="w-full mb-12 px-4">
         <div className="relative group cursor-pointer">
@@ -1053,6 +1208,7 @@ const Template6 = () => {
   const [quizStep, setQuizStep] = useState(1);
   const [phone, setPhone] = useState('');
   const [activeReview, setActiveReview] = useState(0);
+  const [isSecretOpen, setIsSecretOpen] = useState(false);
 
   const nextRev = () => setActiveReview(p => (p + 1) % DATA.reviews.length);
   const prevRev = () => setActiveReview(p => (p - 1 + DATA.reviews.length) % DATA.reviews.length);
@@ -1369,6 +1525,15 @@ const Template6 = () => {
           </div>
         </div>
 
+        {/* --- СЕКРЕТНЫЙ КЛУБ (PIN-КОД) --- */}
+        <div className="w-full mb-12 px-5 relative z-10">
+          <button onClick={() => setIsSecretOpen(true)} className="w-full bg-amber-600/10 border border-amber-600/20 text-amber-700 py-4 rounded-2xl flex items-center justify-center gap-3 group hover:bg-amber-600/20 transition-all backdrop-blur-md">
+            <Lock className="w-4 h-4 opacity-70 group-hover:scale-110 transition-transform" />
+            <span className="font-serif italic text-lg">Закрытая коллекция</span>
+          </button>
+        </div>
+        <SecretClubModal isOpen={isSecretOpen} onClose={() => setIsSecretOpen(false)} />
+
         {/* --- LEAD-МАГНИТ (ВАРИАНТ 6: Quiet Luxury - Минимализм) --- */}
         <div className="w-full mb-12 px-5">
           <button className="w-full bg-white/80 backdrop-blur-md border border-amber-200/50 hover:border-amber-400/80 rounded-2xl py-4 px-5 flex items-center justify-between transition-all group relative overflow-hidden shadow-md cursor-pointer">
@@ -1427,6 +1592,7 @@ const Template7 = () => {
   const [isFlipped, setIsFlipped] = useState(false);
   const [quizStep, setQuizStep] = useState(1);
   const [phone, setPhone] = useState('');
+  const [isSecretOpen, setIsSecretOpen] = useState(false);
 
   const nextRev = () => setActiveReview(p => (p + 1) % DATA.reviews.length);
   const prevRev = () => setActiveReview(p => (p - 1 + DATA.reviews.length) % DATA.reviews.length);
@@ -1709,6 +1875,15 @@ const Template7 = () => {
             </div>
           </div>
         </div>
+
+        {/* --- СЕКРЕТНЫЙ КЛУБ (PIN-КОД) --- */}
+        <div className="px-5 mb-12 relative z-10">
+          <button onClick={() => setIsSecretOpen(true)} className="w-full bg-black text-[#D4AF37] border border-[#D4AF37]/30 py-4 rounded-2xl flex items-center justify-center gap-3 group hover:bg-slate-900 transition-all shadow-[0_10px_20px_rgba(0,0,0,0.1)]">
+            <Lock className="w-4 h-4 group-hover:scale-110 transition-transform" />
+            <span className="font-sans font-bold text-[10px] uppercase tracking-[0.3em]">Secret Club PIN</span>
+          </button>
+        </div>
+        <SecretClubModal isOpen={isSecretOpen} onClose={() => setIsSecretOpen(false)} />
 
         {/* --- LEAD-МАГНИТ (ВАРИАНТ 7: Secret Resort) --- */}
         <div className="px-5 mb-12">
