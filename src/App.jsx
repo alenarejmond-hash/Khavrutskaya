@@ -1147,9 +1147,9 @@ const Template6 = () => {
                 <img 
                   src="https://i0.wp.com/images.unsplash.com/photo-1559128010-7c1ad6e1b6a5?w=600&strip=all" 
                   alt="Ocean Globe" 
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-cover rounded-full"
                 />
-                <div className="absolute inset-0 bg-gradient-to-tr from-cyan-900/40 via-transparent to-white/40 mix-blend-overlay"></div>
+                <div className="absolute inset-0 bg-gradient-to-tr from-cyan-900/40 via-transparent to-white/40 mix-blend-overlay rounded-full"></div>
                 {/* Эффект объема (внутренняя тень) */}
                 <div className="absolute inset-0 rounded-full shadow-[inset_-20px_-20px_40px_rgba(0,0,0,0.2)] pointer-events-none"></div>
               </div>
