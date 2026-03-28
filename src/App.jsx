@@ -1,5 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { Plane, Map, Sparkles, Phone, MessageCircle, Navigation, Sun, Heart, ArrowRight, Settings, X, Droplets, Cloud, Gem, Moon, Euro, CheckCircle2, MapPin, ExternalLink, Clock, Star, Briefcase, Send, ChevronRight, Youtube, ArrowUpRight, Instagram, Flame, CalendarDays, Luggage } from 'lucide-react';
+import { Plane, Map, Sparkles, Phone, MessageCircle, Navigation, Sun, Heart, ArrowRight, Settings, X, Droplets, Cloud, Gem, Moon, Euro, CircleCheck as CheckCircle2, MapPin, ExternalLink, Clock, Star, Briefcase, Send, ChevronRight, ArrowUpRight, Flame, CalendarDays, Luggage } from 'lucide-react';
+
+// Кастомная иконка Instagram (так как бренды были удалены из новых версий lucide-react)
+const Instagram = ({ className }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+    <rect width="20" height="20" x="2" y="2" rx="5" ry="5"></rect>
+    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+    <line x1="17.5" x2="17.51" y1="6.5" y2="6.5"></line>
+  </svg>
+);
 
 if (typeof window !== 'undefined' && !document.getElementById('vk-bridge-script')) {
   const script = document.createElement('script');
@@ -17,15 +26,15 @@ const DATA = {
   badge: "Влюблена в море",
   // Твоё фото из папки public! Просто положи туда avatar.jpg (БЕЗ СЛЕШЕЙ И ТОЧЕК)
   avatarUrl: "avatar.jpg",
-  bgUrl: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&q=80&w=1000",
+  bgUrl: "https://i0.wp.com/images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1000&strip=all",
   // Добавили туры сюда, чтобы было удобно менять фото и текст!
   tours: [
-    { id: 1, title: "Калининград", desc: "Европейский шарм", img: "https://images.unsplash.com/photo-1547448415-e9f5b28e570d?auto=format&fit=crop&q=80&w=500" },
-    { id: 2, title: "Бали", desc: "Джунгли и океан", img: "https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&q=80&w=500" }
+    { id: 1, title: "Калининград", desc: "Европейский шарм", img: "https://i0.wp.com/images.unsplash.com/photo-1547448415-e9f5b28e570d?w=500&strip=all" },
+    { id: 2, title: "Бали", desc: "Джунгли и океан", img: "https://i0.wp.com/images.unsplash.com/photo-1537996194471-e657df975ab4?w=500&strip=all" }
   ],
   hotTours: [
-    { id: 1, hotelName: "Emerald Resort", loc: "Мальдивы", dates: "15 - 22 Ноября", price: "$4 500", oldPrice: "$6 200", img: "https://images.unsplash.com/photo-1439066615861-d1af74d74000?auto=format&fit=crop&q=80&w=600" },
-    { id: 2, hotelName: "Four Seasons", loc: "Сейшелы", dates: "02 - 10 Декабря", price: "$5 100", oldPrice: "$7 000", img: "https://images.unsplash.com/photo-1540541338287-41700207dee6?auto=format&fit=crop&q=80&w=600" }
+    { id: 1, hotelName: "Emerald Resort", loc: "Мальдивы", dates: "15 - 22 Ноября", price: "$4 500", oldPrice: "$6 200", img: "https://i0.wp.com/images.unsplash.com/photo-1439066615861-d1af74d74000?w=600&strip=all" },
+    { id: 2, hotelName: "Four Seasons", loc: "Сейшелы", dates: "02 - 10 Декабря", price: "$5 100", oldPrice: "$7 000", img: "https://i0.wp.com/images.unsplash.com/photo-1540541338287-41700207dee6?w=600&strip=all" }
   ],
   reviews: [
     { id: 1, name: "Анна С.", text: "Это был лучший отпуск в моей жизни! Все продумано до мелочей. Огромное спасибо за этот рай на земле!" },
@@ -1056,7 +1065,7 @@ const Template6 = () => {
       <div className="absolute top-0 left-0 w-full h-[40vh] z-0 pointer-events-none">
         {/* Четкое фото пляжа, моря и пальм на верхнюю треть экрана */}
         <img 
-          src="https://images.unsplash.com/photo-1519046904884-53103b34b206?auto=format&fit=crop&q=80&w=1200" 
+          src="https://i0.wp.com/images.unsplash.com/photo-1519046904884-53103b34b206?w=1200&strip=all" 
           alt="Beautiful Beach" 
           className="w-full h-full object-cover"
         />
@@ -1136,7 +1145,7 @@ const Template6 = () => {
               {/* Фото океана в форме глобуса с бликами */}
               <div className="absolute inset-0 rounded-full overflow-hidden border-[6px] border-white/80 bg-cyan-100">
                 <img 
-                  src="https://images.unsplash.com/photo-1559128010-7c1ad6e1b6a5?auto=format&fit=crop&q=80&w=600" 
+                  src="https://i0.wp.com/images.unsplash.com/photo-1559128010-7c1ad6e1b6a5?w=600&strip=all" 
                   alt="Ocean Globe" 
                   className="w-full h-full object-cover"
                 />
@@ -1219,7 +1228,7 @@ const Template6 = () => {
 
               {quizStep === 4 && (
                 <div className="text-center py-6 animate-in zoom-in-90 duration-500">
-                  <div className="w-20 h-20 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                  <div className="w-20 h-20 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-6 border border-emerald-200">
                     <CheckCircle2 className="w-10 h-10 text-emerald-500" />
                   </div>
                   <h3 className="font-serif text-2xl font-bold text-slate-800 mb-3">Запрос принят!</h3>
@@ -1243,8 +1252,8 @@ const Template6 = () => {
           
           <div className="grid grid-cols-2 gap-4">
             {[
-              { title: 'Мальдивы', subtitle: 'Private Villas', img: 'https://images.unsplash.com/photo-1514282401047-d79a71a590e8?auto=format&fit=crop&q=80&w=400' },
-              { title: 'Сейшелы', subtitle: 'Ocean Breeze', img: 'https://images.unsplash.com/photo-1588668214407-6ea9a6d8c272?auto=format&fit=crop&q=80&w=400' }
+              { title: 'Мальдивы', subtitle: 'Private Villas', img: 'https://i0.wp.com/images.unsplash.com/photo-1514282401047-d79a71a590e8?w=400&strip=all' },
+              { title: 'Сейшелы', subtitle: 'Ocean Breeze', img: 'https://i0.wp.com/images.unsplash.com/photo-1588668214407-6ea9a6d8c272?w=400&strip=all' }
             ].map((tour, idx) => (
               <div key={idx} className="relative h-[220px] rounded-[2rem] overflow-hidden group cursor-pointer shadow-sm hover:shadow-xl transition-shadow">
                 <img src={tour.img} alt={tour.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
@@ -1273,8 +1282,8 @@ const Template6 = () => {
           
           <div className="flex overflow-x-auto gap-5 px-5 pb-8 pt-2 snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
             {[
-              { id: 1, name: 'Rixos Premium', loc: 'Дубай, ОАЭ', price: '$3 200', img: 'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&q=80&w=600' },
-              { id: 2, name: 'Ayana Resort', loc: 'Бали, Индонезия', price: '$2 850', img: 'https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&q=80&w=600' }
+              { id: 1, name: 'Rixos Premium', loc: 'Дубай, ОАЭ', price: '$3 200', img: 'https://i0.wp.com/images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=600&strip=all' },
+              { id: 2, name: 'Ayana Resort', loc: 'Бали, Индонезия', price: '$2 850', img: 'https://i0.wp.com/images.unsplash.com/photo-1537996194471-e657df975ab4?w=600&strip=all' }
             ].map((deal) => (
               <div key={deal.id} className="min-w-[260px] snap-center bg-white/60 backdrop-blur-xl border border-white rounded-[2rem] p-3 shadow-[0_10px_30px_-10px_rgba(0,0,0,0.08)]">
                 <div className="relative h-[160px] rounded-2xl overflow-hidden mb-4">
@@ -1588,13 +1597,13 @@ const Template7 = () => {
         {/* --- 4. Блок «Авторские Туры» --- */}
         <div className="px-5 mt-16 mb-12">
           <div className="mb-6 flex items-center justify-between">
-            <h2 className="font-serif text-2xl text-slate-900">Авторские туры</h2>
+            <h2 className="font-serif text-2xl text-slate-900">Летняя коллекция</h2>
             <div className="h-[1px] flex-1 bg-gradient-to-r from-slate-200 to-transparent ml-6"></div>
           </div>
           
           <div className="space-y-6">
             <a href="#" className="block relative h-64 rounded-[2rem] overflow-hidden group shadow-[0_15px_30px_rgba(0,0,0,0.1)] border border-white">
-              <img src="https://images.unsplash.com/photo-1499793983690-e29da59ef1c2?auto=format&fit=crop&q=80&w=800" alt="Пляж" className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000" />
+              <img src="https://i0.wp.com/images.unsplash.com/photo-1499793983690-e29da59ef1c2?w=800&strip=all" alt="Пляж" className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent"></div>
               
               <div className="absolute top-5 right-5 w-10 h-10 rounded-full bg-white/30 backdrop-blur-md flex items-center justify-center border border-white/50">
@@ -1618,8 +1627,8 @@ const Template7 = () => {
           
           <div className="flex overflow-x-auto hide-scrollbar snap-x snap-mandatory px-5 pb-8 gap-5">
             {[
-              { id: 1, img: "https://images.unsplash.com/photo-1540541338287-41700207dee6?auto=format&fit=crop&q=80&w=600", title: "One&Only Reethi", loc: "Мальдивы", price: "1 200 000 ₽", left: 1 },
-              { id: 2, img: "https://images.unsplash.com/photo-1582719508461-905c673771fd?auto=format&fit=crop&q=80&w=600", title: "Burj Al Arab", loc: "ОАЭ, Дубай", price: "850 000 ₽", left: 2 },
+              { id: 1, img: "https://i0.wp.com/images.unsplash.com/photo-1540541338287-41700207dee6?w=600&strip=all", title: "One&Only Reethi", loc: "Мальдивы", price: "1 200 000 ₽", left: 1 },
+              { id: 2, img: "https://i0.wp.com/images.unsplash.com/photo-1582719508461-905c673771fd?w=600&strip=all", title: "Burj Al Arab", loc: "ОАЭ, Дубай", price: "850 000 ₽", left: 2 },
             ].map(tour => (
               <div key={tour.id} className="snap-center shrink-0 w-72 glass-panel rounded-3xl overflow-hidden relative shadow-[0_10px_20px_rgba(0,0,0,0.05)]">
                 <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-md border border-white text-slate-800 text-[9px] uppercase tracking-widest px-3 py-1.5 rounded-full z-10 flex items-center gap-1.5 shadow-sm">
@@ -1652,7 +1661,7 @@ const Template7 = () => {
         {/* --- ОТЗЫВЫ (ВАРИАНТ 7: Secret Resort - Золотая элегантность) --- */}
         <div className="px-5 mb-14">
           <div className="text-center mb-8">
-            <h2 className="font-serif text-2xl text-slate-900 mb-2">Отзывы</h2>
+            <h2 className="font-serif text-2xl text-slate-900 mb-2">Голоса гостей</h2>
             <div className="w-8 h-[1px] bg-[#D4AF37] mx-auto"></div>
           </div>
           
@@ -1870,10 +1879,25 @@ export default function App() {
 
   // Стили-анимации, добавленные глобально, вынесены в переменную (исправление краша)
   const globalStyles = `
-      /* iOS Safari Fix: предотвращает исчезновение картинок при скруглении */
+      /* iOS Safari Fix: Облегченный способ без краша памяти мобилки (чтобы все фото грузились) */
       .overflow-hidden {
         -webkit-mask-image: -webkit-radial-gradient(white, black);
         isolation: isolate;
+      }
+      
+      img {
+        -webkit-transform: translateZ(0);
+        transform: translateZ(0);
+      }
+      
+      .hide-scrollbar {
+        -ms-overflow-style: none; 
+        scrollbar-width: none;
+        -webkit-overflow-scrolling: touch;
+      }
+      
+      .hide-scrollbar::-webkit-scrollbar { 
+        display: none; 
       }
       
       @keyframes morph {
@@ -1963,13 +1987,22 @@ export default function App() {
         }`}
       >
         {!isPanelOpen ? (
-          // Полупрозрачная кнопка (незаметная для клиента)
-          <button 
-            onClick={() => setIsPanelOpen(true)}
-            className="absolute top-0 right-0 w-12 h-12 bg-black/5 hover:bg-black/80 backdrop-blur-sm text-white rounded-full flex items-center justify-center transition-all group shadow-sm hover:shadow-lg"
-          >
-            <Settings className="w-5 h-5 text-gray-500 group-hover:text-white transition-colors animate-spin-slow" style={{ animationDuration: '6s' }} />
-          </button>
+          <>
+            {/* Яркая подсказка-указатель (Уменьшена и сделана компактнее, чтобы не перекрывать фото) */}
+            <div className="absolute top-2.5 right-14 animate-pulse pointer-events-none flex items-center">
+              <div className="bg-slate-900/80 backdrop-blur-sm text-white text-[8px] uppercase tracking-widest font-bold px-3 py-1.5 rounded-full shadow-md whitespace-nowrap flex items-center gap-1.5 border border-white/10">
+                Дизайн <ArrowRight className="w-2.5 h-2.5 text-cyan-400" />
+              </div>
+            </div>
+
+            {/* Полупрозрачная кнопка (незаметная для клиента) */}
+            <button 
+              onClick={() => setIsPanelOpen(true)}
+              className="absolute top-0 right-0 w-12 h-12 bg-black/5 hover:bg-black/80 backdrop-blur-sm text-white rounded-full flex items-center justify-center transition-all group shadow-sm hover:shadow-lg"
+            >
+              <Settings className="w-5 h-5 text-gray-500 group-hover:text-white transition-colors animate-spin-slow" style={{ animationDuration: '6s' }} />
+            </button>
+          </>
         ) : (
           <div className="flex flex-col animate-in fade-in slide-in-from-top-2 duration-300">
             <div className="flex justify-between items-center mb-5">
@@ -1993,7 +2026,7 @@ export default function App() {
             
             <div className="mt-5 p-3 bg-blue-50 rounded-xl">
               <p className="text-[10px] text-blue-600 leading-tight">
-                <strong>Секретный пульт:</strong> Для создания Вау-эффекта! 🪄
+                <strong>Секретный пульт:</strong> Клиент не видит эту панель. Переключайте стили во время звонка для создания Вау-эффекта! 🪄
               </p>
             </div>
           </div>
