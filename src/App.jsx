@@ -31,56 +31,81 @@ if (typeof window !== 'undefined' && !document.getElementById('vk-bridge-script'
   document.head.appendChild(script);
 }
 
-// Обновленные данные из брифа клиента
+// =========================================================================
+// ⬇️⬇️⬇️ БЛОК ДЛЯ РЕДАКТИРОВАНИЯ (МЕНЯЙТЕ ДАННЫЕ ТОЛЬКО ЗДЕСЬ) ⬇️⬇️⬇️
+// Все тексты, ссылки, контакты и картинки вынесены сюда для удобства.
+// Подсказка по картинкам: можно вставлять ссылки из интернета (https://...)
+// или загружать свои файлы в папку public (например, писать "/photo.jpg")
+// =========================================================================
 const DATA = {
+  // --- ОСНОВНАЯ ИНФОРМАЦИЯ ---
   name: "Марина",
   lastName: "Хавруцкая",
-  role: "Основатель и руководитель турагентства ЛетИя",
+  
+  // Должность (без слова ЛетИя, так как дальше идет логотип)
+  roleText: "Основатель и руководитель турагентства",
+  // ССЫЛКА НА ЛОГОТИП (сохраните вашу картинку как logo.png в папку public)
+  roleLogo: "/logo.png",
+  
   badge: "20 лет опыта",
   aboutText: "Я не просто подбираю туры, я создаю путешествия (в том числе авторские), в которые хочется возвращаться. 20 лет опыта. Знаю скрытые жемчужины по всему миру, лично инспектирую отели и создаю безупречный сервис, в котором продумана каждая деталь и безопасность вашего отдыха.",
   
-  // Социальные сети
+  // --- СОЦИАЛЬНЫЕ СЕТИ И КОНТАКТЫ ---
   socials: {
     tg: "https://t.me/turysuper",
     vk: "https://vk.com/turysuper777",
     insta: "https://www.instagram.com/newbreath.travel?igsh=czgydGwzMnRtZndu&utm_source=qr"
   },
 
-  // Туры
+  // --- АВТОРСКИЕ МАРШРУТЫ (Секция с сеткой туров) ---
   tours: [
-    { id: 1, title: "Калининград", desc: "Европейский шарм", img: "https://i0.wp.com/images.unsplash.com/photo-1547448415-e9f5b28e570d?w=500&strip=all" },
-    { id: 2, title: "Бали", desc: "Джунгли и океан", img: "https://i0.wp.com/images.unsplash.com/photo-1537996194471-e657df975ab4?w=500&strip=all" }
+    { id: 1, title: "Бали", desc: "Джунгли и океан", img: "https://i0.wp.com/images.unsplash.com/photo-1537996194471-e657df975ab4?w=500&strip=all" },
+    { id: 2, title: "Все Авторские туры", desc: "Полная коллекция", img: "https://i0.wp.com/images.unsplash.com/photo-1547448415-e9f5b28e570d?w=500&strip=all" }
   ],
+  
+  // --- ГОРЯЩИЕ ТУРЫ (Специальные предложения) ---
   hotTours: [
     { id: 1, hotelName: "Emerald Resort", loc: "Мальдивы", dates: "15 - 22 Ноября", price: "$4 500", oldPrice: "$6 200", img: "https://i0.wp.com/images.unsplash.com/photo-1439066615861-d1af74d74000?w=600&strip=all" },
     { id: 2, hotelName: "Four Seasons", loc: "Сейшелы", dates: "02 - 10 Декабря", price: "$5 100", oldPrice: "$7 000", img: "https://i0.wp.com/images.unsplash.com/photo-1540541338287-41700207dee6?w=600&strip=all" }
   ],
+  
+  // --- КРУИЗЫ ---
   cruises: [
     { id: 1, title: "Средиземноморье", ship: "Astoria Grande", img: "https://i0.wp.com/images.unsplash.com/photo-1599640842225-85d111c60e6b?w=600&strip=all" },
     { id: 2, title: "Персидский залив", ship: "MSC Virtuosa", img: "https://i0.wp.com/images.unsplash.com/photo-1548574505-5e239809ee19?w=600&strip=all" }
   ],
+  
+  // --- НОВОСТИ ---
   news: [
     { id: 1, date: "15 Апр", text: "Открыто раннее бронирование на Мальдивы. Выгода до 30%." },
     { id: 2, date: "10 Апр", text: "Специальные условия на перелеты Emirates в Дубай. Напишите мне для деталей." }
   ],
+  
+  // --- ПОЖЕЛАНИЯ ДНЯ (Случайный выбор) ---
   wishes: [
     "Пусть сегодняшний день подарит вам столько же тепла, сколько солнце на Мальдивах. ☀️",
     "Вы заслуживаете лучшего. Пусть ваши мечты о путешествиях начнут сбываться уже сегодня. 🌊",
     "Вдохновение повсюду. Желаю вам найти его в каждой мелочи этого дня! ✨",
     "Пусть ваш день будет таким же безупречным, как сервис в пятизвездочном отеле. 🥂"
   ],
+  
+  // --- ОТЗЫВЫ КЛИЕНТОВ ---
   reviews: [
     { id: 1, name: "Анна С.", text: "Это был лучший отпуск в моей жизни! Все продумано до мелочей. Огромное спасибо за этот рай на земле!" },
     { id: 2, name: "Михаил В.", text: "Сервис на высшем уровне. Отель превзошел все ожидания, а индивидуальный трансфер был очень кстати." },
     { id: 3, name: "Ольга К.", text: "Настоящий Quiet Luxury. Никаких забот, только океан, солнце и безупречный комфорт. Обязательно вернемся!" }
   ],
-  secretPin: "7777",
+  
+  // --- СЕКРЕТНЫЙ КЛУБ ---
+  secretPin: "7777", // Ваш PIN-код
   secretTour: {
     title: "Private Island Resort",
     desc: "Полная приватность, личный батлер и перелет на гидроплане. Скрыто от посторонних глаз.",
     price: "По запросу",
     img: "https://i0.wp.com/images.unsplash.com/photo-1599619351208-3e6c839d6828?w=800&strip=all"
   },
+  
+  // --- ГАЛЕРЕЯ (Атмосфера путешествий) ---
   gallery: [
     "https://i0.wp.com/images.unsplash.com/photo-1522748906645-95d8adfd52c7?w=800&q=80",
     "https://i0.wp.com/images.unsplash.com/photo-1499793983690-e29da59ef1c2?w=800&q=80",
@@ -89,6 +114,9 @@ const DATA = {
     "https://i0.wp.com/images.unsplash.com/photo-1573843981267-be1199f14d4a?w=800&q=80"
   ]
 };
+// =========================================================================
+// ⬆️⬆️⬆️ КОНЕЦ БЛОКА РЕДАКТИРОВАНИЯ ⬆️⬆️⬆️
+// =========================================================================
 
 // --- КОМПОНЕНТ: СТЕКЛЯННАЯ БОКОВАЯ ПАНЕЛЬ "ОБО МНЕ" (DRAWER) ---
 const AboutDrawer = ({ isOpen, onClose }) => {
@@ -492,14 +520,18 @@ export default function App() {
               <h1 className="relative z-10 font-serif text-[32px] md:text-6xl font-medium text-white tracking-wide mb-3 drop-shadow-md">
                 <StaggeredText text={`${DATA.name} ${DATA.lastName}`} delayOffset={300} />
               </h1>
-              <p className="relative z-10 text-white font-light text-[10px] md:text-sm uppercase tracking-widest mt-2 mb-6 opacity-0 drop-shadow-md" style={{ animation: 'textReveal 0.8s cubic-bezier(0.25, 0.8, 0.25, 1) forwards 700ms' }}>
-                {DATA.role}
-              </p>
+              
+              <div className="relative z-10 flex flex-wrap items-center justify-center gap-2 md:gap-3 mt-2 mb-6 opacity-0" style={{ animation: 'textReveal 0.8s cubic-bezier(0.25, 0.8, 0.25, 1) forwards 700ms' }}>
+                <p className="text-white font-light text-[10px] md:text-sm uppercase tracking-widest drop-shadow-md text-center">
+                  {DATA.roleText}
+                </p>
+                <img src={DATA.roleLogo} alt="Логотип ЛетИя" className="h-8 md:h-12 object-contain drop-shadow-xl" />
+              </div>
               
               <div className="relative z-10 w-16 md:w-24 h-[1px] bg-gradient-to-r from-transparent via-white/80 to-transparent mx-auto mb-6 md:mb-10 opacity-0 drop-shadow-md" style={{ animation: 'textReveal 0.8s cubic-bezier(0.25, 0.8, 0.25, 1) forwards 800ms' }}></div>
               
               <p className="relative z-10 font-serif font-light text-white text-[16px] md:text-2xl leading-relaxed px-2 md:px-12 tracking-wide drop-shadow-md">
-                <StaggeredText text="«Открываю для вас мир Quiet Luxury. Путешествия, где важна каждая деталь, а сервис незаметен, но безупречен.»" delayOffset={900} />
+                <StaggeredText text="«Открываю для вас мир путешествий. Только лучшие предложения индивидуально под ваш запрос.»" delayOffset={900} />
               </p>
 
               {/* Изящная стеклянная кнопка вызова манифеста */}
@@ -580,11 +612,11 @@ export default function App() {
       </Reveal>
 
       {/* --- 4. БЛОК: АВТОРСКИЕ ТУРЫ (СЕТКА) --- */}
+        {/* --- 4. БЛОК: АВТОРСКИЕ ТУРЫ (СЕТКА) --- */}
         <Reveal>
           <div className="mb-14 md:mb-24">
             <div className="flex justify-between items-end mb-6 md:mb-10">
               <h2 className="font-serif text-2xl md:text-4xl text-slate-800 font-light tracking-wide">Авторские <br className="md:hidden"/><span className="text-sky-500 font-light tracking-wide md:ml-2">маршруты</span></h2>
-              <button className="text-xs md:text-sm font-medium tracking-widest uppercase text-cyan-600 mb-1 hover:text-sky-500 transition-colors">Все туры</button>
             </div>
             
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
