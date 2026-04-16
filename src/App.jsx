@@ -42,6 +42,10 @@ const DATA = {
   name: "Марина",
   lastName: "Хавруцкая",
   
+  // ФОНОВЫЕ ИЗОБРАЖЕНИЯ (Для мобильного и компьютера)
+  bgMobile: "/bg-poster.jpg",          // Вертикальное фото для телефона
+  bgDesktop: "/bg-poster-desktop.jpg", // Горизонтальное фото для широких экранов
+  
   // Должность (текст на одной строке)
   roleText: "Основатель и руководитель турагентства",
   // ССЫЛКА НА ЛОГОТИП (сохраните вашу картинку как logo.png в папку public)
@@ -400,21 +404,23 @@ export default function App() {
       {/* --- ФОНОВОЕ ФОТО (Только на первый экран с плавным градиентом) --- */}
       <div className="absolute top-0 left-0 w-full h-[110vh] md:h-[130vh] z-[-2] pointer-events-none overflow-hidden bg-gradient-to-b from-sky-200/40 to-[#F0F8FF]">
         {/* ИНСТРУКЦИЯ ПО ФОНУ:
-          1. Положи свое высококачественное фото в папку public твоего проекта.
-          2. Назови его bg-poster.jpg.
-          3. Плавное движение будет применяться автоматически!
+          1. Положите вертикальное фото bg-poster.jpg для телефонов в папку public.
+          2. Положите горизонтальное фото bg-poster-desktop.jpg для компьютеров туда же.
         */}
-        <img 
-          src="/bg-poster.jpg" 
-          alt="Luxury Background" 
-          onLoad={() => setBgLoaded(true)}
-          className={`w-full h-full object-cover transition-opacity duration-[1500ms] ease-in-out ${bgLoaded ? 'opacity-100' : 'opacity-0'}`}
-          style={{ animation: 'livingBackground 28s ease-in-out infinite alternate' }}
-        />
+        <picture>
+          <source media="(min-width: 768px)" srcSet={DATA.bgDesktop} />
+          <img 
+            src={DATA.bgMobile} 
+            alt="Luxury Background" 
+            onLoad={() => setBgLoaded(true)}
+            className={`w-full h-full object-cover transition-opacity duration-[1500ms] ease-in-out ${bgLoaded ? 'opacity-100' : 'opacity-0'}`}
+            style={{ animation: 'livingBackground 28s ease-in-out infinite alternate' }}
+          />
+        </picture>
         {/* Очень легкий градиент-фильтр океанического цвета */}
         <div className="absolute inset-0 bg-sky-900/10"></div>
-        {/* Градиент, растворяющий фото в основном цвете фона */}
-        <div className="absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-t from-[#F0F8FF] to-transparent"></div>
+        {/* Градиент, растворяющий фото в основном цвете фона (на десктопе уменьшен, чтобы не засвечивал текст) */}
+        <div className="absolute bottom-0 left-0 w-full h-1/2 md:h-1/3 bg-gradient-to-t from-[#F0F8FF] to-transparent"></div>
       </div>
 
       <div className="fixed inset-0 z-[-1] pointer-events-none">
@@ -513,19 +519,26 @@ export default function App() {
         <Reveal>
           <div className="relative text-center px-2 pb-10 mb-12 md:mb-20 mt-[20vh] md:mt-[30vh] max-w-4xl mx-auto flex flex-col items-center">
             
-            {/* БЛОК С ТЕКСТОМ: мягкая затемняющая подложка для идеальной читаемости */}
+            {/* БЛОК С ТЕКСТОМ: мягкая затемняющая подложка. На десктопе усилена, чтобы текст не тонул в белой дымке */}
             <div className="relative w-full flex flex-col items-center">
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-2xl h-[160%] bg-[radial-gradient(ellipse_at_center,rgba(0,0,0,0.25)_0%,transparent_70%)] z-0 pointer-events-none blur-md"></div>
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-2xl h-[160%] bg-[radial-gradient(ellipse_at_center,rgba(0,0,0,0.25)_0%,transparent_70%)] md:bg-[radial-gradient(ellipse_at_center,rgba(0,0,0,0.5)_0%,transparent_60%)] z-0 pointer-events-none blur-md"></div>
               
-              <h1 className="relative z-10 font-serif text-[32px] md:text-6xl font-medium text-white tracking-wide mb-3 drop-shadow-md">
+              {/* Отступ mb-3 убран на мобильном (mb-0), оставлен на десктопе */}
+              <h1 className="relative z-10 font-serif text-[32px] md:text-6xl font-medium text-white tracking-wide mb-0 md:mb-3 drop-shadow-md">
                 <StaggeredText text={`${DATA.name} ${DATA.lastName}`} delayOffset={300} />
               </h1>
               
-              <div className="relative z-10 flex flex-col items-center justify-center gap-3 md:gap-5 mt-2 mb-6 opacity-0 w-full" style={{ animation: 'textReveal 0.8s cubic-bezier(0.25, 0.8, 0.25, 1) forwards 700ms' }}>
+              {/* Отступ mt и gap уменьшены на мобильном для максимального сближения */}
+              <div className="relative z-10 flex flex-col items-center justify-center gap-1 md:gap-5 mt-0 md:mt-2 mb-6 opacity-0 w-full" style={{ animation: 'textReveal 0.8s cubic-bezier(0.25, 0.8, 0.25, 1) forwards 700ms' }}>
                 <p className="text-white font-light text-[10px] md:text-sm uppercase tracking-widest drop-shadow-md text-center">
                   {DATA.roleText}
                 </p>
-                <img src={DATA.roleLogo} alt="Логотип ЛетИя" className="h-16 md:h-28 object-contain drop-shadow-2xl shrink-0" />
+                
+                {/* ЛОГОТИП с подложкой-свечением для читаемости темных букв на любом фоне */}
+                <div className="relative inline-block mt-2 md:mt-0">
+                  <div className="absolute inset-0 bg-white/40 blur-xl rounded-full"></div>
+                  <img src={DATA.roleLogo} alt="Логотип ЛетИя" className="relative h-16 md:h-28 object-contain drop-shadow-[0_0_10px_rgba(255,255,255,0.8)] shrink-0" />
+                </div>
               </div>
               
               <div className="relative z-10 w-16 md:w-24 h-[1px] bg-gradient-to-r from-transparent via-white/80 to-transparent mx-auto mb-6 md:mb-10 opacity-0 drop-shadow-md" style={{ animation: 'textReveal 0.8s cubic-bezier(0.25, 0.8, 0.25, 1) forwards 800ms' }}></div>
