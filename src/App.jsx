@@ -90,6 +90,47 @@ const DATA = {
   ]
 };
 
+// --- КОМПОНЕНТ: СТЕКЛЯННАЯ БОКОВАЯ ПАНЕЛЬ "ОБО МНЕ" (DRAWER) ---
+const AboutDrawer = ({ isOpen, onClose }) => {
+  return (
+    <div className={`fixed inset-0 z-[120] flex justify-end transition-all duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] ${isOpen ? 'opacity-100 visible' : 'opacity-0 invisible pointer-events-none'}`}>
+      <div className="absolute inset-0 bg-slate-900/30 backdrop-blur-sm transition-opacity duration-700" onClick={onClose}></div>
+      
+      <div className={`w-full md:w-[440px] h-[100dvh] bg-white/85 backdrop-blur-2xl border-l border-white/50 shadow-2xl relative transform transition-transform duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] flex flex-col overflow-y-auto ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}>
+        <div className="sticky top-0 z-20 flex justify-end p-6 bg-gradient-to-b from-white/80 to-transparent">
+          <button onClick={onClose} className="p-3 bg-white/50 backdrop-blur-md rounded-full text-slate-500 hover:text-slate-800 hover:bg-white/80 border border-white/60 transition-all shadow-sm">
+            <X className="w-5 h-5" />
+          </button>
+        </div>
+
+        <div className="px-6 md:px-10 pb-10 flex-1 flex flex-col">
+          {/* Журнальное прямоугольное фото */}
+          <div className="relative w-full rounded-2xl overflow-hidden shadow-lg border border-white/60 mb-8 -mt-6">
+            <img src="/avatar.jpg" alt={DATA.name} className="w-full h-[380px] object-cover" />
+          </div>
+
+          {/* Текст манифеста */}
+          <div className="flex-1">
+            <h2 className="font-serif text-3xl text-slate-800 font-light tracking-wide mb-6">Мой манифест</h2>
+            <p className="text-slate-600 font-light tracking-wide leading-relaxed text-[17px]">
+              {DATA.aboutText}
+            </p>
+          </div>
+          
+          {/* Элегантная подпись */}
+          <div className="mt-10 pt-8 border-t border-slate-200/50">
+            <div className="flex justify-end">
+              <span className="font-serif font-light tracking-wide text-sky-600 text-xl border-b border-sky-200/50 pb-1 pr-2">
+                С любовью, {DATA.name} {DATA.lastName}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 // --- ОБЩИЙ КОМПОНЕНТ: СЕКРЕТНЫЙ КЛУБ (PIN-КОД) ---
 const SecretClubModal = ({ isOpen, onClose }) => {
   const [pin, setPin] = useState('');
@@ -256,6 +297,7 @@ const StaggeredText = ({ text, delayOffset = 0 }) => {
 // ==========================================
 export default function App() {
   const [isQuizOpen, setIsQuizOpen] = useState(false);
+  const [isAboutOpen, setIsAboutOpen] = useState(false); // Состояние для панели "Обо мне"
   const [quizStep, setQuizStep] = useState(1);
   const [phone, setPhone] = useState('');
   const [activeReview, setActiveReview] = useState(0);
@@ -309,8 +351,8 @@ export default function App() {
         }
         @keyframes livingBackground {
           0% { transform: scale(1.0) translate(0, 0); }
-          50% { transform: scale(1.3) translate(-3%, -2%); }
-          100% { transform: scale(1.0) translate(0%, 0%); }
+          50% { transform: scale(1.15) translate(-1.5%, -1.5%); }
+          100% { transform: scale(1.3) translate(1.5%, -3%); }
         }
         @keyframes fluidMorph {
           0% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
@@ -323,8 +365,11 @@ export default function App() {
         }
       `}</style>
 
-      {/* --- ГЛОБАЛЬНЫЙ ФОН (На весь сайт: фото, плавно движущееся) --- */}
-      <div className="fixed top-0 left-0 w-full h-screen z-[-2] pointer-events-none overflow-hidden bg-[#F0F8FF]">
+      {/* --- ГЛОБАЛЬНЫЙ ФОНОВЫЙ ЦВЕТ --- */}
+      <div className="fixed inset-0 z-[-3] bg-[#F0F8FF] pointer-events-none"></div>
+
+      {/* --- ФОНОВОЕ ФОТО (Только на первый экран с плавным градиентом) --- */}
+      <div className="absolute top-0 left-0 w-full h-[110vh] md:h-[130vh] z-[-2] pointer-events-none overflow-hidden">
         {/* ИНСТРУКЦИЯ ПО ФОНУ:
           1. Положи свое высококачественное фото в папку public твоего проекта.
           2. Назови его bg-poster.jpg.
@@ -334,16 +379,21 @@ export default function App() {
           src="/bg-poster.jpg" 
           alt="Luxury Background" 
           className="w-full h-full object-cover"
-          style={{ animation: 'livingBackground 15s ease-in-out infinite' }}
+          style={{ animation: 'livingBackground 28s ease-in-out infinite alternate' }}
         />
         {/* Очень легкий градиент-фильтр океанического цвета */}
         <div className="absolute inset-0 bg-sky-900/10"></div>
+        {/* Градиент, растворяющий фото в основном цвете фона */}
+        <div className="absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-t from-[#F0F8FF] to-transparent"></div>
       </div>
 
       <div className="fixed inset-0 z-[-1] pointer-events-none">
         <div className="absolute top-0 right-0 w-96 h-96 bg-sky-200/20 rounded-full mix-blend-overlay blur-[80px]"></div>
         <div className="absolute top-40 -left-20 w-80 h-80 bg-blue-300/10 rounded-full mix-blend-overlay blur-[80px]"></div>
       </div>
+
+      {/* ВЫЗОВ ПАНЕЛИ "ОБО МНЕ" */}
+      <AboutDrawer isOpen={isAboutOpen} onClose={() => setIsAboutOpen(false)} />
 
       {/* РАСШИРЕННЫЙ КОНТЕЙНЕР ДЛЯ ДЕСКТОПА (max-w-6xl вместо 480px) */}
       <div className="relative z-10 w-full max-w-6xl mx-auto px-5 pt-8 md:pt-16">
@@ -352,33 +402,6 @@ export default function App() {
         <Reveal>
           <div className="relative text-center px-2 pb-10 mb-12 md:mb-20 mt-[20vh] md:mt-[30vh] max-w-4xl mx-auto flex flex-col items-center">
             
-            {/* Аватарка стоит органично, без "абсолютного" позиционирования */}
-            <div className="relative w-[150px] h-[150px] md:w-[200px] md:h-[200px] z-30 group mb-8 md:mb-12">
-              {/* Свечение капли */}
-              <div 
-                className="absolute inset-[-20px] bg-sky-300/20 blur-[30px] transition-all duration-700 opacity-80"
-                style={{ animation: 'fluidMorph 8s ease-in-out infinite' }}
-              ></div>
-              {/* Сама капля с матовым стеклом */}
-              <div 
-                className="w-full h-full p-[2px] bg-white/10 backdrop-blur-md shadow-[0_20px_50px_-10px_rgba(0,0,0,0.4)] relative z-10 overflow-hidden"
-                style={{ animation: 'fluidMorph 8s ease-in-out infinite' }}
-              >
-                {/* ИНСТРУКЦИЯ ПО АВАТАРУ:
-                  1. Положи свое фото в папку public.
-                  2. Назови его avatar.jpg.
-                  (Пока файла нет, будет пустая форма. Как загрузишь - появится внутри капли).
-                */}
-                <img 
-                  src="/avatar.jpg" 
-                  alt="Avatar" 
-                  className="w-full h-full object-cover"
-                  style={{ animation: 'fluidMorph 8s ease-in-out infinite' }}
-                />
-              </div>
-              <Sparkles className="absolute top-2 right-0 md:w-10 md:h-10 w-8 h-8 text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.8)] animate-pulse z-20" />
-            </div>
-
             {/* БЛОК С ТЕКСТОМ: мягкая затемняющая подложка для идеальной читаемости */}
             <div className="relative w-full flex flex-col items-center">
               <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-2xl h-[160%] bg-[radial-gradient(ellipse_at_center,rgba(0,0,0,0.25)_0%,transparent_70%)] z-0 pointer-events-none blur-md"></div>
@@ -395,16 +418,23 @@ export default function App() {
               <p className="relative z-10 font-serif font-light text-white text-[16px] md:text-2xl leading-relaxed px-2 md:px-12 tracking-wide drop-shadow-md">
                 <StaggeredText text="«Открываю для вас мир Quiet Luxury. Путешествия, где важна каждая деталь, а сервис незаметен, но безупречен.»" delayOffset={900} />
               </p>
+
+              {/* Изящная стеклянная кнопка вызова манифеста */}
+              <button 
+                onClick={() => setIsAboutOpen(true)}
+                className="relative z-10 mt-10 px-8 py-3 bg-white/10 backdrop-blur-md border border-white/20 rounded-full text-white font-light tracking-widest uppercase text-xs md:text-sm hover:bg-white/20 hover:scale-[1.02] transition-all flex items-center gap-3 shadow-[0_4px_15px_rgba(0,0,0,0.2)] hover:shadow-[0_4px_20px_rgba(255,255,255,0.2)]"
+                style={{ animation: 'textReveal 0.8s cubic-bezier(0.25, 0.8, 0.25, 1) forwards 1200ms', opacity: 0 }}
+              >
+                Мой манифест <ArrowRight className="w-4 h-4" />
+              </button>
             </div>
           </div>
         </Reveal>
 
-        {/* --- ГРУППИРОВКА: ПОЖЕЛАНИЕ И ОБО МНЕ (В 2 колонки на десктопе) --- */}
+        {/* --- ПОЖЕЛАНИЕ ДНЯ (Отцентрировано после переноса блока Обо мне) --- */}
         <Reveal delay={100}>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-10 mb-14 md:mb-20 max-w-5xl mx-auto">
-            
-            {/* --- ПОЖЕЛАНИЕ ДНЯ --- */}
-            <div className="bg-gradient-to-br from-sky-50 to-white/60 backdrop-blur-md border border-sky-200/60 p-6 md:p-10 rounded-3xl shadow-sm relative overflow-hidden flex flex-col items-center justify-center text-center h-full">
+          <div className="mb-14 md:mb-20 max-w-2xl mx-auto px-2">
+            <div className="bg-gradient-to-br from-sky-50 to-white/60 backdrop-blur-md border border-sky-200/60 p-6 md:p-10 rounded-3xl shadow-sm relative overflow-hidden flex flex-col items-center justify-center text-center">
               <Sparkles className="w-8 h-8 text-sky-400 mb-3 md:mb-5 opacity-80" />
               <h2 className="font-serif text-xl md:text-2xl text-slate-800 font-light tracking-wide mb-2 md:mb-4">Пожелание дня</h2>
               
@@ -417,19 +447,6 @@ export default function App() {
                   "{randomWish}"
                 </p>
               )}
-            </div>
-
-            {/* --- ИНТЕРАКТИВНЫЙ БЛОК ОБО МНЕ --- */}
-            <div className="bg-white/70 backdrop-blur-md border border-white p-6 md:p-10 rounded-tr-[2rem] rounded-bl-[2rem] rounded-tl-md rounded-br-md shadow-md relative flex flex-col justify-center h-full">
-              <div className="absolute -top-4 -left-1 text-5xl md:text-6xl text-sky-200 font-serif opacity-70">"</div>
-              <p className="text-sm md:text-base text-slate-700 font-light tracking-wide leading-relaxed relative z-10">
-                {DATA.aboutText}
-              </p>
-              <div className="mt-6 md:mt-8 flex justify-end">
-                <span className="font-serif font-light tracking-wide text-sky-600 text-lg md:text-xl border-b border-sky-200/50 pb-1 pr-2">
-                  С любовью, {DATA.name} {DATA.lastName}
-                </span>
-              </div>
             </div>
           </div>
         </Reveal>
