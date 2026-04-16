@@ -521,11 +521,11 @@ export default function App() {
                 <StaggeredText text={`${DATA.name} ${DATA.lastName}`} delayOffset={300} />
               </h1>
               
-              <div className="relative z-10 flex flex-wrap items-center justify-center gap-2 md:gap-3 mt-2 mb-6 opacity-0" style={{ animation: 'textReveal 0.8s cubic-bezier(0.25, 0.8, 0.25, 1) forwards 700ms' }}>
-                <p className="text-white font-light text-[10px] md:text-sm uppercase tracking-widest drop-shadow-md text-center">
+              <div className="relative z-10 flex items-center justify-center gap-3 md:gap-5 mt-2 mb-6 opacity-0 w-full" style={{ animation: 'textReveal 0.8s cubic-bezier(0.25, 0.8, 0.25, 1) forwards 700ms' }}>
+                <p className="text-white font-light text-[10px] md:text-sm uppercase tracking-widest drop-shadow-md text-right">
                   {DATA.roleText}
                 </p>
-                <img src={DATA.roleLogo} alt="Логотип ЛетИя" className="h-8 md:h-12 object-contain drop-shadow-xl" />
+                <img src={DATA.roleLogo} alt="Логотип ЛетИя" className="h-14 md:h-24 object-contain drop-shadow-2xl shrink-0" />
               </div>
               
               <div className="relative z-10 w-16 md:w-24 h-[1px] bg-gradient-to-r from-transparent via-white/80 to-transparent mx-auto mb-6 md:mb-10 opacity-0 drop-shadow-md" style={{ animation: 'textReveal 0.8s cubic-bezier(0.25, 0.8, 0.25, 1) forwards 800ms' }}></div>
