@@ -42,9 +42,8 @@ const DATA = {
   name: "Марина",
   lastName: "Хавруцкая",
   
-  // Должность (разделена на 2 строки для красоты)
-  roleTextTop: "Основатель и руководитель",
-  roleTextBottom: "турагентства",
+  // Должность (текст на одной строке)
+  roleText: "Основатель и руководитель турагентства",
   // ССЫЛКА НА ЛОГОТИП (сохраните вашу картинку как logo.png в папку public)
   roleLogo: "/logo.png",
   
@@ -522,16 +521,11 @@ export default function App() {
                 <StaggeredText text={`${DATA.name} ${DATA.lastName}`} delayOffset={300} />
               </h1>
               
-              <div className="relative z-10 flex flex-col items-center justify-center gap-1 md:gap-2 mt-2 mb-6 opacity-0 w-full" style={{ animation: 'textReveal 0.8s cubic-bezier(0.25, 0.8, 0.25, 1) forwards 700ms' }}>
+              <div className="relative z-10 flex flex-col items-center justify-center gap-3 md:gap-5 mt-2 mb-6 opacity-0 w-full" style={{ animation: 'textReveal 0.8s cubic-bezier(0.25, 0.8, 0.25, 1) forwards 700ms' }}>
                 <p className="text-white font-light text-[10px] md:text-sm uppercase tracking-widest drop-shadow-md text-center">
-                  {DATA.roleTextTop}
+                  {DATA.roleText}
                 </p>
-                <div className="flex items-center justify-center gap-3 md:gap-5">
-                  <p className="text-white font-light text-[10px] md:text-sm uppercase tracking-widest drop-shadow-md text-right">
-                    {DATA.roleTextBottom}
-                  </p>
-                  <img src={DATA.roleLogo} alt="Логотип ЛетИя" className="h-14 md:h-24 object-contain drop-shadow-2xl shrink-0" />
-                </div>
+                <img src={DATA.roleLogo} alt="Логотип ЛетИя" className="h-16 md:h-28 object-contain drop-shadow-2xl shrink-0" />
               </div>
               
               <div className="relative z-10 w-16 md:w-24 h-[1px] bg-gradient-to-r from-transparent via-white/80 to-transparent mx-auto mb-6 md:mb-10 opacity-0 drop-shadow-md" style={{ animation: 'textReveal 0.8s cubic-bezier(0.25, 0.8, 0.25, 1) forwards 800ms' }}></div>
