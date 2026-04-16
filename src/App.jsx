@@ -80,14 +80,11 @@ const DATA = {
   ],
   
   // --- НОВОСТИ ---
-  news: [
-    { id: 1, date: "15 Апр", title: "Раннее бронирование", text: "Открыто раннее бронирование на Мальдивы. Выгода до 30% при бронировании за 6 месяцев. Включены трансферы на гидроплане." },
-    { id: 2, date: "10 Апр", title: "Спецусловия Emirates", text: "Специальные условия на перелеты Emirates в Дубай. Напишите мне для деталей и подбора премиального отеля." },
-    { id: 3, date: "05 Апр", title: "Новый курорт на Бали", text: "Открытие нового eco-luxury курорта в Убуде. Первым гостям особые привилегии и спа-процедуры в подарок." },
-    { id: 4, date: "28 Мар", title: "Правила въезда в Таиланд", text: "С апреля обновлены правила въезда. Теперь отдых стал еще комфортнее. Подробности в личных сообщениях." },
-    { id: 5, date: "20 Мар", title: "Круизы осенью", text: "Открыта продажа на осенние круизы. Идеальное время для посещения Италии, Испании и Франции." },
-    { id: 6, date: "15 Мар", title: "Гастро-туры", text: "Формируем мини-группы для эксклюзивных гастрономических туров по Тоскане. Винодельни и трюфели." }
-  ],
+  // Сюда вы вставите ссылку на опубликованную вкладку "Новости" в формате TSV (инструкция ниже)
+  newsSheetUrl: "https://docs.google.com/spreadsheets/d/e/2PACX-1vTrEIxf7RjorBv2_SfnngsQ5Ts3hU4t2REiEhXmpS68-gOidooeEBaxAvlz4jHU4EvzjPyoZZYD_Xuv/pub?gid=0&single=true&output=tsv",
+
+  // Старые новости удалены. Теперь они подтягиваются СТРОГО из Google Таблицы
+  news: [],
   
   // --- ПОЖЕЛАНИЯ ДНЯ (Случайный выбор) ---
   wishes: [
@@ -344,6 +341,7 @@ export default function App() {
   const [selectedNews, setSelectedNews] = useState(null); // Модалка конкретной новости
   const [isAllNewsOpen, setIsAllNewsOpen] = useState(false); // Шторка всех новостей
   const [newsPage, setNewsPage] = useState(1); // Пагинация новостей
+  const [newsList, setNewsList] = useState(DATA.news); // Данные новостей
   
   // Состояние для Пожелания дня
   const [randomWish, setRandomWish] = useState('');
@@ -362,6 +360,36 @@ export default function App() {
     setRandomWish(w);
     setIsWishVisible(true);
   };
+
+  // Сигнал для загрузки новостей из вкладки Google Таблицы
+  useEffect(() => {
+    if (DATA.newsSheetUrl) {
+      // Автоматически исправляем ссылку, если случайно вставили csv вместо tsv
+      const correctUrl = DATA.newsSheetUrl.replace('output=csv', 'output=tsv');
+      
+      fetch(correctUrl)
+        .then(res => res.text())
+        .then(tsv => {
+          const rows = tsv.split('\n');
+          const fetchedNews = rows.slice(1).map((row, index) => {
+            const cols = row.split('\t');
+            return {
+              id: index + 100, // Уникальный ID
+              date: cols[0] ? cols[0].trim() : '',
+              title: cols[1] ? cols[1].trim() : '',
+              text: cols[2] ? cols[2].trim() : ''
+            };
+          }).filter(item => item.title && item.text); // Отсеиваем пустые строки
+          
+          if (fetchedNews.length > 0) {
+            setNewsList(fetchedNews.reverse()); // Новые (снизу таблицы) будут первыми
+          } else {
+            setNewsList([]); // Очищаем, если новостей нет
+          }
+        })
+        .catch(err => console.error("Ошибка загрузки новостей:", err));
+    }
+  }, []);
 
   // Сигнал для ВКонтакте
   useEffect(() => {
@@ -459,9 +487,20 @@ export default function App() {
               <CalendarDays className="w-4 h-4" />
               <span className="text-[11px] md:text-xs uppercase tracking-widest font-medium">{selectedNews.date}</span>
             </div>
-            <p className="text-slate-600 font-light tracking-wide text-sm md:text-base leading-relaxed">
-              {selectedNews.text}
-            </p>
+            <div className="text-slate-600 font-light tracking-wide text-sm md:text-base leading-relaxed space-y-4 max-h-[60vh] overflow-y-auto pr-2">
+              {(() => {
+                let parts = selectedNews.text.split(/\\n|\n/);
+                // Умная автоматическая разбивка: если текст сплошной и длинный, делим его по 2 предложения
+                if (parts.length <= 1 && selectedNews.text.length > 150) {
+                  const sentences = selectedNews.text.match(/[^.!?]+[.!?]+/g) || [selectedNews.text];
+                  parts = [];
+                  for (let i = 0; i < sentences.length; i += 2) {
+                    parts.push(sentences.slice(i, i + 2).join('').trim().replace(/\s+/g, ' '));
+                  }
+                }
+                return parts.map((p, i) => p.trim() ? <p key={i}>{p}</p> : null);
+              })()}
+            </div>
           </div>
         )}
       </div>
@@ -480,7 +519,7 @@ export default function App() {
         </div>
 
         <div className="flex-1 overflow-y-auto p-6 space-y-4">
-          {DATA.news.slice((newsPage - 1) * 5, newsPage * 5).map(item => (
+          {newsList.slice((newsPage - 1) * 5, newsPage * 5).map(item => (
             <div 
               key={item.id}
               onClick={() => setSelectedNews(item)}
@@ -491,7 +530,7 @@ export default function App() {
                 <span className="text-[10px] uppercase tracking-widest font-medium">{item.date}</span>
               </div>
               <h3 className="font-serif text-lg text-slate-800 font-light tracking-wide mb-2 group-hover:text-sky-700 transition-colors">{item.title}</h3>
-              <p className="text-sm text-slate-500 font-light tracking-wide line-clamp-2">{item.text}</p>
+              <p className="text-sm text-slate-500 font-light tracking-wide line-clamp-2">{item.text.replace(/\\n|\n/g, ' ')}</p>
             </div>
           ))}
         </div>
@@ -506,11 +545,11 @@ export default function App() {
             <ChevronRight className="w-5 h-5 rotate-180" />
           </button>
           <span className="text-sm font-light tracking-wide text-slate-500">
-            Страница {newsPage} из {Math.ceil(DATA.news.length / 5)}
+            Страница {newsPage} из {Math.ceil(newsList.length / 5) || 1}
           </span>
           <button 
-            onClick={() => setNewsPage(p => Math.min(Math.ceil(DATA.news.length / 5), p + 1))}
-            disabled={newsPage === Math.ceil(DATA.news.length / 5)}
+            onClick={() => setNewsPage(p => Math.min(Math.ceil(newsList.length / 5) || 1, p + 1))}
+            disabled={newsPage === (Math.ceil(newsList.length / 5) || 1)}
             className="w-10 h-10 rounded-full flex items-center justify-center border border-slate-200 text-slate-600 disabled:opacity-30 disabled:cursor-not-allowed hover:bg-slate-50 transition-colors shadow-sm"
           >
             <ChevronRight className="w-5 h-5" />
@@ -826,8 +865,8 @@ export default function App() {
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
-              {DATA.news.map((item, index) => {
-                const isMobileHidden = index >= 3;
+              {newsList.map((item, index) => {
+                const isMobileHidden = index >= 2;
                 const isDesktopHidden = index >= 4;
                 if (isDesktopHidden) return null;
                 
@@ -847,7 +886,7 @@ export default function App() {
                       </div>
                     </div>
                     <h3 className="font-serif text-lg md:text-xl text-slate-800 font-light tracking-wide mt-2">{item.title}</h3>
-                    <p className="text-sm text-slate-500 font-light tracking-wide line-clamp-2">{item.text}</p>
+                    <p className="text-sm text-slate-500 font-light tracking-wide line-clamp-2">{item.text.replace(/\\n|\n/g, ' ')}</p>
                   </div>
                 );
               })}
