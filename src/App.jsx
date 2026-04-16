@@ -35,7 +35,7 @@ if (typeof window !== 'undefined' && !document.getElementById('vk-bridge-script'
 const DATA = {
   name: "Марина",
   lastName: "Хавруцкая",
-  role: "Турагент и организатор авторских туров",
+  role: "Основатель и руководитель турагентства ЛетИя",
   badge: "20 лет опыта",
   aboutText: "Я не просто подбираю туры, я создаю путешествия (в том числе авторские), в которые хочется возвращаться. 20 лет опыта. Знаю скрытые жемчужины по всему миру, лично инспектирую отели и создаю безупречный сервис, в котором продумана каждая деталь и безопасность вашего отдыха.",
   
@@ -111,7 +111,7 @@ const AboutDrawer = ({ isOpen, onClose }) => {
 
           {/* Текст манифеста */}
           <div className="flex-1">
-            <h2 className="font-serif text-3xl text-slate-800 font-light tracking-wide mb-6">Мой манифест</h2>
+            <h2 className="font-serif text-3xl text-slate-800 font-light tracking-wide mb-6">Давайте знакомиться</h2>
             <p className="text-slate-600 font-light tracking-wide leading-relaxed text-[17px]">
               {DATA.aboutText}
             </p>
@@ -302,6 +302,7 @@ export default function App() {
   const [phone, setPhone] = useState('');
   const [activeReview, setActiveReview] = useState(0);
   const [isSecretOpen, setIsSecretOpen] = useState(false);
+  const [bgLoaded, setBgLoaded] = useState(false);
   
   // Состояние для Пожелания дня
   const [randomWish, setRandomWish] = useState('');
@@ -369,7 +370,7 @@ export default function App() {
       <div className="fixed inset-0 z-[-3] bg-[#F0F8FF] pointer-events-none"></div>
 
       {/* --- ФОНОВОЕ ФОТО (Только на первый экран с плавным градиентом) --- */}
-      <div className="absolute top-0 left-0 w-full h-[110vh] md:h-[130vh] z-[-2] pointer-events-none overflow-hidden">
+      <div className="absolute top-0 left-0 w-full h-[110vh] md:h-[130vh] z-[-2] pointer-events-none overflow-hidden bg-gradient-to-b from-sky-200/40 to-[#F0F8FF]">
         {/* ИНСТРУКЦИЯ ПО ФОНУ:
           1. Положи свое высококачественное фото в папку public твоего проекта.
           2. Назови его bg-poster.jpg.
@@ -378,7 +379,8 @@ export default function App() {
         <img 
           src="/bg-poster.jpg" 
           alt="Luxury Background" 
-          className="w-full h-full object-cover"
+          onLoad={() => setBgLoaded(true)}
+          className={`w-full h-full object-cover transition-opacity duration-[1500ms] ease-in-out ${bgLoaded ? 'opacity-100' : 'opacity-0'}`}
           style={{ animation: 'livingBackground 28s ease-in-out infinite alternate' }}
         />
         {/* Очень легкий градиент-фильтр океанического цвета */}
@@ -390,13 +392,94 @@ export default function App() {
       <div className="fixed inset-0 z-[-1] pointer-events-none">
         <div className="absolute top-0 right-0 w-96 h-96 bg-sky-200/20 rounded-full mix-blend-overlay blur-[80px]"></div>
         <div className="absolute top-40 -left-20 w-80 h-80 bg-blue-300/10 rounded-full mix-blend-overlay blur-[80px]"></div>
+    </div>
+
+    {/* ВЫЗОВ ПАНЕЛИ "ОБО МНЕ" */}
+    <AboutDrawer isOpen={isAboutOpen} onClose={() => setIsAboutOpen(false)} />
+    {/* ВЫЗОВ ПАНЕЛИ "СЕКРЕТНЫЙ КЛУБ" (Вынесено из Reveal для перекрытия всех окон) */}
+    <SecretClubModal isOpen={isSecretOpen} onClose={() => setIsSecretOpen(false)} />
+
+    {/* --- ВЫЗОВ ПАНЕЛИ КВИЗА (Вынесено из-под Reveal для абсолютного перекрытия всех окон) --- */}
+    <div className={`fixed inset-0 z-[120] flex items-center justify-center transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] ${isQuizOpen ? 'opacity-100 visible' : 'opacity-0 invisible pointer-events-none'}`}>
+      <div className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm" onClick={closeQuiz}></div>
+      <div className={`relative w-full max-w-md mx-4 bg-white border border-white rounded-[2rem] shadow-2xl p-6 md:p-8 transition-all duration-500 transform ${isQuizOpen ? 'translate-y-0 scale-100' : 'translate-y-10 scale-95'}`}>
+        
+        <div className="flex justify-between items-center mb-6">
+          <span className="text-[10px] md:text-xs text-sky-600 uppercase tracking-widest font-medium">
+            {quizStep < 4 ? `Шаг ${quizStep} из 3` : 'Готово'}
+          </span>
+          <button onClick={closeQuiz} className="p-2 bg-slate-100 rounded-full text-slate-500 hover:text-slate-800 hover:bg-slate-200 transition-colors">
+            <X className="w-4 h-4 md:w-5 md:h-5" />
+          </button>
+        </div>
+
+        {quizStep === 1 && (
+          <div className="animate-in fade-in zoom-in-95 duration-300">
+            <h3 className="font-serif text-2xl md:text-3xl font-light tracking-wide text-slate-800 mb-2">Куда тянет душу?</h3>
+            <p className="text-sm md:text-base text-slate-500 font-light tracking-wide mb-6">Выберите идеальную картинку отдыха</p>
+            <div className="space-y-3">
+              {['Белоснежные пляжи и релакс', 'Активный отдых и горы', 'Европейские улочки', 'Экзотика и джунгли'].map((option, i) => (
+                <button key={i} onClick={() => setQuizStep(2)} className="w-full text-left px-5 py-4 md:py-5 rounded-2xl bg-slate-50 border border-slate-100 text-sm md:text-base font-light tracking-wide text-slate-700 hover:bg-sky-50 hover:border-sky-200 hover:text-sky-700 transition-colors flex justify-between items-center group">
+                  {option} <ChevronRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity" />
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {quizStep === 2 && (
+          <div className="animate-in fade-in slide-in-from-right-4 duration-300">
+            <h3 className="font-serif text-2xl md:text-3xl font-light tracking-wide text-slate-800 mb-2">С кем полетите?</h3>
+            <p className="text-sm md:text-base text-slate-500 font-light tracking-wide mb-6">Это поможет подобрать правильный отель</p>
+            <div className="space-y-3">
+              {['Вдвоем (Романтика)', 'Семьей (С детьми)', 'Соло (Перезагрузка)', 'Шумной компанией'].map((option, i) => (
+                <button key={i} onClick={() => setQuizStep(3)} className="w-full text-left px-5 py-4 md:py-5 rounded-2xl bg-slate-50 border border-slate-100 text-sm md:text-base font-light tracking-wide text-slate-700 hover:bg-sky-50 hover:border-sky-200 hover:text-sky-700 transition-colors flex justify-between items-center group">
+                  {option} <ChevronRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity" />
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {quizStep === 3 && (
+          <div className="animate-in fade-in slide-in-from-right-4 duration-300">
+            <h3 className="font-serif text-2xl md:text-3xl font-light tracking-wide text-slate-800 mb-2">Ваш контакт?</h3>
+            <p className="text-sm md:text-base text-slate-500 font-light tracking-wide mb-6">Оставьте Telegram или WhatsApp, я пришлю 3 лучших варианта под ваш запрос.</p>
+            <div className="space-y-4">
+              <input 
+                type="tel" 
+                placeholder="+7 (999) 000-00-00" 
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                className="w-full bg-white border border-slate-200 rounded-2xl px-5 py-4 md:py-5 text-slate-800 font-light tracking-wide focus:outline-none focus:border-sky-400 focus:ring-1 focus:ring-sky-400 md:text-lg"
+              />
+              <button 
+                onClick={() => setQuizStep(4)} 
+                className="w-full bg-gradient-to-r from-sky-500 to-sky-600 text-white font-medium tracking-wide rounded-2xl py-4 md:py-5 text-lg hover:shadow-lg hover:shadow-sky-500/30 transition-all"
+              >
+                Получить подборку
+              </button>
+            </div>
+          </div>
+        )}
+
+        {quizStep === 4 && (
+          <div className="text-center py-6 md:py-10 animate-in zoom-in-90 duration-500">
+            <div className="w-20 h-20 md:w-24 md:h-24 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-6 md:mb-8 border border-emerald-200">
+              <CheckCircle2 className="w-10 h-10 md:w-12 md:h-12 text-emerald-500" />
+            </div>
+            <h3 className="font-serif text-2xl md:text-3xl font-light tracking-wide text-slate-800 mb-3 md:mb-4">Запрос принят!</h3>
+            <p className="text-slate-600 font-light tracking-wide text-sm md:text-base leading-relaxed mb-8 md:mb-10">Я уже начала готовить для вас идеальные варианты. Напишу в ближайшее время.</p>
+            <button onClick={closeQuiz} className="w-full bg-slate-100 text-slate-700 font-medium tracking-wide rounded-2xl py-4 md:py-5 text-lg hover:bg-slate-200 transition-colors">
+              Отлично, жду
+            </button>
+          </div>
+        )}
       </div>
+    </div>
 
-      {/* ВЫЗОВ ПАНЕЛИ "ОБО МНЕ" */}
-      <AboutDrawer isOpen={isAboutOpen} onClose={() => setIsAboutOpen(false)} />
-
-      {/* РАСШИРЕННЫЙ КОНТЕЙНЕР ДЛЯ ДЕСКТОПА (max-w-6xl вместо 480px) */}
-      <div className="relative z-10 w-full max-w-6xl mx-auto px-5 pt-8 md:pt-16">
+    {/* РАСШИРЕННЫЙ КОНТЕЙНЕР ДЛЯ ДЕСКТОПА (max-w-6xl вместо 480px) */}
+    <div className="relative z-10 w-full max-w-6xl mx-auto px-5 pt-8 md:pt-16">
 
         {/* --- 1. БЛОК: HERO (НЕВИДИМЫЙ ИНТЕРФЕЙС / PURE TEXT) --- */}
         <Reveal>
@@ -425,7 +508,7 @@ export default function App() {
                 className="relative z-10 mt-10 px-8 py-3 bg-white/10 backdrop-blur-md border border-white/20 rounded-full text-white font-light tracking-widest uppercase text-xs md:text-sm hover:bg-white/20 hover:scale-[1.02] transition-all flex items-center gap-3 shadow-[0_4px_15px_rgba(0,0,0,0.2)] hover:shadow-[0_4px_20px_rgba(255,255,255,0.2)]"
                 style={{ animation: 'textReveal 0.8s cubic-bezier(0.25, 0.8, 0.25, 1) forwards 1200ms', opacity: 0 }}
               >
-                Мой манифест <ArrowRight className="w-4 h-4" />
+                Давайте знакомиться <ArrowRight className="w-4 h-4" />
               </button>
             </div>
           </div>
@@ -483,96 +566,20 @@ export default function App() {
                 </div>
                 
                 {!isQuizOpen && (
-                  <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                    <div className="bg-white/90 backdrop-blur-sm px-6 py-3 md:px-8 md:py-4 rounded-full shadow-lg flex items-center gap-2">
-                      <span className="font-light tracking-wide text-cyan-800 text-sm md:text-base">Пройти квиз</span>
-                      <ChevronRight className="w-4 h-4 md:w-5 md:h-5 text-cyan-600" />
-                    </div>
+                <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                  <div className="bg-white/90 backdrop-blur-sm px-6 py-3 md:px-8 md:py-4 rounded-full shadow-lg flex items-center gap-2">
+                    <span className="font-light tracking-wide text-cyan-800 text-sm md:text-base">Пройти квиз</span>
+                    <ChevronRight className="w-4 h-4 md:w-5 md:h-5 text-cyan-600" />
                   </div>
-                )}
-              </button>
-
-              {/* ВЫЕЗЖАЮЩАЯ ПАНЕЛЬ КВИЗА (По центру на десктопе) */}
-              <div className={`absolute top-10 md:top-16 left-0 right-0 mx-auto w-full max-w-md bg-white border border-white rounded-[2rem] shadow-2xl p-6 md:p-8 transition-all duration-500 z-30 ${isQuizOpen ? 'translate-y-0 opacity-100 visible' : 'translate-y-20 opacity-0 invisible pointer-events-none'}`}>
-                
-                <div className="flex justify-between items-center mb-6">
-                  <span className="text-[10px] md:text-xs text-sky-600 uppercase tracking-widest font-medium">
-                    {quizStep < 4 ? `Шаг ${quizStep} из 3` : 'Готово'}
-                  </span>
-                  <button onClick={closeQuiz} className="p-2 bg-slate-100 rounded-full text-slate-500 hover:text-slate-800 hover:bg-slate-200 transition-colors">
-                    <X className="w-4 h-4 md:w-5 md:h-5" />
-                  </button>
                 </div>
+              )}
+            </button>
 
-                {quizStep === 1 && (
-                  <div className="animate-in fade-in zoom-in-95 duration-300">
-                    <h3 className="font-serif text-2xl md:text-3xl font-light tracking-wide text-slate-800 mb-2">Куда тянет душу?</h3>
-                    <p className="text-sm md:text-base text-slate-500 font-light tracking-wide mb-6">Выберите идеальную картинку отдыха</p>
-                    <div className="space-y-3">
-                      {['Белоснежные пляжи и релакс', 'Активный отдых и горы', 'Европейские улочки', 'Экзотика и джунгли'].map((option, i) => (
-                        <button key={i} onClick={() => setQuizStep(2)} className="w-full text-left px-5 py-4 md:py-5 rounded-2xl bg-slate-50 border border-slate-100 text-sm md:text-base font-light tracking-wide text-slate-700 hover:bg-sky-50 hover:border-sky-200 hover:text-sky-700 transition-colors flex justify-between items-center group">
-                          {option} <ChevronRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity" />
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                {quizStep === 2 && (
-                  <div className="animate-in fade-in slide-in-from-right-4 duration-300">
-                    <h3 className="font-serif text-2xl md:text-3xl font-light tracking-wide text-slate-800 mb-2">С кем полетите?</h3>
-                    <p className="text-sm md:text-base text-slate-500 font-light tracking-wide mb-6">Это поможет подобрать правильный отель</p>
-                    <div className="space-y-3">
-                      {['Вдвоем (Романтика)', 'Семьей (С детьми)', 'Соло (Перезагрузка)', 'Шумной компанией'].map((option, i) => (
-                        <button key={i} onClick={() => setQuizStep(3)} className="w-full text-left px-5 py-4 md:py-5 rounded-2xl bg-slate-50 border border-slate-100 text-sm md:text-base font-light tracking-wide text-slate-700 hover:bg-sky-50 hover:border-sky-200 hover:text-sky-700 transition-colors flex justify-between items-center group">
-                          {option} <ChevronRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity" />
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                {quizStep === 3 && (
-                  <div className="animate-in fade-in slide-in-from-right-4 duration-300">
-                    <h3 className="font-serif text-2xl md:text-3xl font-light tracking-wide text-slate-800 mb-2">Ваш контакт?</h3>
-                    <p className="text-sm md:text-base text-slate-500 font-light tracking-wide mb-6">Оставьте Telegram или WhatsApp, я пришлю 3 лучших варианта под ваш запрос.</p>
-                    <div className="space-y-4">
-                      <input 
-                        type="tel" 
-                        placeholder="+7 (999) 000-00-00" 
-                        value={phone}
-                        onChange={(e) => setPhone(e.target.value)}
-                        className="w-full bg-white border border-slate-200 rounded-2xl px-5 py-4 md:py-5 text-slate-800 font-light tracking-wide focus:outline-none focus:border-sky-400 focus:ring-1 focus:ring-sky-400 md:text-lg"
-                      />
-                      <button 
-                        onClick={() => setQuizStep(4)} 
-                        className="w-full bg-gradient-to-r from-sky-500 to-sky-600 text-white font-medium tracking-wide rounded-2xl py-4 md:py-5 text-lg hover:shadow-lg hover:shadow-sky-500/30 transition-all"
-                      >
-                        Получить подборку
-                      </button>
-                    </div>
-                  </div>
-                )}
-
-                {quizStep === 4 && (
-                  <div className="text-center py-6 md:py-10 animate-in zoom-in-90 duration-500">
-                    <div className="w-20 h-20 md:w-24 md:h-24 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-6 md:mb-8 border border-emerald-200">
-                      <CheckCircle2 className="w-10 h-10 md:w-12 md:h-12 text-emerald-500" />
-                    </div>
-                    <h3 className="font-serif text-2xl md:text-3xl font-light tracking-wide text-slate-800 mb-3 md:mb-4">Запрос принят!</h3>
-                    <p className="text-slate-600 font-light tracking-wide text-sm md:text-base leading-relaxed mb-8 md:mb-10">Я уже начала готовить для вас идеальные варианты. Напишу в ближайшее время.</p>
-                    <button onClick={closeQuiz} className="w-full bg-slate-100 text-slate-700 font-medium tracking-wide rounded-2xl py-4 md:py-5 text-lg hover:bg-slate-200 transition-colors">
-                      Отлично, жду
-                    </button>
-                  </div>
-                )}
-              </div>
-
-            </div>
           </div>
-        </Reveal>
+        </div>
+      </Reveal>
 
-        {/* --- 4. БЛОК: АВТОРСКИЕ ТУРЫ (СЕТКА) --- */}
+      {/* --- 4. БЛОК: АВТОРСКИЕ ТУРЫ (СЕТКА) --- */}
         <Reveal>
           <div className="mb-14 md:mb-24">
             <div className="flex justify-between items-end mb-6 md:mb-10">
@@ -765,17 +772,16 @@ export default function App() {
         </Reveal>
 
         {/* --- СЕКРЕТНЫЙ КЛУБ --- */}
-        <Reveal>
-          <div className="w-full mb-12 md:mb-20 px-5 md:px-0 relative z-10 max-w-md mx-auto">
-            <button onClick={() => setIsSecretOpen(true)} className="w-full bg-sky-600/10 border border-sky-600/20 text-sky-700 py-4 md:py-5 rounded-2xl flex items-center justify-center gap-3 md:gap-4 group hover:bg-sky-600/20 transition-all backdrop-blur-md">
-              <Lock className="w-4 h-4 md:w-5 md:h-5 opacity-70 group-hover:scale-110 transition-transform" />
-              <span className="font-serif font-light tracking-wide text-lg md:text-xl">Закрытая коллекция</span>
-            </button>
-          </div>
-          <SecretClubModal isOpen={isSecretOpen} onClose={() => setIsSecretOpen(false)} />
-        </Reveal>
+      <Reveal>
+        <div className="w-full mb-12 md:mb-20 px-5 md:px-0 relative z-10 max-w-md mx-auto">
+          <button onClick={() => setIsSecretOpen(true)} className="w-full bg-sky-600/10 border border-sky-600/20 text-sky-700 py-4 md:py-5 rounded-2xl flex items-center justify-center gap-3 md:gap-4 group hover:bg-sky-600/20 transition-all backdrop-blur-md">
+            <Lock className="w-4 h-4 md:w-5 md:h-5 opacity-70 group-hover:scale-110 transition-transform" />
+            <span className="font-serif font-light tracking-wide text-lg md:text-xl">Закрытая коллекция</span>
+          </button>
+        </div>
+      </Reveal>
 
-        {/* --- ФУТЕР --- */}
+      {/* --- ФУТЕР --- */}
         <Reveal>
           <div className="mb-8 md:mb-12 w-full">
             <div className="flex flex-col items-center px-5 md:px-0">
