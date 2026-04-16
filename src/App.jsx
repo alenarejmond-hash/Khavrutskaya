@@ -81,8 +81,12 @@ const DATA = {
   
   // --- НОВОСТИ ---
   news: [
-    { id: 1, date: "15 Апр", text: "Открыто раннее бронирование на Мальдивы. Выгода до 30%." },
-    { id: 2, date: "10 Апр", text: "Специальные условия на перелеты Emirates в Дубай. Напишите мне для деталей." }
+    { id: 1, date: "15 Апр", title: "Раннее бронирование", text: "Открыто раннее бронирование на Мальдивы. Выгода до 30% при бронировании за 6 месяцев. Включены трансферы на гидроплане." },
+    { id: 2, date: "10 Апр", title: "Спецусловия Emirates", text: "Специальные условия на перелеты Emirates в Дубай. Напишите мне для деталей и подбора премиального отеля." },
+    { id: 3, date: "05 Апр", title: "Новый курорт на Бали", text: "Открытие нового eco-luxury курорта в Убуде. Первым гостям особые привилегии и спа-процедуры в подарок." },
+    { id: 4, date: "28 Мар", title: "Правила въезда в Таиланд", text: "С апреля обновлены правила въезда. Теперь отдых стал еще комфортнее. Подробности в личных сообщениях." },
+    { id: 5, date: "20 Мар", title: "Круизы осенью", text: "Открыта продажа на осенние круизы. Идеальное время для посещения Италии, Испании и Франции." },
+    { id: 6, date: "15 Мар", title: "Гастро-туры", text: "Формируем мини-группы для эксклюзивных гастрономических туров по Тоскане. Винодельни и трюфели." }
   ],
   
   // --- ПОЖЕЛАНИЯ ДНЯ (Случайный выбор) ---
@@ -129,15 +133,15 @@ const AboutDrawer = ({ isOpen, onClose }) => {
       <div className="absolute inset-0 bg-slate-900/30 backdrop-blur-sm transition-opacity duration-700" onClick={onClose}></div>
       
       <div className={`w-full md:w-[440px] h-[100dvh] bg-white/85 backdrop-blur-2xl border-l border-white/50 shadow-2xl relative transform transition-transform duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] flex flex-col overflow-y-auto ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}>
-        <div className="sticky top-0 z-20 flex justify-end p-6 bg-gradient-to-b from-white/80 to-transparent">
-          <button onClick={onClose} className="p-3 bg-white/50 backdrop-blur-md rounded-full text-slate-500 hover:text-slate-800 hover:bg-white/80 border border-white/60 transition-all shadow-sm">
-            <X className="w-5 h-5" />
+        <div className="absolute top-4 right-4 md:top-5 md:right-5 z-20">
+          <button onClick={onClose} className="p-2 md:p-3 bg-white/80 backdrop-blur-md rounded-full text-slate-500 hover:text-slate-800 hover:bg-white shadow-sm border border-white/60 transition-all">
+            <X className="w-4 h-4 md:w-5 md:h-5" />
           </button>
         </div>
 
-        <div className="px-6 md:px-10 pb-10 flex-1 flex flex-col">
+        <div className="px-6 md:px-10 pt-16 md:pt-20 pb-10 flex-1 flex flex-col">
           {/* Журнальное прямоугольное фото */}
-          <div className="relative w-full rounded-2xl overflow-hidden shadow-lg border border-white/60 mb-8 -mt-6">
+          <div className="relative w-full rounded-2xl overflow-hidden shadow-lg border border-white/60 mb-8">
             <img src="/avatar.jpg" alt={DATA.name} className="w-full h-[380px] object-cover" />
           </div>
 
@@ -337,6 +341,10 @@ export default function App() {
   const [bgLoaded, setBgLoaded] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null); // Модалка для фото
   
+  const [selectedNews, setSelectedNews] = useState(null); // Модалка конкретной новости
+  const [isAllNewsOpen, setIsAllNewsOpen] = useState(false); // Шторка всех новостей
+  const [newsPage, setNewsPage] = useState(1); // Пагинация новостей
+  
   // Состояние для Пожелания дня
   const [randomWish, setRandomWish] = useState('');
   const [isWishVisible, setIsWishVisible] = useState(false);
@@ -375,8 +383,11 @@ export default function App() {
   }, []);
 
   return (
-    // Светлый, небесно-голубой фон с мягким скроллом
-    <div className="min-h-screen text-slate-800 font-sans relative overflow-x-hidden pb-12 w-full">
+    // Светлый, небесно-голубой фон с мягким скроллом, отключено выделение и вызов контекстного меню
+    <div 
+      className="min-h-screen text-slate-800 font-sans relative overflow-x-hidden pb-12 w-full select-none [-webkit-touch-callout:none]"
+      onContextMenu={(e) => e.preventDefault()}
+    >
       
       <style>{`
         @keyframes textReveal {
@@ -433,6 +444,80 @@ export default function App() {
     <AboutDrawer isOpen={isAboutOpen} onClose={() => setIsAboutOpen(false)} />
     {/* ВЫЗОВ ПАНЕЛИ "СЕКРЕТНЫЙ КЛУБ" (Вынесено из Reveal для перекрытия всех окон) */}
     <SecretClubModal isOpen={isSecretOpen} onClose={() => setIsSecretOpen(false)} />
+
+    {/* МОДАЛКА ОДНОЙ НОВОСТИ */}
+    <div className={`fixed inset-0 z-[140] flex items-center justify-center transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] ${selectedNews ? 'opacity-100 visible' : 'opacity-0 invisible pointer-events-none'}`}>
+      <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-md" onClick={() => setSelectedNews(null)}></div>
+      <div className={`relative w-full max-w-lg mx-4 bg-white rounded-[2rem] shadow-2xl p-6 md:p-10 transition-all duration-500 transform ${selectedNews ? 'translate-y-0 scale-100' : 'translate-y-10 scale-95'}`}>
+        <button onClick={() => setSelectedNews(null)} className="absolute top-4 right-4 md:top-6 md:right-6 p-2 bg-slate-100 rounded-full text-slate-500 hover:text-slate-800 hover:bg-slate-200 transition-colors">
+          <X className="w-5 h-5" />
+        </button>
+        {selectedNews && (
+          <div>
+            <h3 className="font-serif text-2xl md:text-3xl text-slate-800 font-light tracking-wide mb-2 pr-8">{selectedNews.title}</h3>
+            <div className="flex items-center gap-2 text-sky-600 mb-6">
+              <CalendarDays className="w-4 h-4" />
+              <span className="text-[11px] md:text-xs uppercase tracking-widest font-medium">{selectedNews.date}</span>
+            </div>
+            <p className="text-slate-600 font-light tracking-wide text-sm md:text-base leading-relaxed">
+              {selectedNews.text}
+            </p>
+          </div>
+        )}
+      </div>
+    </div>
+
+    {/* ШТОРКА ВСЕХ НОВОСТЕЙ */}
+    <div className={`fixed inset-0 z-[130] flex justify-end transition-all duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] ${isAllNewsOpen ? 'opacity-100 visible' : 'opacity-0 invisible pointer-events-none'}`}>
+      <div className="absolute inset-0 bg-slate-900/30 backdrop-blur-sm transition-opacity duration-700" onClick={() => setIsAllNewsOpen(false)}></div>
+      
+      <div className={`w-full md:w-[500px] h-[100dvh] bg-white/95 backdrop-blur-2xl border-l border-white/50 shadow-2xl relative transform transition-transform duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] flex flex-col ${isAllNewsOpen ? 'translate-x-0' : 'translate-x-full'}`}>
+        <div className="flex items-center justify-between p-6 border-b border-slate-100">
+          <h2 className="font-serif text-2xl text-slate-800 font-light tracking-wide">Все новости</h2>
+          <button onClick={() => setIsAllNewsOpen(false)} className="p-2 bg-slate-100 rounded-full text-slate-500 hover:text-slate-800 hover:bg-slate-200 transition-colors">
+            <X className="w-5 h-5" />
+          </button>
+        </div>
+
+        <div className="flex-1 overflow-y-auto p-6 space-y-4">
+          {DATA.news.slice((newsPage - 1) * 5, newsPage * 5).map(item => (
+            <div 
+              key={item.id}
+              onClick={() => setSelectedNews(item)}
+              className="p-5 bg-slate-50 rounded-2xl border border-slate-100 hover:bg-sky-50 hover:border-sky-100 cursor-pointer transition-colors group shadow-sm"
+            >
+              <div className="flex items-center gap-2 text-sky-600 mb-2">
+                <CalendarDays className="w-4 h-4" />
+                <span className="text-[10px] uppercase tracking-widest font-medium">{item.date}</span>
+              </div>
+              <h3 className="font-serif text-lg text-slate-800 font-light tracking-wide mb-2 group-hover:text-sky-700 transition-colors">{item.title}</h3>
+              <p className="text-sm text-slate-500 font-light tracking-wide line-clamp-2">{item.text}</p>
+            </div>
+          ))}
+        </div>
+
+        {/* Пагинация */}
+        <div className="p-6 border-t border-slate-100 flex items-center justify-between bg-white">
+          <button 
+            onClick={() => setNewsPage(p => Math.max(1, p - 1))}
+            disabled={newsPage === 1}
+            className="w-10 h-10 rounded-full flex items-center justify-center border border-slate-200 text-slate-600 disabled:opacity-30 disabled:cursor-not-allowed hover:bg-slate-50 transition-colors shadow-sm"
+          >
+            <ChevronRight className="w-5 h-5 rotate-180" />
+          </button>
+          <span className="text-sm font-light tracking-wide text-slate-500">
+            Страница {newsPage} из {Math.ceil(DATA.news.length / 5)}
+          </span>
+          <button 
+            onClick={() => setNewsPage(p => Math.min(Math.ceil(DATA.news.length / 5), p + 1))}
+            disabled={newsPage === Math.ceil(DATA.news.length / 5)}
+            className="w-10 h-10 rounded-full flex items-center justify-center border border-slate-200 text-slate-600 disabled:opacity-30 disabled:cursor-not-allowed hover:bg-slate-50 transition-colors shadow-sm"
+          >
+            <ChevronRight className="w-5 h-5" />
+          </button>
+        </div>
+      </div>
+    </div>
 
     {/* --- ВЫЗОВ ПАНЕЛИ КВИЗА (Вынесено из-под Reveal для абсолютного перекрытия всех окон) --- */}
     <div className={`fixed inset-0 z-[120] flex items-center justify-center transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] ${isQuizOpen ? 'opacity-100 visible' : 'opacity-0 invisible pointer-events-none'}`}>
@@ -728,21 +813,44 @@ export default function App() {
 
         {/* --- 7. БЛОК: НОВОСТИ --- */}
         <Reveal>
-          <div className="mb-14 md:mb-24 -mx-5 md:mx-0">
-            <div className="px-5 md:px-0 flex items-center gap-3 mb-6 md:mb-10">
-              <Newspaper className="w-6 h-6 md:w-8 md:h-8 text-sky-500" />
-              <h2 className="font-serif text-2xl md:text-4xl text-slate-800 font-light tracking-wide">Новости <span className="text-sky-500 font-light tracking-wide">туризма</span></h2>
+          <div className="mb-14 md:mb-24 px-5 md:px-0">
+            <div className="flex justify-between items-end mb-6 md:mb-10">
+              <div className="flex items-center gap-3">
+                <Newspaper className="w-6 h-6 md:w-8 md:h-8 text-sky-500" />
+                <h2 className="font-serif text-2xl md:text-4xl text-slate-800 font-light tracking-wide">Новости <span className="text-sky-500 font-light tracking-wide">туризма</span></h2>
+              </div>
+              <button onClick={() => setIsAllNewsOpen(true)} className="flex items-center gap-1 text-sky-600 hover:text-sky-700 transition-colors group">
+                <span className="text-[10px] md:text-sm uppercase tracking-widest font-medium border-b border-sky-200 group-hover:border-sky-400 pb-0.5">Все новости</span>
+                <ChevronRight className="w-3 h-3 md:w-4 md:h-4 group-hover:translate-x-1 transition-transform" />
+              </button>
             </div>
-            <div className="flex overflow-x-auto gap-4 md:gap-6 px-5 md:px-0 pb-6 snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-              {DATA.news.map(item => (
-                <div key={item.id} className="min-w-[280px] md:min-w-[400px] shrink-0 snap-center flex gap-4 md:gap-6 p-4 md:p-6 bg-white/60 backdrop-blur-sm rounded-3xl border border-white/80 shadow-sm items-center hover:shadow-md transition-shadow">
-                  <div className="shrink-0 flex flex-col items-center justify-center w-14 h-14 md:w-20 md:h-20 bg-sky-100/50 rounded-2xl md:rounded-3xl text-sky-700 border border-sky-200/50">
-                    <span className="text-lg md:text-2xl font-serif font-medium tracking-wide leading-none">{item.date.split(' ')[0]}</span>
-                    <span className="text-[9px] md:text-[11px] uppercase font-light tracking-widest mt-0.5 md:mt-1">{item.date.split(' ')[1]}</span>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+              {DATA.news.map((item, index) => {
+                const isMobileHidden = index >= 3;
+                const isDesktopHidden = index >= 4;
+                if (isDesktopHidden) return null;
+                
+                return (
+                  <div 
+                    key={item.id} 
+                    onClick={() => setSelectedNews(item)}
+                    className={`p-5 md:p-6 bg-white/60 backdrop-blur-sm rounded-3xl border border-white/80 shadow-sm cursor-pointer hover:shadow-md transition-all flex-col gap-3 group ${isMobileHidden ? 'hidden md:flex' : 'flex'}`}
+                  >
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2 text-sky-600">
+                        <CalendarDays className="w-4 h-4 md:w-5 md:h-5" />
+                        <span className="text-[10px] md:text-xs uppercase tracking-widest font-medium">{item.date}</span>
+                      </div>
+                      <div className="w-8 h-8 rounded-full bg-sky-50 flex items-center justify-center text-sky-500 group-hover:bg-sky-500 group-hover:text-white transition-colors">
+                        <ArrowUpRight className="w-4 h-4" />
+                      </div>
+                    </div>
+                    <h3 className="font-serif text-lg md:text-xl text-slate-800 font-light tracking-wide mt-2">{item.title}</h3>
+                    <p className="text-sm text-slate-500 font-light tracking-wide line-clamp-2">{item.text}</p>
                   </div>
-                  <p className="text-sm md:text-base font-light tracking-wide text-slate-600 leading-relaxed">{item.text}</p>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         </Reveal>
@@ -762,14 +870,14 @@ export default function App() {
                 <div className="flex gap-4 md:gap-6 pr-4 md:pr-6 pl-5 md:pl-0">
                   {DATA.gallery.map((img, i) => (
                     <div key={`g1-${i}`} onClick={() => setSelectedImage(img)} className="w-[180px] h-[180px] md:w-[280px] md:h-[280px] rounded-[2rem] overflow-hidden flex-shrink-0 shadow-[0_8px_30px_rgba(0,0,0,0.06)] border border-white/60 bg-white/40">
-                      <img src={img} alt="Atmosphere" className="w-full h-full object-cover transition-transform duration-700 hover:scale-105" />
+                      <img src={img} alt="Atmosphere" draggable={false} className="w-full h-full object-cover transition-transform duration-700 hover:scale-105" />
                     </div>
                   ))}
                 </div>
                 <div className="flex gap-4 md:gap-6 pr-4 md:pr-6">
                   {DATA.gallery.map((img, i) => (
                     <div key={`g2-${i}`} onClick={() => setSelectedImage(img)} className="w-[180px] h-[180px] md:w-[280px] md:h-[280px] rounded-[2rem] overflow-hidden flex-shrink-0 shadow-[0_8px_30px_rgba(0,0,0,0.06)] border border-white/60 bg-white/40">
-                      <img src={img} alt="Atmosphere" className="w-full h-full object-cover transition-transform duration-700 hover:scale-105" />
+                      <img src={img} alt="Atmosphere" draggable={false} className="w-full h-full object-cover transition-transform duration-700 hover:scale-105" />
                     </div>
                   ))}
                 </div>
