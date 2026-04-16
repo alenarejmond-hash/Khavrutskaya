@@ -63,8 +63,8 @@ const DATA = {
 
   // --- АВТОРСКИЕ МАРШРУТЫ (Секция с сеткой туров) ---
   tours: [
-    { id: 1, title: "Бали", desc: "Джунгли и океан", img: "https://i0.wp.com/images.unsplash.com/photo-1537996194471-e657df975ab4?w=500&strip=all" },
-    { id: 2, title: "Все Авторские туры", desc: "Полная коллекция", img: "https://i0.wp.com/images.unsplash.com/photo-1547448415-e9f5b28e570d?w=500&strip=all" }
+    { id: 1, title: "Бали", desc: "Джунгли и океан", img: "https://i0.wp.com/images.unsplash.com/photo-1537996194471-e657df975ab4?w=500&strip=all", link: "https://t.me/turysuper" },
+    { id: 2, title: "Все Авторские туры", desc: "Полная коллекция", img: "https://i0.wp.com/images.unsplash.com/photo-1547448415-e9f5b28e570d?w=500&strip=all", link: "https://t.me/turysuper" }
   ],
   
   // --- ГОРЯЩИЕ ТУРЫ (Специальные предложения) ---
@@ -335,6 +335,7 @@ export default function App() {
   const [activeReview, setActiveReview] = useState(0);
   const [isSecretOpen, setIsSecretOpen] = useState(false);
   const [bgLoaded, setBgLoaded] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null); // Модалка для фото
   
   // Состояние для Пожелания дня
   const [randomWish, setRandomWish] = useState('');
@@ -512,6 +513,17 @@ export default function App() {
       </div>
     </div>
 
+    {/* --- МОДАЛКА ДЛЯ ФОТО ГАЛЕРЕИ --- */}
+    <div className={`fixed inset-0 z-[130] flex items-center justify-center transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] ${selectedImage ? 'opacity-100 visible' : 'opacity-0 invisible pointer-events-none'}`}>
+      <div className="absolute inset-0 bg-slate-900/90 backdrop-blur-md" onClick={() => setSelectedImage(null)}></div>
+      <button onClick={() => setSelectedImage(null)} className="absolute top-6 right-6 md:top-10 md:right-10 p-3 bg-white/10 rounded-full text-white hover:bg-white/20 transition-colors z-10 shadow-lg">
+        <X className="w-6 h-6 md:w-8 md:h-8" />
+      </button>
+      <div className={`relative z-10 max-w-[95vw] max-h-[90vh] transition-transform duration-500 ${selectedImage ? 'scale-100' : 'scale-90'}`}>
+        {selectedImage && <img src={selectedImage} alt="Expanded Atmosphere" className="max-w-full max-h-[90vh] object-contain rounded-2xl shadow-2xl" onClick={(e) => e.stopPropagation()} />}
+      </div>
+    </div>
+
     {/* РАСШИРЕННЫЙ КОНТЕЙНЕР ДЛЯ ДЕСКТОПА (max-w-6xl вместо 480px) */}
     <div className="relative z-10 w-full max-w-6xl mx-auto px-5 pt-8 md:pt-16">
 
@@ -529,15 +541,15 @@ export default function App() {
               </h1>
               
               {/* Отступ mt и gap уменьшены на мобильном для максимального сближения */}
-              <div className="relative z-10 flex flex-col items-center justify-center gap-1 md:gap-5 mt-0 md:mt-2 mb-6 opacity-0 w-full" style={{ animation: 'textReveal 0.8s cubic-bezier(0.25, 0.8, 0.25, 1) forwards 700ms' }}>
-                <p className="text-white font-light text-[10px] md:text-sm uppercase tracking-widest drop-shadow-md text-center">
+              <div className="relative z-10 flex flex-col items-center justify-center gap-0 md:gap-5 mt-0 md:mt-2 mb-6 opacity-0 w-full" style={{ animation: 'textReveal 0.8s cubic-bezier(0.25, 0.8, 0.25, 1) forwards 700ms' }}>
+                <p className="text-white font-medium md:font-light text-[10px] md:text-sm uppercase tracking-widest drop-shadow-md text-center">
                   {DATA.roleText}
                 </p>
                 
                 {/* ЛОГОТИП с подложкой-свечением для читаемости темных букв на любом фоне */}
-                <div className="relative inline-block mt-2 md:mt-0">
+                <div className="relative inline-block mt-0">
                   <div className="absolute inset-0 bg-white/40 blur-xl rounded-full"></div>
-                  <img src={DATA.roleLogo} alt="Логотип ЛетИя" className="relative h-16 md:h-28 object-contain drop-shadow-[0_0_10px_rgba(255,255,255,0.8)] shrink-0" />
+                  <img src={DATA.roleLogo} alt="Логотип ЛетИя" className="relative h-20 md:h-28 object-contain drop-shadow-[0_0_10px_rgba(255,255,255,0.8)] shrink-0" />
                 </div>
               </div>
               
@@ -634,7 +646,7 @@ export default function App() {
             
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
               {DATA.tours.map((tour, idx) => (
-                <div key={idx} className="relative h-[220px] md:h-[320px] rounded-[2rem] overflow-hidden group cursor-pointer shadow-md hover:shadow-xl transition-shadow">
+                <a key={idx} href={tour.link} target="_blank" rel="noreferrer" className="block relative h-[220px] md:h-[320px] rounded-[2rem] overflow-hidden group cursor-pointer shadow-md hover:shadow-xl transition-shadow">
                   <img src={tour.img} alt={tour.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#0a2e38]/80 via-transparent to-transparent"></div>
                   
@@ -646,7 +658,7 @@ export default function App() {
                     <p className="text-[10px] md:text-xs uppercase tracking-widest font-light text-sky-200 mb-1 md:mb-2 drop-shadow-md">{tour.desc}</p>
                     <h3 className="font-serif text-lg md:text-2xl font-light tracking-wide drop-shadow-md">{tour.title}</h3>
                   </div>
-                </div>
+                </a>
               ))}
             </div>
           </div>
@@ -716,14 +728,14 @@ export default function App() {
 
         {/* --- 7. БЛОК: НОВОСТИ --- */}
         <Reveal>
-          <div className="mb-14 md:mb-24 px-1 md:px-0">
-            <div className="flex items-center gap-3 mb-6 md:mb-10">
+          <div className="mb-14 md:mb-24 -mx-5 md:mx-0">
+            <div className="px-5 md:px-0 flex items-center gap-3 mb-6 md:mb-10">
               <Newspaper className="w-6 h-6 md:w-8 md:h-8 text-sky-500" />
-              <h2 className="font-serif text-2xl md:text-4xl text-slate-800 font-light tracking-wide">Новости <span className="text-sky-500 font-light tracking-wide">&</span> Вдохновение</h2>
+              <h2 className="font-serif text-2xl md:text-4xl text-slate-800 font-light tracking-wide">Новости <span className="text-sky-500 font-light tracking-wide">туризма</span></h2>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+            <div className="flex overflow-x-auto gap-4 md:gap-6 px-5 md:px-0 pb-6 snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
               {DATA.news.map(item => (
-                <div key={item.id} className="flex gap-4 md:gap-6 p-4 md:p-6 bg-white/60 backdrop-blur-sm rounded-3xl border border-white/80 shadow-sm items-center hover:shadow-md transition-shadow">
+                <div key={item.id} className="min-w-[280px] md:min-w-[400px] shrink-0 snap-center flex gap-4 md:gap-6 p-4 md:p-6 bg-white/60 backdrop-blur-sm rounded-3xl border border-white/80 shadow-sm items-center hover:shadow-md transition-shadow">
                   <div className="shrink-0 flex flex-col items-center justify-center w-14 h-14 md:w-20 md:h-20 bg-sky-100/50 rounded-2xl md:rounded-3xl text-sky-700 border border-sky-200/50">
                     <span className="text-lg md:text-2xl font-serif font-medium tracking-wide leading-none">{item.date.split(' ')[0]}</span>
                     <span className="text-[9px] md:text-[11px] uppercase font-light tracking-widest mt-0.5 md:mt-1">{item.date.split(' ')[1]}</span>
@@ -744,19 +756,19 @@ export default function App() {
             
             <div className="w-full overflow-hidden relative z-10">
               <div 
-                className="flex w-max hover:[animation-play-state:paused] active:[animation-play-state:paused] cursor-grab active:cursor-grabbing" 
-                style={{ animation: 'marquee 40s linear infinite' }}
+                className={`flex w-max ${selectedImage ? '' : 'hover:[animation-play-state:paused] active:[animation-play-state:paused]'} cursor-pointer`}
+                style={{ animation: 'marquee 40s linear infinite', animationPlayState: selectedImage ? 'paused' : 'running' }}
               >
                 <div className="flex gap-4 md:gap-6 pr-4 md:pr-6 pl-5 md:pl-0">
                   {DATA.gallery.map((img, i) => (
-                    <div key={`g1-${i}`} className="w-[180px] h-[180px] md:w-[280px] md:h-[280px] rounded-[2rem] overflow-hidden flex-shrink-0 shadow-[0_8px_30px_rgba(0,0,0,0.06)] border border-white/60 bg-white/40">
+                    <div key={`g1-${i}`} onClick={() => setSelectedImage(img)} className="w-[180px] h-[180px] md:w-[280px] md:h-[280px] rounded-[2rem] overflow-hidden flex-shrink-0 shadow-[0_8px_30px_rgba(0,0,0,0.06)] border border-white/60 bg-white/40">
                       <img src={img} alt="Atmosphere" className="w-full h-full object-cover transition-transform duration-700 hover:scale-105" />
                     </div>
                   ))}
                 </div>
                 <div className="flex gap-4 md:gap-6 pr-4 md:pr-6">
                   {DATA.gallery.map((img, i) => (
-                    <div key={`g2-${i}`} className="w-[180px] h-[180px] md:w-[280px] md:h-[280px] rounded-[2rem] overflow-hidden flex-shrink-0 shadow-[0_8px_30px_rgba(0,0,0,0.06)] border border-white/60 bg-white/40">
+                    <div key={`g2-${i}`} onClick={() => setSelectedImage(img)} className="w-[180px] h-[180px] md:w-[280px] md:h-[280px] rounded-[2rem] overflow-hidden flex-shrink-0 shadow-[0_8px_30px_rgba(0,0,0,0.06)] border border-white/60 bg-white/40">
                       <img src={img} alt="Atmosphere" className="w-full h-full object-cover transition-transform duration-700 hover:scale-105" />
                     </div>
                   ))}
