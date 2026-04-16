@@ -308,9 +308,9 @@ export default function App() {
           100% { opacity: 1; transform: translateY(0); }
         }
         @keyframes livingBackground {
-          0% { transform: scale(1.05) translate(0, 0); }
-          50% { transform: scale(1.15) translate(-2%, -2%); }
-          100% { transform: scale(1.05) translate(0%, 0%); }
+          0% { transform: scale(1.0) translate(0, 0); }
+          50% { transform: scale(1.3) translate(-3%, -2%); }
+          100% { transform: scale(1.0) translate(0%, 0%); }
         }
         @keyframes fluidMorph {
           0% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
@@ -334,7 +334,7 @@ export default function App() {
           src="/bg-poster.jpg" 
           alt="Luxury Background" 
           className="w-full h-full object-cover"
-          style={{ animation: 'livingBackground 30s ease-in-out infinite' }}
+          style={{ animation: 'livingBackground 15s ease-in-out infinite' }}
         />
         {/* Очень легкий градиент-фильтр океанического цвета */}
         <div className="absolute inset-0 bg-sky-900/10"></div>
@@ -680,36 +680,18 @@ export default function App() {
               >
                 <div className="flex gap-4 md:gap-6 pr-4 md:pr-6 pl-5 md:pl-0">
                   {DATA.gallery.map((img, i) => (
-                    <div key={`g1-${i}`} className="w-[260px] md:w-[380px] h-[340px] md:h-[460px] rounded-[2rem] overflow-hidden flex-shrink-0 shadow-[0_8px_30px_rgba(0,0,0,0.06)] border border-white/60 bg-white/40">
+                    <div key={`g1-${i}`} className="w-[180px] h-[180px] md:w-[280px] md:h-[280px] rounded-[2rem] overflow-hidden flex-shrink-0 shadow-[0_8px_30px_rgba(0,0,0,0.06)] border border-white/60 bg-white/40">
                       <img src={img} alt="Atmosphere" className="w-full h-full object-cover transition-transform duration-700 hover:scale-105" />
                     </div>
                   ))}
                 </div>
                 <div className="flex gap-4 md:gap-6 pr-4 md:pr-6">
                   {DATA.gallery.map((img, i) => (
-                    <div key={`g2-${i}`} className="w-[260px] md:w-[380px] h-[340px] md:h-[460px] rounded-[2rem] overflow-hidden flex-shrink-0 shadow-[0_8px_30px_rgba(0,0,0,0.06)] border border-white/60 bg-white/40">
+                    <div key={`g2-${i}`} className="w-[180px] h-[180px] md:w-[280px] md:h-[280px] rounded-[2rem] overflow-hidden flex-shrink-0 shadow-[0_8px_30px_rgba(0,0,0,0.06)] border border-white/60 bg-white/40">
                       <img src={img} alt="Atmosphere" className="w-full h-full object-cover transition-transform duration-700 hover:scale-105" />
                     </div>
                   ))}
                 </div>
-              </div>
-            </div>
-          </div>
-        </Reveal>
-
-        {/* --- ПЛЫВУЩИЙ ТЕКСТ (INFINITE MARQUEE) --- */}
-        <Reveal>
-          <div className="w-full overflow-hidden mb-12 md:mb-20 relative z-10 opacity-60 pointer-events-none select-none">
-            <div className="flex whitespace-nowrap" style={{ animation: 'marquee 35s linear infinite', width: 'max-content' }}>
-              <div className="flex items-center">
-                <span className="font-serif font-light text-5xl md:text-7xl lg:text-8xl text-transparent tracking-widest uppercase mx-4" style={{ WebkitTextStroke: '2px rgba(255,255,255,0.5)' }}>
-                  ✨ ЛетИя ✨ АВТОРСКИЕ МАРШРУТЫ ✨ ИСКУССТВО ПУТЕШЕСТВИЙ ✨ БЕЗУПРЕЧНЫЙ СЕРВИС
-                </span>
-              </div>
-              <div className="flex items-center">
-                <span className="font-serif font-light text-5xl md:text-7xl lg:text-8xl text-transparent tracking-widest uppercase mx-4" style={{ WebkitTextStroke: '2px rgba(255,255,255,0.5)' }}>
-                  ✨ ЛетИя ✨ АВТОРСКИЕ МАРШРУТЫ ✨ ИСКУССТВО ПУТЕШЕСТВИЙ ✨ БЕЗУПРЕЧНЫЙ СЕРВИС
-                </span>
               </div>
             </div>
           </div>
