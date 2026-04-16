@@ -37,8 +37,6 @@ const DATA = {
   lastName: "Хавруцкая",
   role: "Турагент и организатор авторских туров",
   badge: "20 лет опыта",
-  avatarUrl: "https://r2.syntx.ai/soraimages/555222856/7695795.png",
-  bgUrl: "https://i0.wp.com/images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1000&strip=all",
   aboutText: "Я не просто подбираю туры, я создаю путешествия (в том числе авторские), в которые хочется возвращаться. 20 лет опыта. Знаю скрытые жемчужины по всему миру, лично инспектирую отели и создаю безупречный сервис, в котором продумана каждая деталь и безопасность вашего отдыха.",
   
   // Социальные сети
@@ -82,7 +80,14 @@ const DATA = {
     desc: "Полная приватность, личный батлер и перелет на гидроплане. Скрыто от посторонних глаз.",
     price: "По запросу",
     img: "https://i0.wp.com/images.unsplash.com/photo-1599619351208-3e6c839d6828?w=800&strip=all"
-  }
+  },
+  gallery: [
+    "https://i0.wp.com/images.unsplash.com/photo-1522748906645-95d8adfd52c7?w=800&q=80",
+    "https://i0.wp.com/images.unsplash.com/photo-1499793983690-e29da59ef1c2?w=800&q=80",
+    "https://i0.wp.com/images.unsplash.com/photo-1510414842594-a61c69b5ae57?w=800&q=80",
+    "https://i0.wp.com/images.unsplash.com/photo-1544365558-35aa4afcf11f?w=800&q=80",
+    "https://i0.wp.com/images.unsplash.com/photo-1573843981267-be1199f14d4a?w=800&q=80"
+  ]
 };
 
 // --- ОБЩИЙ КОМПОНЕНТ: СЕКРЕТНЫЙ КЛУБ (PIN-КОД) ---
@@ -132,8 +137,8 @@ const SecretClubModal = ({ isOpen, onClose }) => {
             <div className="w-14 h-14 bg-white/10 rounded-full flex items-center justify-center mb-4 border border-white/20">
               <Lock className="w-6 h-6 text-sky-400" />
             </div>
-            <h3 className="font-serif text-2xl text-white mb-2 text-center">Private Club</h3>
-            <p className="text-xs text-white/60 mb-8 text-center">Введите PIN для доступа к эксклюзивной коллекции</p>
+            <h3 className="font-serif text-2xl text-white mb-2 text-center font-light tracking-wide">Private Club</h3>
+            <p className="text-xs text-white/60 mb-8 text-center font-light tracking-wider">Введите PIN для доступа к эксклюзивной коллекции</p>
 
             <div className="flex gap-4 mb-8">
               {[0, 1, 2, 3].map(i => (
@@ -161,19 +166,19 @@ const SecretClubModal = ({ isOpen, onClose }) => {
              <div className="w-14 h-14 bg-emerald-500/20 rounded-full flex items-center justify-center mb-4 border border-emerald-500/30">
               <Unlock className="w-6 h-6 text-emerald-400" />
             </div>
-            <h3 className="font-serif text-2xl text-white mb-2 text-center">Доступ открыт</h3>
-            <p className="text-xs text-white/60 mb-6 text-center">Эксклюзивное предложение для вас</p>
+            <h3 className="font-serif text-2xl text-white mb-2 text-center font-light tracking-wide">Доступ открыт</h3>
+            <p className="text-xs text-white/60 mb-6 text-center font-light tracking-wider">Эксклюзивное предложение для вас</p>
             
             <div className="w-full bg-white/5 border border-white/10 rounded-2xl overflow-hidden mb-6 group cursor-pointer hover:bg-white/10 transition-all">
               <img src={DATA.secretTour.img} alt="Secret" className="w-full h-32 object-cover group-hover:scale-105 transition-transform duration-700" />
               <div className="p-4">
-                <h4 className="font-serif text-lg text-white mb-1">{DATA.secretTour.title}</h4>
-                <p className="text-[10px] text-white/60 mb-3">{DATA.secretTour.desc}</p>
-                <div className="text-sky-400 font-bold text-sm">{DATA.secretTour.price}</div>
+                <h4 className="font-serif text-lg text-white mb-1 font-light tracking-wide">{DATA.secretTour.title}</h4>
+                <p className="text-[10px] text-white/60 mb-3 font-light tracking-wider">{DATA.secretTour.desc}</p>
+                <div className="text-sky-400 font-medium tracking-wide text-sm">{DATA.secretTour.price}</div>
               </div>
             </div>
 
-            <a href={DATA.socials.tg} target="_blank" rel="noreferrer" className="w-full bg-sky-500 text-slate-900 font-bold rounded-xl py-3 hover:bg-sky-400 transition-colors shadow-[0_0_20px_rgba(14,165,233,0.3)] text-center block">
+            <a href={DATA.socials.tg} target="_blank" rel="noreferrer" className="w-full bg-sky-500 text-slate-900 font-medium tracking-wide rounded-xl py-3 hover:bg-sky-400 transition-colors shadow-[0_0_20px_rgba(14,165,233,0.3)] text-center block">
               Связаться в Telegram
             </a>
           </div>
@@ -295,53 +300,49 @@ export default function App() {
 
   return (
     // Светлый, небесно-голубой фон с мягким скроллом
-    <div className="min-h-screen bg-[#F0F8FF] text-slate-800 font-sans relative overflow-x-hidden pb-12 w-full">
+    <div className="min-h-screen text-slate-800 font-sans relative overflow-x-hidden pb-12 w-full">
       
       <style>{`
         @keyframes textReveal {
           0% { opacity: 0; transform: translateY(15px); }
           100% { opacity: 1; transform: translateY(0); }
         }
-        @keyframes slowZoom {
-          0% { transform: scale(1); }
-          100% { transform: scale(1.15); }
+        @keyframes livingBackground {
+          0% { transform: scale(1.05) translate(0, 0); }
+          50% { transform: scale(1.15) translate(-2%, -2%); }
+          100% { transform: scale(1.05) translate(0%, 0%); }
         }
         @keyframes fluidMorph {
           0% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
           50% { border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%; }
           100% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
         }
+        @keyframes marquee {
+          0% { transform: translateX(0%); }
+          100% { transform: translateX(-50%); }
+        }
       `}</style>
 
-      {/* --- ГЛОБАЛЬНЫЙ ФОН И ВИДЕО (На весь экран: манящий пляж) --- */}
-      <div className="absolute top-0 left-0 w-full h-screen z-0 pointer-events-none overflow-hidden">
-        {/* ИНСТРУКЦИЯ ПО ЗАМЕНЕ ФОНА:
-          1. Положи свое фото и видео в папку `public` твоего проекта.
-          2. Назови их `bg-poster.jpg` и `bg-video.mp4`.
-          3. Vite автоматически подтянет их по ссылкам `/bg-poster.jpg` и `/bg-video.mp4`.
-          (Если пока файлов нет, в превью будет просто фон, как только положишь файлы — они появятся).
+      {/* --- ГЛОБАЛЬНЫЙ ФОН (На весь сайт: фото, плавно движущееся) --- */}
+      <div className="fixed top-0 left-0 w-full h-screen z-[-2] pointer-events-none overflow-hidden bg-[#F0F8FF]">
+        {/* ИНСТРУКЦИЯ ПО ФОНУ:
+          1. Положи свое высококачественное фото в папку public твоего проекта.
+          2. Назови его bg-poster.jpg.
+          3. Плавное движение будет применяться автоматически!
         */}
-        <video 
-          autoPlay 
-          loop 
-          muted 
-          playsInline 
+        <img 
+          src="/bg-poster.jpg" 
+          alt="Luxury Background" 
           className="w-full h-full object-cover"
-          poster="/bg-poster.jpg" 
-          style={{ animation: 'slowZoom 25s ease-in-out infinite alternate', transformOrigin: 'center' }}
-        >
-          <source src="/bg-video.mp4" type="video/mp4" />
-          {/* Заглушка на всякий случай, если локальное видео не найдено: 
-          <source src="https://assets.mixkit.co/videos/preview/mixkit-aerial-view-of-a-beautiful-tropical-beach-4033-small.mp4" type="video/mp4" />
-          */}
-        </video>
-        {/* Градиент, чтобы видео бесшовно сливалось с небесным фоном сайта внизу */}
-        <div className="absolute inset-0 bg-gradient-to-b from-sky-900/20 via-sky-900/10 to-[#F0F8FF]"></div>
+          style={{ animation: 'livingBackground 30s ease-in-out infinite' }}
+        />
+        {/* Очень легкий градиент-фильтр океанического цвета */}
+        <div className="absolute inset-0 bg-sky-900/10"></div>
       </div>
 
-      <div className="fixed inset-0 z-[-1] pointer-events-none bg-[#F0F8FF]">
-        <div className="absolute top-0 right-0 w-96 h-96 bg-sky-200/40 rounded-full mix-blend-multiply blur-[80px]"></div>
-        <div className="absolute top-40 -left-20 w-80 h-80 bg-blue-300/20 rounded-full mix-blend-multiply blur-[80px]"></div>
+      <div className="fixed inset-0 z-[-1] pointer-events-none">
+        <div className="absolute top-0 right-0 w-96 h-96 bg-sky-200/20 rounded-full mix-blend-overlay blur-[80px]"></div>
+        <div className="absolute top-40 -left-20 w-80 h-80 bg-blue-300/10 rounded-full mix-blend-overlay blur-[80px]"></div>
       </div>
 
       {/* РАСШИРЕННЫЙ КОНТЕЙНЕР ДЛЯ ДЕСКТОПА (max-w-6xl вместо 480px) */}
@@ -349,7 +350,6 @@ export default function App() {
 
         {/* --- 1. БЛОК: HERO (НЕВИДИМЫЙ ИНТЕРФЕЙС / PURE TEXT) --- */}
         <Reveal>
-          {/* Карточка убрана, контент парит прямо над видео океана */}
           <div className="relative text-center px-2 pb-10 mb-12 md:mb-20 mt-[20vh] md:mt-[30vh] max-w-4xl mx-auto flex flex-col items-center">
             
             {/* Аватарка стоит органично, без "абсолютного" позиционирования */}
@@ -364,29 +364,38 @@ export default function App() {
                 className="w-full h-full p-[2px] bg-white/10 backdrop-blur-md shadow-[0_20px_50px_-10px_rgba(0,0,0,0.4)] relative z-10 overflow-hidden"
                 style={{ animation: 'fluidMorph 8s ease-in-out infinite' }}
               >
+                {/* ИНСТРУКЦИЯ ПО АВАТАРУ:
+                  1. Положи свое фото в папку public.
+                  2. Назови его avatar.jpg.
+                  (Пока файла нет, будет пустая форма. Как загрузишь - появится внутри капли).
+                */}
                 <img 
-                  src={DATA.avatarUrl} 
-                  alt={DATA.name} 
-                  className="w-full h-full object-contain"
+                  src="/avatar.jpg" 
+                  alt="Avatar" 
+                  className="w-full h-full object-cover"
                   style={{ animation: 'fluidMorph 8s ease-in-out infinite' }}
                 />
               </div>
               <Sparkles className="absolute top-2 right-0 md:w-10 md:h-10 w-8 h-8 text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.8)] animate-pulse z-20" />
             </div>
 
-            {/* Текст с сияющим мягким лазурным свечением */}
-            <h1 className="font-serif text-[32px] md:text-6xl font-semibold text-white tracking-wide mb-3 [text-shadow:0_4px_20px_rgba(14,165,233,0.6)]">
-              <StaggeredText text={`${DATA.name} ${DATA.lastName}`} delayOffset={300} />
-            </h1>
-            <p className="text-sky-50 font-bold text-[10px] md:text-sm uppercase tracking-[0.4em] mt-2 mb-6 opacity-0 [text-shadow:0_2px_15px_rgba(14,165,233,0.8)]" style={{ animation: 'textReveal 0.8s cubic-bezier(0.25, 0.8, 0.25, 1) forwards 700ms' }}>
-              {DATA.role}
-            </p>
-            
-            <div className="w-16 md:w-24 h-[1px] bg-gradient-to-r from-transparent via-white/80 to-transparent mx-auto mb-6 md:mb-10 opacity-0 drop-shadow-[0_2px_10px_rgba(14,165,233,0.5)]" style={{ animation: 'textReveal 0.8s cubic-bezier(0.25, 0.8, 0.25, 1) forwards 800ms' }}></div>
-            
-            <p className="font-serif italic text-white text-[16px] md:text-2xl leading-relaxed px-2 md:px-12 [text-shadow:0_4px_25px_rgba(14,165,233,0.7)]">
-              <StaggeredText text="«Открываю для вас мир Quiet Luxury. Путешествия, где важна каждая деталь, а сервис незаметен, но безупречен.»" delayOffset={900} />
-            </p>
+            {/* БЛОК С ТЕКСТОМ: мягкая затемняющая подложка для идеальной читаемости */}
+            <div className="relative w-full flex flex-col items-center">
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-2xl h-[160%] bg-[radial-gradient(ellipse_at_center,rgba(0,0,0,0.25)_0%,transparent_70%)] z-0 pointer-events-none blur-md"></div>
+              
+              <h1 className="relative z-10 font-serif text-[32px] md:text-6xl font-medium text-white tracking-wide mb-3 drop-shadow-md">
+                <StaggeredText text={`${DATA.name} ${DATA.lastName}`} delayOffset={300} />
+              </h1>
+              <p className="relative z-10 text-white font-light text-[10px] md:text-sm uppercase tracking-widest mt-2 mb-6 opacity-0 drop-shadow-md" style={{ animation: 'textReveal 0.8s cubic-bezier(0.25, 0.8, 0.25, 1) forwards 700ms' }}>
+                {DATA.role}
+              </p>
+              
+              <div className="relative z-10 w-16 md:w-24 h-[1px] bg-gradient-to-r from-transparent via-white/80 to-transparent mx-auto mb-6 md:mb-10 opacity-0 drop-shadow-md" style={{ animation: 'textReveal 0.8s cubic-bezier(0.25, 0.8, 0.25, 1) forwards 800ms' }}></div>
+              
+              <p className="relative z-10 font-serif font-light text-white text-[16px] md:text-2xl leading-relaxed px-2 md:px-12 tracking-wide drop-shadow-md">
+                <StaggeredText text="«Открываю для вас мир Quiet Luxury. Путешествия, где важна каждая деталь, а сервис незаметен, но безупречен.»" delayOffset={900} />
+              </p>
+            </div>
           </div>
         </Reveal>
 
@@ -397,14 +406,14 @@ export default function App() {
             {/* --- ПОЖЕЛАНИЕ ДНЯ --- */}
             <div className="bg-gradient-to-br from-sky-50 to-white/60 backdrop-blur-md border border-sky-200/60 p-6 md:p-10 rounded-3xl shadow-sm relative overflow-hidden flex flex-col items-center justify-center text-center h-full">
               <Sparkles className="w-8 h-8 text-sky-400 mb-3 md:mb-5 opacity-80" />
-              <h2 className="font-serif text-xl md:text-2xl text-slate-800 font-medium mb-2 md:mb-4">Пожелание дня</h2>
+              <h2 className="font-serif text-xl md:text-2xl text-slate-800 font-light tracking-wide mb-2 md:mb-4">Пожелание дня</h2>
               
               {!isWishVisible ? (
-                <button onClick={showWish} className="mt-2 px-6 py-3 bg-sky-600/10 text-sky-700 hover:bg-sky-600/20 rounded-full font-medium transition-colors text-sm md:text-base border border-sky-600/20">
+                <button onClick={showWish} className="mt-2 px-6 py-3 bg-sky-600/10 text-sky-700 hover:bg-sky-600/20 rounded-full font-medium tracking-wide transition-colors text-sm md:text-base border border-sky-600/20">
                   ✨ Открыть послание
                 </button>
               ) : (
-                <p className="text-slate-600 font-serif italic text-[15px] md:text-lg leading-relaxed animate-in fade-in zoom-in-95 duration-500">
+                <p className="text-slate-700 font-serif font-light tracking-wide text-[15px] md:text-lg leading-relaxed animate-in fade-in zoom-in-95 duration-500">
                   "{randomWish}"
                 </p>
               )}
@@ -413,11 +422,11 @@ export default function App() {
             {/* --- ИНТЕРАКТИВНЫЙ БЛОК ОБО МНЕ --- */}
             <div className="bg-white/70 backdrop-blur-md border border-white p-6 md:p-10 rounded-tr-[2rem] rounded-bl-[2rem] rounded-tl-md rounded-br-md shadow-md relative flex flex-col justify-center h-full">
               <div className="absolute -top-4 -left-1 text-5xl md:text-6xl text-sky-200 font-serif opacity-70">"</div>
-              <p className="text-sm md:text-base text-slate-600 font-light leading-relaxed relative z-10">
+              <p className="text-sm md:text-base text-slate-700 font-light tracking-wide leading-relaxed relative z-10">
                 {DATA.aboutText}
               </p>
               <div className="mt-6 md:mt-8 flex justify-end">
-                <span className="font-serif italic text-sky-600 text-lg md:text-xl border-b border-sky-200/50 pb-1 pr-2">
+                <span className="font-serif font-light tracking-wide text-sky-600 text-lg md:text-xl border-b border-sky-200/50 pb-1 pr-2">
                   С любовью, {DATA.name} {DATA.lastName}
                 </span>
               </div>
@@ -430,7 +439,7 @@ export default function App() {
           <div className="mb-14 md:mb-20 px-2 max-w-sm mx-auto">
             <a href={DATA.socials.tg} target="_blank" rel="noreferrer" className="w-full bg-gradient-to-r from-blue-500 to-sky-500 text-white shadow-lg shadow-sky-500/30 rounded-2xl py-4 flex items-center justify-center gap-3 hover:scale-[1.02] transition-transform">
               <Plane className="w-5 md:w-6 h-5 md:h-6" />
-              <span className="font-serif text-lg md:text-xl font-medium">Подобрать тур</span>
+              <span className="font-serif font-light tracking-wide text-lg md:text-xl">Подобрать тур</span>
             </a>
           </div>
         </Reveal>
@@ -438,7 +447,7 @@ export default function App() {
         {/* --- 3. БЛОК: 3D-ГЛОБУС & КВИЗ --- */}
         <Reveal>
           <div className="relative mb-14 md:mb-24">
-            <h2 className="text-center font-serif text-2xl md:text-4xl text-slate-800 mb-8 font-medium">Куда отправимся <br className="md:hidden"/><span className="text-sky-500 italic md:ml-2">в этот раз?</span></h2>
+            <h2 className="text-center font-serif text-2xl md:text-4xl text-slate-800 font-light tracking-wide mb-8">Куда отправимся <br className="md:hidden"/><span className="text-sky-500 font-light tracking-wide md:ml-2">в этот раз?</span></h2>
             
             <div className="relative flex justify-center items-center h-[280px] md:h-[360px]">
               <button 
@@ -459,7 +468,7 @@ export default function App() {
                 {!isQuizOpen && (
                   <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
                     <div className="bg-white/90 backdrop-blur-sm px-6 py-3 md:px-8 md:py-4 rounded-full shadow-lg flex items-center gap-2">
-                      <span className="font-bold text-cyan-800 text-sm md:text-base">Пройти квиз</span>
+                      <span className="font-light tracking-wide text-cyan-800 text-sm md:text-base">Пройти квиз</span>
                       <ChevronRight className="w-4 h-4 md:w-5 md:h-5 text-cyan-600" />
                     </div>
                   </div>
@@ -470,7 +479,7 @@ export default function App() {
               <div className={`absolute top-10 md:top-16 left-0 right-0 mx-auto w-full max-w-md bg-white border border-white rounded-[2rem] shadow-2xl p-6 md:p-8 transition-all duration-500 z-30 ${isQuizOpen ? 'translate-y-0 opacity-100 visible' : 'translate-y-20 opacity-0 invisible pointer-events-none'}`}>
                 
                 <div className="flex justify-between items-center mb-6">
-                  <span className="text-[10px] md:text-xs text-sky-600 uppercase tracking-[0.2em] font-medium">
+                  <span className="text-[10px] md:text-xs text-sky-600 uppercase tracking-widest font-medium">
                     {quizStep < 4 ? `Шаг ${quizStep} из 3` : 'Готово'}
                   </span>
                   <button onClick={closeQuiz} className="p-2 bg-slate-100 rounded-full text-slate-500 hover:text-slate-800 hover:bg-slate-200 transition-colors">
@@ -480,11 +489,11 @@ export default function App() {
 
                 {quizStep === 1 && (
                   <div className="animate-in fade-in zoom-in-95 duration-300">
-                    <h3 className="font-serif text-2xl md:text-3xl font-bold text-slate-800 mb-2">Куда тянет душу?</h3>
-                    <p className="text-sm md:text-base text-slate-500 mb-6">Выберите идеальную картинку отдыха</p>
+                    <h3 className="font-serif text-2xl md:text-3xl font-light tracking-wide text-slate-800 mb-2">Куда тянет душу?</h3>
+                    <p className="text-sm md:text-base text-slate-500 font-light tracking-wide mb-6">Выберите идеальную картинку отдыха</p>
                     <div className="space-y-3">
                       {['Белоснежные пляжи и релакс', 'Активный отдых и горы', 'Европейские улочки', 'Экзотика и джунгли'].map((option, i) => (
-                        <button key={i} onClick={() => setQuizStep(2)} className="w-full text-left px-5 py-4 md:py-5 rounded-2xl bg-slate-50 border border-slate-100 text-sm md:text-base font-medium text-slate-700 hover:bg-sky-50 hover:border-sky-200 hover:text-sky-700 transition-colors flex justify-between items-center group">
+                        <button key={i} onClick={() => setQuizStep(2)} className="w-full text-left px-5 py-4 md:py-5 rounded-2xl bg-slate-50 border border-slate-100 text-sm md:text-base font-light tracking-wide text-slate-700 hover:bg-sky-50 hover:border-sky-200 hover:text-sky-700 transition-colors flex justify-between items-center group">
                           {option} <ChevronRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity" />
                         </button>
                       ))}
@@ -494,11 +503,11 @@ export default function App() {
 
                 {quizStep === 2 && (
                   <div className="animate-in fade-in slide-in-from-right-4 duration-300">
-                    <h3 className="font-serif text-2xl md:text-3xl font-bold text-slate-800 mb-2">С кем полетите?</h3>
-                    <p className="text-sm md:text-base text-slate-500 mb-6">Это поможет подобрать правильный отель</p>
+                    <h3 className="font-serif text-2xl md:text-3xl font-light tracking-wide text-slate-800 mb-2">С кем полетите?</h3>
+                    <p className="text-sm md:text-base text-slate-500 font-light tracking-wide mb-6">Это поможет подобрать правильный отель</p>
                     <div className="space-y-3">
                       {['Вдвоем (Романтика)', 'Семьей (С детьми)', 'Соло (Перезагрузка)', 'Шумной компанией'].map((option, i) => (
-                        <button key={i} onClick={() => setQuizStep(3)} className="w-full text-left px-5 py-4 md:py-5 rounded-2xl bg-slate-50 border border-slate-100 text-sm md:text-base font-medium text-slate-700 hover:bg-sky-50 hover:border-sky-200 hover:text-sky-700 transition-colors flex justify-between items-center group">
+                        <button key={i} onClick={() => setQuizStep(3)} className="w-full text-left px-5 py-4 md:py-5 rounded-2xl bg-slate-50 border border-slate-100 text-sm md:text-base font-light tracking-wide text-slate-700 hover:bg-sky-50 hover:border-sky-200 hover:text-sky-700 transition-colors flex justify-between items-center group">
                           {option} <ChevronRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity" />
                         </button>
                       ))}
@@ -508,19 +517,19 @@ export default function App() {
 
                 {quizStep === 3 && (
                   <div className="animate-in fade-in slide-in-from-right-4 duration-300">
-                    <h3 className="font-serif text-2xl md:text-3xl font-bold text-slate-800 mb-2">Ваш контакт?</h3>
-                    <p className="text-sm md:text-base text-slate-500 mb-6">Оставьте Telegram или WhatsApp, я пришлю 3 лучших варианта под ваш запрос.</p>
+                    <h3 className="font-serif text-2xl md:text-3xl font-light tracking-wide text-slate-800 mb-2">Ваш контакт?</h3>
+                    <p className="text-sm md:text-base text-slate-500 font-light tracking-wide mb-6">Оставьте Telegram или WhatsApp, я пришлю 3 лучших варианта под ваш запрос.</p>
                     <div className="space-y-4">
                       <input 
                         type="tel" 
                         placeholder="+7 (999) 000-00-00" 
                         value={phone}
                         onChange={(e) => setPhone(e.target.value)}
-                        className="w-full bg-white border border-slate-200 rounded-2xl px-5 py-4 md:py-5 text-slate-800 focus:outline-none focus:border-sky-400 focus:ring-1 focus:ring-sky-400 md:text-lg"
+                        className="w-full bg-white border border-slate-200 rounded-2xl px-5 py-4 md:py-5 text-slate-800 font-light tracking-wide focus:outline-none focus:border-sky-400 focus:ring-1 focus:ring-sky-400 md:text-lg"
                       />
                       <button 
                         onClick={() => setQuizStep(4)} 
-                        className="w-full bg-gradient-to-r from-sky-500 to-sky-600 text-white font-bold rounded-2xl py-4 md:py-5 text-lg hover:shadow-lg hover:shadow-sky-500/30 transition-all"
+                        className="w-full bg-gradient-to-r from-sky-500 to-sky-600 text-white font-medium tracking-wide rounded-2xl py-4 md:py-5 text-lg hover:shadow-lg hover:shadow-sky-500/30 transition-all"
                       >
                         Получить подборку
                       </button>
@@ -533,9 +542,9 @@ export default function App() {
                     <div className="w-20 h-20 md:w-24 md:h-24 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-6 md:mb-8 border border-emerald-200">
                       <CheckCircle2 className="w-10 h-10 md:w-12 md:h-12 text-emerald-500" />
                     </div>
-                    <h3 className="font-serif text-2xl md:text-3xl font-bold text-slate-800 mb-3 md:mb-4">Запрос принят!</h3>
-                    <p className="text-slate-600 text-sm md:text-base leading-relaxed mb-8 md:mb-10">Я уже начала готовить для вас идеальные варианты. Напишу в ближайшее время.</p>
-                    <button onClick={closeQuiz} className="w-full bg-slate-100 text-slate-700 font-bold rounded-2xl py-4 md:py-5 text-lg hover:bg-slate-200 transition-colors">
+                    <h3 className="font-serif text-2xl md:text-3xl font-light tracking-wide text-slate-800 mb-3 md:mb-4">Запрос принят!</h3>
+                    <p className="text-slate-600 font-light tracking-wide text-sm md:text-base leading-relaxed mb-8 md:mb-10">Я уже начала готовить для вас идеальные варианты. Напишу в ближайшее время.</p>
+                    <button onClick={closeQuiz} className="w-full bg-slate-100 text-slate-700 font-medium tracking-wide rounded-2xl py-4 md:py-5 text-lg hover:bg-slate-200 transition-colors">
                       Отлично, жду
                     </button>
                   </div>
@@ -550,8 +559,8 @@ export default function App() {
         <Reveal>
           <div className="mb-14 md:mb-24">
             <div className="flex justify-between items-end mb-6 md:mb-10">
-              <h2 className="font-serif text-2xl md:text-4xl text-slate-800 font-medium">Авторские <br className="md:hidden"/><span className="text-sky-500 italic md:ml-2">маршруты</span></h2>
-              <button className="text-xs md:text-sm font-bold uppercase tracking-wider text-cyan-600 mb-1 hover:text-sky-500 transition-colors">Все туры</button>
+              <h2 className="font-serif text-2xl md:text-4xl text-slate-800 font-light tracking-wide">Авторские <br className="md:hidden"/><span className="text-sky-500 font-light tracking-wide md:ml-2">маршруты</span></h2>
+              <button className="text-xs md:text-sm font-medium tracking-widest uppercase text-cyan-600 mb-1 hover:text-sky-500 transition-colors">Все туры</button>
             </div>
             
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
@@ -565,8 +574,8 @@ export default function App() {
                   </div>
 
                   <div className="absolute bottom-4 left-4 right-4 md:bottom-6 md:left-6 md:right-6 text-white">
-                    <p className="text-[10px] md:text-xs uppercase tracking-widest text-sky-200 mb-1 md:mb-2 font-semibold drop-shadow-md">{tour.desc}</p>
-                    <h3 className="font-serif text-lg md:text-2xl font-medium drop-shadow-md">{tour.title}</h3>
+                    <p className="text-[10px] md:text-xs uppercase tracking-widest font-light text-sky-200 mb-1 md:mb-2 drop-shadow-md">{tour.desc}</p>
+                    <h3 className="font-serif text-lg md:text-2xl font-light tracking-wide drop-shadow-md">{tour.title}</h3>
                   </div>
                 </div>
               ))}
@@ -578,7 +587,7 @@ export default function App() {
         <Reveal>
           <div className="mb-14 md:mb-24">
             <div className="flex justify-between items-end mb-6 md:mb-10">
-              <h2 className="font-serif text-2xl md:text-4xl text-slate-800 font-medium">Морские <br className="md:hidden"/><span className="text-cyan-600 italic md:ml-2">круизы</span></h2>
+              <h2 className="font-serif text-2xl md:text-4xl text-slate-800 font-light tracking-wide">Морские <br className="md:hidden"/><span className="text-cyan-600 font-light tracking-wide md:ml-2">круизы</span></h2>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
               {DATA.cruises.map(cruise => (
@@ -588,8 +597,8 @@ export default function App() {
                     <div className="absolute top-3 right-4 md:top-5 md:right-6 text-cyan-600/40 group-hover:text-cyan-500 transition-colors">
                       <Ship className="w-5 h-5 md:w-8 md:h-8" />
                     </div>
-                    <h3 className="font-serif text-lg md:text-2xl text-slate-800 font-medium leading-tight">{cruise.title}</h3>
-                    <p className="text-[10px] md:text-xs uppercase tracking-widest text-slate-500 mt-2 md:mt-4">{cruise.ship}</p>
+                    <h3 className="font-serif text-lg md:text-2xl text-slate-800 font-light tracking-wide leading-tight">{cruise.title}</h3>
+                    <p className="text-[10px] md:text-xs uppercase tracking-widest font-light text-slate-500 mt-2 md:mt-4">{cruise.ship}</p>
                   </div>
                 </div>
               ))}
@@ -601,7 +610,7 @@ export default function App() {
         <Reveal>
           <div className="mb-14 md:mb-24 -mx-5 md:mx-0">
             <div className="px-5 md:px-0 mb-6 md:mb-10">
-              <h2 className="font-serif text-2xl md:text-4xl text-slate-800 font-medium">Специальные <br className="md:hidden"/><span className="text-sky-500 italic md:ml-2">предложения</span></h2>
+              <h2 className="font-serif text-2xl md:text-4xl text-slate-800 font-light tracking-wide">Специальные <br className="md:hidden"/><span className="text-sky-500 font-light tracking-wide md:ml-2">предложения</span></h2>
             </div>
             
             <div className="flex md:grid md:grid-cols-2 lg:grid-cols-3 overflow-x-auto gap-5 px-5 md:px-0 pb-8 pt-2 snap-x snap-mandatory md:snap-none [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
@@ -609,21 +618,21 @@ export default function App() {
                 <div key={deal.id} className="min-w-[260px] md:min-w-0 snap-center bg-white border border-white rounded-[2rem] p-3 md:p-4 shadow-[0_12px_30px_rgba(0,0,0,0.08)] hover:shadow-xl transition-shadow cursor-pointer group">
                   <div className="relative h-[160px] md:h-[220px] rounded-2xl overflow-hidden mb-4">
                     <img src={deal.img} alt={deal.hotelName} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
-                    <div className="absolute top-3 left-3 bg-gradient-to-r from-sky-400 to-blue-500 text-white text-[10px] font-bold uppercase tracking-wider px-3 py-1.5 rounded-full shadow-lg flex items-center gap-1">
+                    <div className="absolute top-3 left-3 bg-gradient-to-r from-sky-400 to-blue-500 text-white text-[10px] font-medium uppercase tracking-wider px-3 py-1.5 rounded-full shadow-lg flex items-center gap-1">
                       <span className="w-1.5 h-1.5 bg-white rounded-full animate-pulse"></span>
                       Осталось мало мест
                     </div>
                   </div>
                   
                   <div className="px-2 pb-2">
-                    <h4 className="font-serif text-lg md:text-xl font-bold text-slate-800">{deal.hotelName}</h4>
-                    <div className="flex items-center gap-1 text-slate-500 text-xs md:text-sm mt-1 mb-4 md:mb-6">
+                    <h4 className="font-serif text-lg md:text-xl font-light tracking-wide text-slate-800">{deal.hotelName}</h4>
+                    <div className="flex items-center gap-1 text-slate-500 font-light tracking-wide text-xs md:text-sm mt-1 mb-4 md:mb-6">
                       <MapPin className="w-3 h-3 text-cyan-500" /> {deal.loc}
                     </div>
                     <div className="flex items-end justify-between">
                       <div>
-                        <p className="text-[9px] md:text-[11px] uppercase tracking-widest text-slate-400 font-bold mb-0.5 line-through">{deal.oldPrice}</p>
-                        <p className="font-serif text-xl md:text-3xl font-bold text-sky-600">{deal.price}</p>
+                        <p className="text-[9px] md:text-[11px] uppercase tracking-widest text-slate-400 font-light mb-0.5 line-through">{deal.oldPrice}</p>
+                        <p className="font-serif text-xl md:text-3xl font-medium tracking-wide text-sky-600">{deal.price}</p>
                       </div>
                       <button className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-cyan-50 flex items-center justify-center text-cyan-600 group-hover:bg-cyan-600 group-hover:text-white transition-colors shadow-sm">
                         <ArrowUpRight className="w-5 h-5 md:w-6 md:h-6" />
@@ -641,18 +650,67 @@ export default function App() {
           <div className="mb-14 md:mb-24 px-1 md:px-0">
             <div className="flex items-center gap-3 mb-6 md:mb-10">
               <Newspaper className="w-6 h-6 md:w-8 md:h-8 text-sky-500" />
-              <h2 className="font-serif text-2xl md:text-4xl text-slate-800 font-medium">Новости <span className="text-sky-500 italic">&</span> Вдохновение</h2>
+              <h2 className="font-serif text-2xl md:text-4xl text-slate-800 font-light tracking-wide">Новости <span className="text-sky-500 font-light tracking-wide">&</span> Вдохновение</h2>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
               {DATA.news.map(item => (
                 <div key={item.id} className="flex gap-4 md:gap-6 p-4 md:p-6 bg-white/60 backdrop-blur-sm rounded-3xl border border-white/80 shadow-sm items-center hover:shadow-md transition-shadow">
                   <div className="shrink-0 flex flex-col items-center justify-center w-14 h-14 md:w-20 md:h-20 bg-sky-100/50 rounded-2xl md:rounded-3xl text-sky-700 border border-sky-200/50">
-                    <span className="text-lg md:text-2xl font-serif font-bold leading-none">{item.date.split(' ')[0]}</span>
-                    <span className="text-[9px] md:text-[11px] uppercase font-bold tracking-widest mt-0.5 md:mt-1">{item.date.split(' ')[1]}</span>
+                    <span className="text-lg md:text-2xl font-serif font-medium tracking-wide leading-none">{item.date.split(' ')[0]}</span>
+                    <span className="text-[9px] md:text-[11px] uppercase font-light tracking-widest mt-0.5 md:mt-1">{item.date.split(' ')[1]}</span>
                   </div>
-                  <p className="text-sm md:text-base text-slate-600 leading-relaxed font-light">{item.text}</p>
+                  <p className="text-sm md:text-base font-light tracking-wide text-slate-600 leading-relaxed">{item.text}</p>
                 </div>
               ))}
+            </div>
+          </div>
+        </Reveal>
+
+        {/* --- 8. БЛОК: АТМОСФЕРА ПУТЕШЕСТВИЙ (ГАЛЕРЕЯ) --- */}
+        <Reveal>
+          <div className="mb-14 md:mb-24 -mx-5 md:mx-0">
+            <div className="px-5 md:px-0 mb-6 md:mb-10">
+              <h2 className="font-serif text-2xl md:text-4xl text-slate-800 font-light tracking-wide">Атмосфера <br className="md:hidden"/><span className="text-sky-500 font-light tracking-wide md:ml-2">наших путешествий</span></h2>
+            </div>
+            
+            <div className="w-full overflow-hidden relative z-10">
+              <div 
+                className="flex w-max hover:[animation-play-state:paused] active:[animation-play-state:paused] cursor-grab active:cursor-grabbing" 
+                style={{ animation: 'marquee 40s linear infinite' }}
+              >
+                <div className="flex gap-4 md:gap-6 pr-4 md:pr-6 pl-5 md:pl-0">
+                  {DATA.gallery.map((img, i) => (
+                    <div key={`g1-${i}`} className="w-[260px] md:w-[380px] h-[340px] md:h-[460px] rounded-[2rem] overflow-hidden flex-shrink-0 shadow-[0_8px_30px_rgba(0,0,0,0.06)] border border-white/60 bg-white/40">
+                      <img src={img} alt="Atmosphere" className="w-full h-full object-cover transition-transform duration-700 hover:scale-105" />
+                    </div>
+                  ))}
+                </div>
+                <div className="flex gap-4 md:gap-6 pr-4 md:pr-6">
+                  {DATA.gallery.map((img, i) => (
+                    <div key={`g2-${i}`} className="w-[260px] md:w-[380px] h-[340px] md:h-[460px] rounded-[2rem] overflow-hidden flex-shrink-0 shadow-[0_8px_30px_rgba(0,0,0,0.06)] border border-white/60 bg-white/40">
+                      <img src={img} alt="Atmosphere" className="w-full h-full object-cover transition-transform duration-700 hover:scale-105" />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </Reveal>
+
+        {/* --- ПЛЫВУЩИЙ ТЕКСТ (INFINITE MARQUEE) --- */}
+        <Reveal>
+          <div className="w-full overflow-hidden mb-12 md:mb-20 relative z-10 opacity-60 pointer-events-none select-none">
+            <div className="flex whitespace-nowrap" style={{ animation: 'marquee 35s linear infinite', width: 'max-content' }}>
+              <div className="flex items-center">
+                <span className="font-serif font-light text-5xl md:text-7xl lg:text-8xl text-transparent tracking-widest uppercase mx-4" style={{ WebkitTextStroke: '2px rgba(255,255,255,0.5)' }}>
+                  ✨ ЛетИя ✨ АВТОРСКИЕ МАРШРУТЫ ✨ ИСКУССТВО ПУТЕШЕСТВИЙ ✨ БЕЗУПРЕЧНЫЙ СЕРВИС
+                </span>
+              </div>
+              <div className="flex items-center">
+                <span className="font-serif font-light text-5xl md:text-7xl lg:text-8xl text-transparent tracking-widest uppercase mx-4" style={{ WebkitTextStroke: '2px rgba(255,255,255,0.5)' }}>
+                  ✨ ЛетИя ✨ АВТОРСКИЕ МАРШРУТЫ ✨ ИСКУССТВО ПУТЕШЕСТВИЙ ✨ БЕЗУПРЕЧНЫЙ СЕРВИС
+                </span>
+              </div>
             </div>
           </div>
         </Reveal>
@@ -662,7 +720,7 @@ export default function App() {
           <div className="mb-14 md:mb-24 px-5 md:px-0 max-w-4xl mx-auto">
             <div className="flex items-center gap-4 mb-8 md:mb-12">
               <div className="h-[1px] flex-1 bg-gradient-to-r from-transparent to-sky-200"></div>
-              <h2 className="font-serif text-xl md:text-3xl text-slate-800 font-medium italic">Впечатления</h2>
+              <h2 className="font-serif text-xl md:text-3xl text-slate-800 font-light tracking-wide uppercase">Впечатления</h2>
               <div className="h-[1px] flex-1 bg-gradient-to-l from-transparent to-sky-200"></div>
             </div>
             
@@ -676,7 +734,7 @@ export default function App() {
               <div className="relative flex-1 flex flex-col justify-center items-center mt-6 mb-8 w-full min-h-[100px] md:min-h-[160px]">
                 {DATA.reviews.map((review, i) => (
                   <div key={review.id} className={`absolute inset-0 px-4 md:px-12 transition-all duration-700 ease-in-out flex items-center justify-center ${i === activeReview ? 'opacity-100 blur-none z-10' : 'opacity-0 blur-sm pointer-events-none z-0'}`}>
-                    <p className="font-serif text-slate-700 italic text-[15px] md:text-xl leading-relaxed md:leading-loose line-clamp-4 md:line-clamp-none max-w-2xl mx-auto">
+                    <p className="font-serif text-slate-700 font-light tracking-wide text-[15px] md:text-xl leading-relaxed md:leading-loose max-w-2xl mx-auto">
                       "{review.text}"
                     </p>
                   </div>
@@ -691,10 +749,10 @@ export default function App() {
                 <div className="relative w-[120px] md:w-[160px] h-full flex justify-center">
                   {DATA.reviews.map((review, i) => (
                     <div key={review.id} className={`absolute inset-0 flex flex-col items-center transition-all duration-500 ${i === activeReview ? 'opacity-100 translate-y-0 z-10' : 'opacity-0 translate-y-2 pointer-events-none z-0'}`}>
-                      <div className="w-10 h-10 md:w-14 md:h-14 rounded-full mb-1.5 md:mb-2 ring-2 ring-sky-100 shadow-sm flex items-center justify-center bg-gradient-to-br from-sky-100 to-sky-50 text-sky-700 font-bold font-serif text-lg md:text-2xl shrink-0">
+                      <div className="w-10 h-10 md:w-14 md:h-14 rounded-full mb-1.5 md:mb-2 ring-2 ring-sky-100 shadow-sm flex items-center justify-center bg-gradient-to-br from-sky-100 to-sky-50 text-sky-700 font-light font-serif text-lg md:text-2xl shrink-0">
                         {review.name.charAt(0)}
                       </div>
-                      <span className="text-[8px] md:text-[10px] uppercase tracking-[0.2em] font-bold text-slate-800 truncate w-full text-center">{review.name}</span>
+                      <span className="text-[8px] md:text-[10px] uppercase tracking-widest font-medium text-slate-800 truncate w-full text-center">{review.name}</span>
                     </div>
                   ))}
                 </div>
@@ -712,7 +770,7 @@ export default function App() {
           <div className="w-full mb-12 md:mb-20 px-5 md:px-0 relative z-10 max-w-md mx-auto">
             <button onClick={() => setIsSecretOpen(true)} className="w-full bg-sky-600/10 border border-sky-600/20 text-sky-700 py-4 md:py-5 rounded-2xl flex items-center justify-center gap-3 md:gap-4 group hover:bg-sky-600/20 transition-all backdrop-blur-md">
               <Lock className="w-4 h-4 md:w-5 md:h-5 opacity-70 group-hover:scale-110 transition-transform" />
-              <span className="font-serif italic text-lg md:text-xl">Закрытая коллекция</span>
+              <span className="font-serif font-light tracking-wide text-lg md:text-xl">Закрытая коллекция</span>
             </button>
           </div>
           <SecretClubModal isOpen={isSecretOpen} onClose={() => setIsSecretOpen(false)} />
@@ -724,26 +782,23 @@ export default function App() {
             <div className="flex flex-col items-center px-5 md:px-0">
               <div className="flex items-center justify-center gap-3 mb-6 md:mb-8 w-full max-w-[200px] md:max-w-[400px]">
                 <div className="h-[1px] flex-1 bg-sky-200/50"></div>
-                <span className="font-serif italic text-slate-500 text-sm md:text-lg">Мои контакты</span>
+                <span className="font-serif font-light tracking-widest uppercase text-slate-500 text-[10px] md:text-sm">Мои контакты</span>
                 <div className="h-[1px] flex-1 bg-sky-200/50"></div>
               </div>
               
               <div className="flex justify-center gap-6 md:gap-10">
-                {/* Telegram */}
                 <a href={DATA.socials.tg} target="_blank" rel="noreferrer" className="w-12 h-12 md:w-16 md:h-16 rounded-full border border-sky-200/50 bg-white shadow-md flex items-center justify-center hover:border-sky-400 hover:shadow-lg transition-all group">
                   <Send className="w-5 h-5 md:w-7 md:h-7 text-sky-600/70 group-hover:text-sky-500 group-hover:scale-110 transition-all" />
                 </a>
-                {/* VK */}
                 <a href={DATA.socials.vk} target="_blank" rel="noreferrer" className="w-12 h-12 md:w-16 md:h-16 rounded-full border border-sky-200/50 bg-white shadow-md flex items-center justify-center hover:border-sky-400 hover:shadow-lg transition-all group">
                   <VKIcon className="w-5 h-5 md:w-7 md:h-7 text-sky-600/70 group-hover:text-sky-500 group-hover:scale-110 transition-all" />
                 </a>
-                {/* Instagram */}
                 <a href={DATA.socials.insta} target="_blank" rel="noreferrer" className="w-12 h-12 md:w-16 md:h-16 rounded-full border border-sky-200/50 bg-white shadow-md flex items-center justify-center hover:border-sky-400 hover:shadow-lg transition-all group">
                   <Instagram className="w-5 h-5 md:w-7 md:h-7 text-sky-600/70 group-hover:text-sky-500 group-hover:scale-110 transition-all" />
                 </a>
               </div>
               
-              <p className="text-center text-[9px] md:text-xs uppercase tracking-[0.2em] font-bold text-slate-400 mt-10 md:mt-16 pb-4">
+              <p className="text-center text-[9px] md:text-xs uppercase tracking-widest font-light text-slate-400 mt-10 md:mt-16 pb-4">
                 © {DATA.name} {DATA.lastName} • Quiet Luxury
               </p>
             </div>
