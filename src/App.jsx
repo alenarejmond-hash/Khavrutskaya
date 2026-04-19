@@ -19,7 +19,7 @@ const Instagram = ({ className }) => (
 // Кастомная иконка VK
 const VKIcon = ({ className }) => (
   <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor" className={className}>
-    <path d="M15.08 2H8.92C3.39 2 2 3.39 2 8.92v6.16C2 20.61 3.39 22 8.92 22h6.16C20.61 22 22 20.61 22 15.08V8.92C22 3.39 20.61 2 15.08 2zM16.5 15.46c.15.2.35.43.68.74.3.28.53.51.68.68.22.25.37.45.45.6.14.28.09.52-.16.73-.24.22-.64.33-1.19.33h-1.57c-.45 0-.82-.1-1.12-.29-.31-.19-.57-.46-.78-.81-.22-.38-.45-.71-.69-.99-.25-.29-.48-.48-.68-.58-.28-.13-.53-.13-.75 0-.22.13-.37.36-.45.69-.11.45-.16.92-.16 1.4 0 .38-.11.66-.34.84-.22.18-.55.27-.98.27h-.79c-1.14 0-2.12-.28-2.94-.84-1.13-.77-2.11-1.92-2.94-3.46-1.12-2.11-1.97-4.28-2.54-6.52-.08-.34-.05-.6.1-.79.16-.19.43-.28.82-.28h1.61c.3 0 .54.08.7.23.16.16.28.38.35.67.43 1.58.98 2.94 1.64 4.08.62 1.05 1.22 1.58 1.8 1.58.17 0 .31-.08.41-.23.11-.15.16-.42.16-.81V10.1c0-.46-.08-.79-.23-.99-.15-.2-.36-.31-.61-.31-.14 0-.32.04-.54.12.16-.45.43-.77.81-.97.38-.2.83-.3 1.34-.3h1.22c.31 0 .53.07.66.2.14.13.21.36.21.68v2.96c0 .53.11.85.34.97.23.12.51.05.85-.2.43-.31.85-.82 1.25-1.52.41-.75.76-1.55 1.06-2.42.09-.27.23-.46.42-.58.19-.13.43-.19.72-.19h1.7c.56 0 .94.13 1.14.39.2.26.15.58-.16.96-.34.45-.74.96-1.21 1.52-.46.57-.9 1.1-1.31 1.61-.3.37-.42.66-.35.88.08.21.33.52.75.92z"/>
+    <path d="M15.08 2H8.92C3.39 2 2 3.39 2 8.92v6.16C2 20.61 3.39 22 8.92 22h6.16C20.61 22 22 15.08V8.92C22 3.39 20.61 2 15.08 2zM16.5 15.46c.15.2.35.43.68.74.3.28.53.51.68.68.22.25.37.45.45.6.14.28.09.52-.16.73-.24.22-.64.33-1.19.33h-1.57c-.45 0-.82-.1-1.12-.29-.31-.19-.57-.46-.78-.81-.22-.38-.45-.71-.69-.99-.25-.29-.48-.48-.68-.58-.28-.13-.53-.13-.75 0-.22.13-.37.36-.45.69-.11.45-.16.92-.16 1.4 0 .38-.11.66-.34.84-.22.18-.55.27-.98.27h-.79c-1.14 0-2.12-.28-2.94-.84-1.13-.77-2.11-1.92-2.94-3.46-1.12-2.11-1.97-4.28-2.54-6.52-.08-.34-.05-.6.1-.79.16-.19.43-.28.82-.28h1.61c.3 0 .54.08.7.23.16.16.28.38.35.67.43 1.58.98 2.94 1.64 4.08.62 1.05 1.22 1.58 1.8 1.58.17 0 .31-.08.41-.23.11-.15.16-.42.16-.81V10.1c0-.46-.08-.79-.23-.99-.15-.2-.36-.31-.61-.31-.14 0-.32.04-.54.12.16-.45.43-.77.81-.97.38-.2.83-.3 1.34-.3h1.22c.31 0 .53.07.66.2.14.13.21.36.21.68v2.96c0 .53.11.85.34.97.23.12.51.05.85-.2.43-.31.85-.82 1.25-1.52.41-.75.76-1.55 1.06-2.42.09-.27.23-.46.42-.58.19-.13.43-.19.72-.19h1.7c.56 0 .94.13 1.14.39.2.26.15.58-.16.96-.34.45-.74.96-1.21 1.52-.46.57-.9 1.1-1.31 1.61-.3.37-.42.66-.35.88.08.21.33.52.75.92z"/>
   </svg>
 );
 
@@ -68,11 +68,9 @@ const DATA = {
   ],
   
   // --- ГОРЯЩИЕ ТУРЫ (Специальные предложения) ---
-  // 👇 СЮДА ВСТАВЛЯЙТЕ ССЫЛКУ НА ВАШУ ТАБЛИЦУ (прямо ту обычную ссылку, которую вы копируете из браузера) 👇
-  hotToursSheetUrl: "https://docs.google.com/spreadsheets/d/168meQ7-I-zRGBOYNzzDZjHCoDluz52W50CcJI05JmVs/edit?gid=536176768#gid=536176768",
   hotTours: [
-    { id: 1, hotelName: "Emerald Resort", loc: "Мальдивы", dates: "15 - 22 Ноября", price: "450 000 ₽", oldPrice: "620 000 ₽", img: "https://i0.wp.com/images.unsplash.com/photo-1439066615861-d1af74d74000?w=600&strip=all" },
-    { id: 2, hotelName: "Four Seasons", loc: "Сейшелы", dates: "02 - 10 Декабря", price: "510 000 ₽", oldPrice: "700 000 ₽", img: "https://i0.wp.com/images.unsplash.com/photo-1540541338287-41700207dee6?w=600&strip=all" }
+    { id: 1, hotelName: "Emerald Resort", loc: "Мальдивы", dates: "15 - 22 Ноября", price: "$4 500", oldPrice: "$6 200", img: "https://i0.wp.com/images.unsplash.com/photo-1439066615861-d1af74d74000?w=600&strip=all" },
+    { id: 2, hotelName: "Four Seasons", loc: "Сейшелы", dates: "02 - 10 Декабря", price: "$5 100", oldPrice: "$7 000", img: "https://i0.wp.com/images.unsplash.com/photo-1540541338287-41700207dee6?w=600&strip=all" }
   ],
   
   // --- КРУИЗЫ ---
@@ -344,7 +342,6 @@ export default function App() {
   const [isAllNewsOpen, setIsAllNewsOpen] = useState(false); // Шторка всех новостей
   const [newsPage, setNewsPage] = useState(1); // Пагинация новостей
   const [newsList, setNewsList] = useState(DATA.news); // Данные новостей
-  const [hotToursList, setHotToursList] = useState(DATA.hotTours); // Данные спецпредложений
   
   // Состояние для Пожелания дня
   const [randomWish, setRandomWish] = useState('');
@@ -388,59 +385,9 @@ export default function App() {
             setNewsList(fetchedNews.reverse()); // Новые (снизу таблицы) будут первыми
           } else {
             setNewsList([]); // Очищаем, если новостей нет
-        }
-      })
-      .catch(err => console.error("Ошибка загрузки новостей:", err));
-    }
-  }, []);
-
-  // Сигнал для загрузки спецпредложений из Google Таблицы
-  useEffect(() => {
-    if (DATA.hotToursSheetUrl) {
-      // Автоматически преобразуем вашу обычную ссылку в ссылку для скачивания данных
-      let fetchUrl = DATA.hotToursSheetUrl;
-      if (fetchUrl.includes('/edit')) {
-        const gidMatch = fetchUrl.match(/[#?&]gid=([0-9]+)/);
-        const gid = gidMatch ? gidMatch[1] : '0';
-        fetchUrl = fetchUrl.split('/edit')[0] + '/export?format=tsv&gid=' + gid;
-      } else if (!fetchUrl.includes('/export')) {
-        fetchUrl = fetchUrl + "/export?format=tsv";
-      }
-
-      fetch(fetchUrl)
-        .then(res => res.text())
-        .then(tsv => {
-          const rows = tsv.split('\n');
-          const fetchedTours = rows.slice(1).map((row, index) => {
-            const cols = row.split('\t');
-            // Индексы колонок строго по вашей таблице (с учетом формул):
-            // 0: Скопированный текст (пропускаем)
-            // 1: title (Локация)
-            // 2: dates (Даты и питание)
-            // 3: hotel (Название отеля)
-            // 4: price (Актуальная цена)
-            // 5: oldPrice (Старая цена)
-            // 6: rating (Рейтинг)
-            // 7: imageUrl (Ссылка на фото)
-            // 8: bookingLink (Ссылка на бронь)
-            return {
-              id: index + 200,
-              loc: cols[1] ? cols[1].trim() : '',
-              dates: cols[2] ? cols[2].trim() : '',
-              hotelName: cols[3] ? cols[3].trim() : '',
-              price: cols[4] ? cols[4].trim().replace(/РУБ/gi, '₽').replace(/руб/gi, '₽') : '',
-              oldPrice: cols[5] ? cols[5].trim().replace(/РУБ/gi, '₽').replace(/руб/gi, '₽') : '',
-              rating: cols[6] ? cols[6].trim() : '',
-              img: cols[7] ? cols[7].trim() : '',
-              link: cols[8] ? cols[8].trim() : ''
-            };
-          }).filter(item => item.hotelName && item.img); // Отсеиваем пустые
-
-          if (fetchedTours.length > 0) {
-            setHotToursList(fetchedTours);
           }
         })
-        .catch(err => console.error("Ошибка загрузки спецпредложений:", err));
+        .catch(err => console.error("Ошибка загрузки новостей:", err));
     }
   }, []);
 
@@ -865,37 +812,74 @@ export default function App() {
         </Reveal>
 
         {/* --- 6. БЛОК: ГОРЯЩИЕ ТУРЫ --- */}
-    <Reveal>
-      <div className="mb-14 md:mb-24 -mx-5 md:mx-0">
-        <div className="px-5 md:px-0 mb-6 md:mb-10">
-          <h2 className="font-serif text-2xl md:text-4xl text-slate-800 font-light tracking-wide">Специальные <br className="md:hidden"/><span className="text-sky-500 font-light tracking-wide md:ml-2">предложения</span></h2>
-        </div>
-        
-        <div className="flex md:grid md:grid-cols-2 lg:grid-cols-3 overflow-x-auto gap-5 px-5 md:px-0 pb-8 pt-2 snap-x snap-mandatory md:snap-none [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-          {hotToursList.map((deal) => (
-            <div key={deal.id} className="min-w-[260px] md:min-w-0 snap-center bg-white border border-white rounded-[2rem] p-3 md:p-4 shadow-[0_12px_30px_rgba(0,0,0,0.08)] hover:shadow-xl transition-shadow cursor-pointer group">
-              <div className="relative h-[160px] md:h-[220px] rounded-2xl overflow-hidden mb-4">
+        <Reveal>
+          <div className="mb-14 md:mb-24 -mx-5 md:mx-0">
+            <div className="px-5 md:px-0 mb-6 md:mb-10">
+              <h2 className="font-serif text-2xl md:text-4xl text-slate-800 font-light tracking-wide">Специальные <br className="md:hidden"/><span className="text-sky-500 font-light tracking-wide md:ml-2">предложения</span></h2>
+            </div>
+            
+            <div className="flex md:grid md:grid-cols-2 lg:grid-cols-3 overflow-x-auto gap-5 px-5 md:px-0 pb-8 pt-2 snap-x snap-mandatory md:snap-none [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+              {DATA.hotTours.map((deal) => (
+                <div key={deal.id} className="min-w-[260px] md:min-w-0 snap-center bg-white rounded-2xl md:rounded-[2rem] border border-slate-100 shadow-[0_4px_20px_rgba(0,0,0,0.05)] hover:shadow-[0_8px_30px_rgba(0,0,0,0.08)] transition-all cursor-pointer overflow-hidden flex flex-col group">
+                  <div className="relative h-[160px] md:h-[220px] overflow-hidden shrink-0">
                     <img src={deal.img} alt={deal.hotelName} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
-                    <div className="absolute top-3 left-3 bg-gradient-to-r from-sky-400 to-blue-500 text-white text-[10px] font-medium uppercase tracking-wider px-3 py-1.5 rounded-full shadow-lg flex items-center gap-1">
-                      <span className="w-1.5 h-1.5 bg-white rounded-full animate-pulse"></span>
-                      Осталось мало мест
-                    </div>
                   </div>
                   
-                  <div className="px-2 pb-2">
-                    <h4 className="font-serif text-lg md:text-xl font-light tracking-wide text-slate-800">{deal.hotelName}</h4>
-                    <div className="flex items-center gap-1 text-slate-500 font-light tracking-wide text-xs md:text-sm mt-1 mb-4 md:mb-6">
-                      <MapPin className="w-3 h-3 text-cyan-500" /> {deal.loc}
-                    </div>
-                    <div className="flex items-end justify-between">
-                      <div>
-                        <p className="text-[9px] md:text-[11px] uppercase tracking-widest text-slate-400 font-light mb-0.5 line-through">{deal.oldPrice}</p>
-                        <p className="font-serif text-xl md:text-3xl font-medium tracking-wide text-sky-600">{deal.price}</p>
-                      </div>
-                      <button className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-cyan-50 flex items-center justify-center text-cyan-600 group-hover:bg-cyan-600 group-hover:text-white transition-colors shadow-sm">
-                        <ArrowUpRight className="w-5 h-5 md:w-6 md:h-6" />
-                      </button>
-                    </div>
+                  <div className="p-4 md:p-5 flex flex-col flex-1">
+                    {(() => {
+                      // Умная логика для высчитывания процента скидки и форматирования текста
+                      const p = parseInt(deal.price.replace(/\D/g, ''));
+                      const op = parseInt(deal.oldPrice?.replace(/\D/g, '') || '0');
+                      const discount = (p && op && op > p) ? Math.round(100 - (p / op) * 100) : null;
+                      
+                      // Разбиваем "52 940 РУБ" на цифры и текст
+                      const priceMatch = deal.price.match(/^([^\d]*)?([\d\s.,]+)([^\d]*)?$/);
+                      const prefix = priceMatch ? priceMatch[1]?.trim() : '';
+                      const number = priceMatch ? priceMatch[2]?.trim() : deal.price;
+                      const suffix = priceMatch ? priceMatch[3]?.trim() : '';
+
+                      return (
+                        <>
+                          {/* Плашки: Скидка, Старая цена, Рейтинг */}
+                          <div className="flex items-center justify-between mb-2">
+                            <div className="flex items-center gap-2">
+                              {discount && (
+                                <div className="bg-[#ef4444] text-white px-1.5 py-0.5 rounded text-[11px] md:text-xs font-bold flex items-center gap-0.5 tracking-wide">
+                                  <Flame className="w-3 h-3" /> {discount}%
+                                </div>
+                              )}
+                              {deal.oldPrice && (
+                                <span className="text-slate-400 line-through text-xs md:text-sm font-medium">{deal.oldPrice}</span>
+                              )}
+                            </div>
+                            <div className="bg-[#dcfce7] text-[#166534] px-1.5 py-0.5 rounded text-[11px] md:text-xs font-bold">
+                              {deal.rating || "5.0"}
+                            </div>
+                          </div>
+                          
+                          {/* Главная цена */}
+                          <div className="flex items-baseline gap-1 mb-2">
+                            {prefix && <span className="text-xs md:text-sm font-bold text-slate-500 uppercase">{prefix}</span>}
+                            <span className="text-[22px] md:text-[28px] font-black text-slate-800 tracking-tight">{number}</span>
+                            {suffix && <span className="text-xs md:text-sm font-bold text-slate-500 uppercase">{suffix}</span>}
+                          </div>
+                          
+                          {/* Отель */}
+                          <h4 className="text-base md:text-lg font-bold text-slate-800 mb-1 leading-tight">{deal.hotelName}</h4>
+                          
+                          {/* Даты и условия */}
+                          <div className="text-slate-500 text-xs md:text-sm mb-3">
+                            {deal.dates}
+                          </div>
+                          
+                          {/* Локация (прижата к низу) */}
+                          <div className="flex items-center gap-1.5 text-slate-500 text-xs md:text-sm mt-auto pt-2">
+                            <MapPin className="w-4 h-4 text-slate-400 shrink-0" /> 
+                            <span className="truncate">{deal.loc}</span>
+                          </div>
+                        </>
+                      );
+                    })()}
                   </div>
                 </div>
               ))}
