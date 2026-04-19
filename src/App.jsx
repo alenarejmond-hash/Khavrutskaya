@@ -792,7 +792,7 @@ export default function App() {
         <Reveal>
           <div className="mb-14 md:mb-24">
             <div className="flex justify-between items-end mb-6 md:mb-10">
-              <h2 className="font-serif text-2xl md:text-4xl text-slate-800 font-light tracking-wide">Морские <br className="md:hidden"/><span className="text-cyan-600 font-light tracking-wide md:ml-2">круизы</span></h2>
+              <h2 className="font-serif text-2xl md:text-4xl text-slate-800 font-light tracking-wide">Морские и речные<br className="md:hidden"/><span className="text-cyan-600 font-light tracking-wide md:ml-2">круизы по всему миру</span></h2>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
               {DATA.cruises.map(cruise => (
