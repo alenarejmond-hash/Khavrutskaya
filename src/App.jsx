@@ -68,9 +68,11 @@ const DATA = {
   ],
   
   // --- ГОРЯЩИЕ ТУРЫ (Специальные предложения) ---
+  // 👇 СЮДА ВСТАВЛЯЙТЕ ССЫЛКУ НА ВАШУ ТАБЛИЦУ (прямо ту обычную ссылку, которую вы копируете из браузера) 👇
+  hotToursSheetUrl: "https://docs.google.com/spreadsheets/d/168meQ7-I-zRGBOYNzzDZjHCoDluz52W50CcJI05JmVs/edit?gid=536176768#gid=536176768",
   hotTours: [
-    { id: 1, hotelName: "Emerald Resort", loc: "Мальдивы", dates: "15 - 22 Ноября", price: "$4 500", oldPrice: "$6 200", img: "https://i0.wp.com/images.unsplash.com/photo-1439066615861-d1af74d74000?w=600&strip=all" },
-    { id: 2, hotelName: "Four Seasons", loc: "Сейшелы", dates: "02 - 10 Декабря", price: "$5 100", oldPrice: "$7 000", img: "https://i0.wp.com/images.unsplash.com/photo-1540541338287-41700207dee6?w=600&strip=all" }
+    { id: 1, hotelName: "Emerald Resort", loc: "Мальдивы", dates: "15 - 22 Ноября", price: "450 000 ₽", oldPrice: "620 000 ₽", img: "https://i0.wp.com/images.unsplash.com/photo-1439066615861-d1af74d74000?w=600&strip=all" },
+    { id: 2, hotelName: "Four Seasons", loc: "Сейшелы", dates: "02 - 10 Декабря", price: "510 000 ₽", oldPrice: "700 000 ₽", img: "https://i0.wp.com/images.unsplash.com/photo-1540541338287-41700207dee6?w=600&strip=all" }
   ],
   
   // --- КРУИЗЫ ---
@@ -342,6 +344,7 @@ export default function App() {
   const [isAllNewsOpen, setIsAllNewsOpen] = useState(false); // Шторка всех новостей
   const [newsPage, setNewsPage] = useState(1); // Пагинация новостей
   const [newsList, setNewsList] = useState(DATA.news); // Данные новостей
+  const [hotToursList, setHotToursList] = useState(DATA.hotTours); // Данные спецпредложений
   
   // Состояние для Пожелания дня
   const [randomWish, setRandomWish] = useState('');
@@ -385,9 +388,59 @@ export default function App() {
             setNewsList(fetchedNews.reverse()); // Новые (снизу таблицы) будут первыми
           } else {
             setNewsList([]); // Очищаем, если новостей нет
+        }
+      })
+      .catch(err => console.error("Ошибка загрузки новостей:", err));
+    }
+  }, []);
+
+  // Сигнал для загрузки спецпредложений из Google Таблицы
+  useEffect(() => {
+    if (DATA.hotToursSheetUrl) {
+      // Автоматически преобразуем вашу обычную ссылку в ссылку для скачивания данных
+      let fetchUrl = DATA.hotToursSheetUrl;
+      if (fetchUrl.includes('/edit')) {
+        const gidMatch = fetchUrl.match(/[#?&]gid=([0-9]+)/);
+        const gid = gidMatch ? gidMatch[1] : '0';
+        fetchUrl = fetchUrl.split('/edit')[0] + '/export?format=tsv&gid=' + gid;
+      } else if (!fetchUrl.includes('/export')) {
+        fetchUrl = fetchUrl + "/export?format=tsv";
+      }
+
+      fetch(fetchUrl)
+        .then(res => res.text())
+        .then(tsv => {
+          const rows = tsv.split('\n');
+          const fetchedTours = rows.slice(1).map((row, index) => {
+            const cols = row.split('\t');
+            // Индексы колонок строго по вашей таблице (с учетом формул):
+            // 0: Скопированный текст (пропускаем)
+            // 1: title (Локация)
+            // 2: dates (Даты и питание)
+            // 3: hotel (Название отеля)
+            // 4: price (Актуальная цена)
+            // 5: oldPrice (Старая цена)
+            // 6: rating (Рейтинг)
+            // 7: imageUrl (Ссылка на фото)
+            // 8: bookingLink (Ссылка на бронь)
+            return {
+              id: index + 200,
+              loc: cols[1] ? cols[1].trim() : '',
+              dates: cols[2] ? cols[2].trim() : '',
+              hotelName: cols[3] ? cols[3].trim() : '',
+              price: cols[4] ? cols[4].trim().replace(/РУБ/gi, '₽').replace(/руб/gi, '₽') : '',
+              oldPrice: cols[5] ? cols[5].trim().replace(/РУБ/gi, '₽').replace(/руб/gi, '₽') : '',
+              rating: cols[6] ? cols[6].trim() : '',
+              img: cols[7] ? cols[7].trim() : '',
+              link: cols[8] ? cols[8].trim() : ''
+            };
+          }).filter(item => item.hotelName && item.img); // Отсеиваем пустые
+
+          if (fetchedTours.length > 0) {
+            setHotToursList(fetchedTours);
           }
         })
-        .catch(err => console.error("Ошибка загрузки новостей:", err));
+        .catch(err => console.error("Ошибка загрузки спецпредложений:", err));
     }
   }, []);
 
@@ -812,16 +865,16 @@ export default function App() {
         </Reveal>
 
         {/* --- 6. БЛОК: ГОРЯЩИЕ ТУРЫ --- */}
-        <Reveal>
-          <div className="mb-14 md:mb-24 -mx-5 md:mx-0">
-            <div className="px-5 md:px-0 mb-6 md:mb-10">
-              <h2 className="font-serif text-2xl md:text-4xl text-slate-800 font-light tracking-wide">Специальные <br className="md:hidden"/><span className="text-sky-500 font-light tracking-wide md:ml-2">предложения</span></h2>
-            </div>
-            
-            <div className="flex md:grid md:grid-cols-2 lg:grid-cols-3 overflow-x-auto gap-5 px-5 md:px-0 pb-8 pt-2 snap-x snap-mandatory md:snap-none [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-              {DATA.hotTours.map((deal) => (
-                <div key={deal.id} className="min-w-[260px] md:min-w-0 snap-center bg-white border border-white rounded-[2rem] p-3 md:p-4 shadow-[0_12px_30px_rgba(0,0,0,0.08)] hover:shadow-xl transition-shadow cursor-pointer group">
-                  <div className="relative h-[160px] md:h-[220px] rounded-2xl overflow-hidden mb-4">
+    <Reveal>
+      <div className="mb-14 md:mb-24 -mx-5 md:mx-0">
+        <div className="px-5 md:px-0 mb-6 md:mb-10">
+          <h2 className="font-serif text-2xl md:text-4xl text-slate-800 font-light tracking-wide">Специальные <br className="md:hidden"/><span className="text-sky-500 font-light tracking-wide md:ml-2">предложения</span></h2>
+        </div>
+        
+        <div className="flex md:grid md:grid-cols-2 lg:grid-cols-3 overflow-x-auto gap-5 px-5 md:px-0 pb-8 pt-2 snap-x snap-mandatory md:snap-none [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+          {hotToursList.map((deal) => (
+            <div key={deal.id} className="min-w-[260px] md:min-w-0 snap-center bg-white border border-white rounded-[2rem] p-3 md:p-4 shadow-[0_12px_30px_rgba(0,0,0,0.08)] hover:shadow-xl transition-shadow cursor-pointer group">
+              <div className="relative h-[160px] md:h-[220px] rounded-2xl overflow-hidden mb-4">
                     <img src={deal.img} alt={deal.hotelName} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
                     <div className="absolute top-3 left-3 bg-gradient-to-r from-sky-400 to-blue-500 text-white text-[10px] font-medium uppercase tracking-wider px-3 py-1.5 rounded-full shadow-lg flex items-center gap-1">
                       <span className="w-1.5 h-1.5 bg-white rounded-full animate-pulse"></span>
