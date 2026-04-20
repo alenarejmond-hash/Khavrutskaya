@@ -332,6 +332,43 @@ const StaggeredText = ({ text, delayOffset = 0 }) => {
   );
 };
 
+// --- КОМПОНЕНТ ДЛЯ ПОИСКА КРУИЗОВ (INFOFLOT WIDGET) ---
+const CruiseWidget = () => {
+  useEffect(() => {
+    const initWidget = () => {
+      const container = document.querySelector('.infoflotWidget');
+      if (container) container.innerHTML = ''; // Очищаем старые айфреймы при переоткрытии
+      
+      if (window.createInfoflotWidget) {
+        window.createInfoflotWidget("https://bitrix.infoflot.com/rest/api/search.filter/", {
+          key: "YTo0OntzOjI6IklEIjtpOjUyMTQ7czo0OiJVU0VSIjtzOjI4OiJibVYzWW5KbFlYUm9RR2x1ZEdWeWJtVjBMbkoxIjtzOjY6IlJBTkRPTSI7czo4OiJhb2hqcHFrbyI7czoxNToiSU5GT0ZMT1QtQVBJS0VZIjtzOjQwOiI3NDQ1ZGFkOGE3OWZkMWExZDVhZTE0NDJhYTIyZWQ4ZTU0ZmJiZmE2Ijt9",
+          referer: encodeURIComponent(window.location.href)
+        });
+      }
+    };
+
+    if (!document.getElementById('infoflot-script')) {
+      const script = document.createElement('script');
+      script.id = 'infoflot-script';
+      script.src = "https://bitrix.infoflot.com/local/templates/infoflot/frontend/js/infoflotIframe.js";
+      script.async = true;
+      script.onload = initWidget;
+      document.body.appendChild(script);
+    } else {
+      setTimeout(initWidget, 50);
+    }
+  }, []);
+
+  return (
+    <div 
+      className="w-full h-full"
+      dangerouslySetInnerHTML={{
+        __html: `<div class="infoflotWidget w-full h-full min-h-[600px] rounded-2xl overflow-hidden" data-id="YTo0OntzOjI6IklEIjtpOjUyMTQ7czo0OiJVU0VSIjtzOjI4OiJibVYzWW5KbFlYUm9RR2x1ZEdWeWJtVjBMbkoxIjtzOjY6IlJBTkRPTSI7czo4OiJhb2hqcHFrbyI7czoxNToiSU5GT0ZMT1QtQVBJS0VZIjtzOjQwOiI3NDQ1ZGFkOGE3OWZkMWExZDVhZTE0NDJhYTIyZWQ4ZTU0ZmJiZmE2Ijt9" data-index="1"></div>`
+      }}
+    />
+  );
+};
+
 // ==========================================
 // ГЛАВНЫЙ КОМПОНЕНТ (Oasis Quiet Luxury)
 // ==========================================
@@ -355,6 +392,8 @@ export default function App() {
   // Состояние для Пожелания дня
   const [randomWish, setRandomWish] = useState('');
   const [isWishVisible, setIsWishVisible] = useState(false);
+  
+  const [isCruiseWidgetOpen, setIsCruiseWidgetOpen] = useState(false); // Состояние для виджета круизов
 
   const nextRev = () => setActiveReview(p => (p + 1) % DATA.reviews.length);
   const prevRev = () => setActiveReview(p => (p - 1 + DATA.reviews.length) % DATA.reviews.length);
@@ -542,6 +581,22 @@ export default function App() {
     <AboutDrawer isOpen={isAboutOpen} onClose={() => setIsAboutOpen(false)} />
     {/* ВЫЗОВ ПАНЕЛИ "СЕКРЕТНЫЙ КЛУБ" (Вынесено из Reveal для перекрытия всех окон) */}
     <SecretClubModal isOpen={isSecretOpen} onClose={() => setIsSecretOpen(false)} />
+
+    {/* МОДАЛКА ВИДЖЕТА КРУИЗОВ */}
+    <div className={`fixed inset-0 z-[145] flex items-center justify-center transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] ${isCruiseWidgetOpen ? 'opacity-100 visible' : 'opacity-0 invisible pointer-events-none'}`}>
+      <div className="absolute inset-0 bg-slate-900/80 backdrop-blur-md" onClick={() => setIsCruiseWidgetOpen(false)}></div>
+      <div className={`relative w-full max-w-6xl h-[95vh] md:h-[90vh] mx-4 bg-white rounded-[2rem] shadow-2xl p-2 md:p-6 transition-all duration-500 transform flex flex-col overflow-hidden ${isCruiseWidgetOpen ? 'translate-y-0 scale-100' : 'translate-y-10 scale-95'}`}>
+        <div className="flex justify-between items-center px-4 pt-4 md:px-2 md:pt-0 mb-4 shrink-0">
+          <h3 className="font-serif text-2xl md:text-3xl text-slate-800 font-light tracking-wide">Подбор круиза</h3>
+          <button onClick={() => setIsCruiseWidgetOpen(false)} className="p-2 bg-slate-100 rounded-full text-slate-500 hover:text-slate-800 hover:bg-slate-200 transition-colors">
+            <X className="w-5 h-5 md:w-6 md:h-6" />
+          </button>
+        </div>
+        <div className="flex-1 overflow-y-auto w-full relative rounded-2xl">
+          {isCruiseWidgetOpen && <CruiseWidget />}
+        </div>
+      </div>
+    </div>
 
     {/* МОДАЛКА ОДНОЙ НОВОСТИ */}
     <div className={`fixed inset-0 z-[140] flex items-center justify-center transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] ${selectedNews ? 'opacity-100 visible' : 'opacity-0 invisible pointer-events-none'}`}>
@@ -866,7 +921,7 @@ export default function App() {
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
               {DATA.cruises.map(cruise => (
-                <div key={cruise.id} className="group relative h-32 md:h-48 rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all flex border border-white/80 bg-white/40 cursor-pointer">
+                <div key={cruise.id} onClick={() => setIsCruiseWidgetOpen(true)} className="group relative h-32 md:h-48 rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all flex border border-white/80 bg-white/40 cursor-pointer">
                   <img src={cruise.img} alt={cruise.title} className="w-1/3 md:w-2/5 h-full object-cover group-hover:scale-105 transition-transform duration-700" />
                   <div className="w-2/3 md:w-3/5 bg-white/70 backdrop-blur-md p-4 md:p-8 flex flex-col justify-center relative">
                     <div className="absolute top-3 right-4 md:top-5 md:right-6 text-cyan-600/40 group-hover:text-cyan-500 transition-colors">
@@ -874,6 +929,10 @@ export default function App() {
                     </div>
                     <h3 className="font-serif text-lg md:text-2xl text-slate-800 font-light tracking-wide leading-tight">{cruise.title}</h3>
                     <p className="text-[10px] md:text-xs uppercase tracking-widest font-light text-slate-500 mt-2 md:mt-4">{cruise.ship}</p>
+                    {/* Подсказка для клика */}
+                    <div className="absolute bottom-3 right-4 md:bottom-5 md:right-6 opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1 text-cyan-600 text-[10px] md:text-xs font-medium">
+                      Подобрать <ChevronRight className="w-3 h-3" />
+                    </div>
                   </div>
                 </div>
               ))}
