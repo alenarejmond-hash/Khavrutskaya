@@ -118,13 +118,13 @@ const DATA = {
   },
   
   // --- ГАЛЕРЕЯ (Атмосфера путешествий) ---
-  gallery: [
-    "https://i0.wp.com/images.unsplash.com/photo-1522748906645-95d8adfd52c7?w=800&q=80",
-    "https://i0.wp.com/images.unsplash.com/photo-1499793983690-e29da59ef1c2?w=800&q=80",
-    "https://i0.wp.com/images.unsplash.com/photo-1510414842594-a61c69b5ae57?w=800&q=80",
-    "https://i0.wp.com/images.unsplash.com/photo-1544365558-35aa4afcf11f?w=800&q=80",
-    "https://i0.wp.com/images.unsplash.com/photo-1573843981267-be1199f14d4a?w=800&q=80"
-  ]
+  // ВАЖНО: Убедитесь, что эта ссылка отличается от ссылки на "Горящие туры"!
+  // У каждой вкладки свой уникальный номер (gid=...) в конце ссылки. 
+  // Выберите именно вкладку "ФОТОГАЛЕРЕЯ" при публикации.
+  gallerySheetUrl: "https://docs.google.com/spreadsheets/d/e/2PACX-1vRXue1d4HdwJdKy2Q68NuZxGEyQiV-I34yoCorqQH83EJR2PLa8lkLBh0Lx7DT8F_p6Yn7_K1VHTpNO/pub?gid=1706560007&single=true&output=tsv",
+  
+  // Тестовые фото удалены! Теперь все тянется ТОЛЬКО из таблицы по ссылке выше.
+  gallery: []
 };
 // =========================================================================
 // ⬆️⬆️⬆️ КОНЕЦ БЛОКА РЕДАКТИРОВАНИЯ ⬆️⬆️⬆️
@@ -388,6 +388,7 @@ export default function App() {
   const [newsList, setNewsList] = useState(DATA.news); // Данные новостей
   
   const [hotToursList, setHotToursList] = useState(DATA.hotTours); // Данные спецпредложений
+  const [galleryList, setGalleryList] = useState([]); // Данные галереи теперь строго пустые по умолчанию, ждем загрузки из таблицы
   
   // Состояние для Пожелания дня
   const [randomWish, setRandomWish] = useState('');
@@ -497,6 +498,27 @@ export default function App() {
           setHotToursList(fetchedTours);
         })
         .catch(err => console.error("Ошибка загрузки спецпредложений:", err));
+    }
+  }, []);
+
+  // Сигнал для загрузки галереи из вкладки Google Таблицы
+  useEffect(() => {
+    if (DATA.gallerySheetUrl) {
+      const correctUrl = DATA.gallerySheetUrl.replace('output=csv', 'output=tsv');
+      
+      fetch(correctUrl)
+        .then(res => res.text())
+        .then(tsv => {
+          // Умный поиск: просто извлекаем все ячейки, которые содержат ссылки
+          const links = tsv.split(/[\n\t\r]+/)
+            .map(item => item.replace(/^"|"$/g, '').trim())
+            .filter(item => item.startsWith('http'));
+
+          if (links.length > 0) {
+            setGalleryList(links);
+          }
+        })
+        .catch(err => console.error("Ошибка загрузки галереи:", err));
     }
   }, []);
 
@@ -1059,14 +1081,14 @@ export default function App() {
                 style={{ animation: 'marquee 40s linear infinite', animationPlayState: selectedImage ? 'paused' : 'running' }}
               >
                 <div className="flex gap-4 md:gap-6 pr-4 md:pr-6 pl-5 md:pl-0">
-                  {DATA.gallery.map((img, i) => (
+                  {galleryList.map((img, i) => (
                     <div key={`g1-${i}`} onClick={() => setSelectedImage(img)} className="w-[180px] h-[180px] md:w-[280px] md:h-[280px] rounded-[2rem] overflow-hidden flex-shrink-0 shadow-[0_8px_30px_rgba(0,0,0,0.06)] border border-white/60 bg-white/40">
                       <img src={img} alt="Atmosphere" draggable={false} className="w-full h-full object-cover transition-transform duration-700 hover:scale-105" />
                     </div>
                   ))}
                 </div>
                 <div className="flex gap-4 md:gap-6 pr-4 md:pr-6">
-                  {DATA.gallery.map((img, i) => (
+                  {galleryList.map((img, i) => (
                     <div key={`g2-${i}`} onClick={() => setSelectedImage(img)} className="w-[180px] h-[180px] md:w-[280px] md:h-[280px] rounded-[2rem] overflow-hidden flex-shrink-0 shadow-[0_8px_30px_rgba(0,0,0,0.06)] border border-white/60 bg-white/40">
                       <img src={img} alt="Atmosphere" draggable={false} className="w-full h-full object-cover transition-transform duration-700 hover:scale-105" />
                     </div>
