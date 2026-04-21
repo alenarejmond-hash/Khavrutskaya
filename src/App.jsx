@@ -546,6 +546,63 @@ export default function App() {
   
   const [hotToursList, setHotToursList] = useState(DATA.hotTours); // Данные спецпредложений
   const [galleryList, setGalleryList] = useState([]); // Данные галереи теперь строго пустые по умолчанию, ждем загрузки из таблицы
+
+  // --- ДРАГ И АВТО-СКРОЛЛ ДЛЯ ГАЛЕРЕИ ---
+  const galleryRef = React.useRef(null);
+  const [isGalleryDragging, setIsGalleryDragging] = useState(false);
+  const [isGalleryHovered, setIsGalleryHovered] = useState(false);
+  const galleryStartX = React.useRef(0);
+  const galleryScrollLeft = React.useRef(0);
+  const galleryDragged = React.useRef(false);
+
+  const handleGalleryMouseDown = (e) => {
+    setIsGalleryDragging(true);
+    galleryDragged.current = false;
+    galleryStartX.current = e.pageX - galleryRef.current.offsetLeft;
+    galleryScrollLeft.current = galleryRef.current.scrollLeft;
+  };
+  const handleGalleryMouseLeave = () => {
+    setIsGalleryDragging(false);
+    setIsGalleryHovered(false);
+  };
+  const handleGalleryMouseUp = () => {
+    setIsGalleryDragging(false);
+    setTimeout(() => { galleryDragged.current = false; }, 50); // Защита от ложного клика
+  };
+  const handleGalleryMouseMove = (e) => {
+    if (!isGalleryDragging) return;
+    e.preventDefault();
+    const x = e.pageX - galleryRef.current.offsetLeft;
+    const walk = (x - galleryStartX.current) * 2;
+    if (Math.abs(walk) > 10) galleryDragged.current = true;
+    galleryRef.current.scrollLeft = galleryScrollLeft.current - walk;
+  };
+  const handleGalleryTouchStart = () => setIsGalleryDragging(true);
+  const handleGalleryTouchEnd = () => setIsGalleryDragging(false);
+
+  // Авто-скролл галереи
+  useEffect(() => {
+    let animationId;
+    const step = () => {
+      if (galleryRef.current && !isGalleryHovered && !isGalleryDragging && !selectedImage && galleryList.length > 0) {
+        galleryRef.current.scrollLeft += 1; // Скорость прокрутки
+        
+        if (galleryRef.current.children.length > 2) {
+          const spacerWidth = galleryRef.current.children[0].offsetWidth;
+          const setWidth = galleryRef.current.children[1].offsetWidth;
+          
+          // Бесшовный бесконечный цикл
+          if (galleryRef.current.scrollLeft >= spacerWidth + setWidth * 2) {
+            galleryRef.current.scrollLeft -= setWidth;
+          }
+        }
+      }
+      animationId = requestAnimationFrame(step);
+    };
+    animationId = requestAnimationFrame(step);
+    return () => cancelAnimationFrame(animationId);
+  }, [isGalleryHovered, isGalleryDragging, selectedImage, galleryList]);
+  
   const [reviewsList, setReviewsList] = useState([]); // Отзывы из таблицы
   const [wishesList, setWishesList] = useState(DATA.wishes); // Пожелания из таблицы
   
@@ -1326,29 +1383,38 @@ export default function App() {
               <h2 className="font-serif text-2xl md:text-4xl text-slate-800 font-light tracking-wide">Атмосфера <br className="md:hidden"/><span className="text-sky-500 font-light tracking-wide md:ml-2">наших путешествий</span></h2>
             </div>
             
-            <div className="w-full overflow-hidden relative z-10 group/gallery">
+            <div className="w-full relative z-10 group/gallery">
               <div 
-                className={`flex w-max cursor-pointer ${selectedImage ? '' : 'md:group-hover/gallery:[animation-play-state:paused]'}`}
-                style={{ 
-                  animation: 'marquee 40s linear infinite', 
-                  animationPlayState: selectedImage ? 'paused' : 'running',
-                  WebkitAnimationPlayState: selectedImage ? 'paused' : 'running'
-                }}
+                ref={galleryRef}
+                className="flex overflow-x-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] cursor-grab active:cursor-grabbing pb-8 pt-2 select-none"
+                onMouseDown={handleGalleryMouseDown}
+                onMouseLeave={handleGalleryMouseLeave}
+                onMouseUp={handleGalleryMouseUp}
+                onMouseMove={handleGalleryMouseMove}
+                onTouchStart={handleGalleryTouchStart}
+                onTouchEnd={handleGalleryTouchEnd}
+                onMouseEnter={() => setIsGalleryHovered(true)}
               >
-                <div className="flex gap-4 md:gap-6 pr-4 md:pr-6 pl-5 md:pl-0">
-                  {galleryList.map((img, i) => (
-                    <div key={`g1-${i}`} onClick={() => setSelectedImage(img)} className="w-[180px] h-[180px] md:w-[280px] md:h-[280px] rounded-[2rem] overflow-hidden flex-shrink-0 shadow-[0_8px_30px_rgba(0,0,0,0.06)] border border-white/60 bg-white/40">
-                      <img src={img} alt="Atmosphere" draggable={false} className="w-full h-full object-cover transition-transform duration-700 hover:scale-105" />
-                    </div>
-                  ))}
-                </div>
-                <div className="flex gap-4 md:gap-6 pr-4 md:pr-6">
-                  {galleryList.map((img, i) => (
-                    <div key={`g2-${i}`} onClick={() => setSelectedImage(img)} className="w-[180px] h-[180px] md:w-[280px] md:h-[280px] rounded-[2rem] overflow-hidden flex-shrink-0 shadow-[0_8px_30px_rgba(0,0,0,0.06)] border border-white/60 bg-white/40">
-                      <img src={img} alt="Atmosphere" draggable={false} className="w-full h-full object-cover transition-transform duration-700 hover:scale-105" />
-                    </div>
-                  ))}
-                </div>
+                {/* Спейсер для правильного отступа на мобильных */}
+                <div className="w-5 md:w-0 shrink-0 pointer-events-none"></div>
+                
+                {/* 4 одинаковых сета для бесшовной бесконечной прокрутки */}
+                {[...Array(4)].map((_, setIndex) => (
+                  <div key={`set-${setIndex}`} className="flex gap-4 md:gap-6 pr-4 md:pr-6 shrink-0">
+                    {galleryList.map((img, i) => (
+                      <div 
+                        key={`g-${setIndex}-${i}`} 
+                        onClick={() => {
+                          if (galleryDragged.current) return;
+                          setSelectedImage(img);
+                        }} 
+                        className="w-[180px] h-[180px] md:w-[280px] md:h-[280px] rounded-[2rem] overflow-hidden flex-shrink-0 shadow-[0_8px_30px_rgba(0,0,0,0.06)] border border-white/60 bg-white/40"
+                      >
+                        <img src={img} alt="Atmosphere" draggable={false} className="w-full h-full object-cover transition-transform duration-700 hover:scale-105 pointer-events-none" />
+                      </div>
+                    ))}
+                  </div>
+                ))}
               </div>
             </div>
           </div>
