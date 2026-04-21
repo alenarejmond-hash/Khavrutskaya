@@ -137,7 +137,18 @@ const DATA = {
   gallerySheetUrl: "https://docs.google.com/spreadsheets/d/e/2PACX-1vRXue1d4HdwJdKy2Q68NuZxGEyQiV-I34yoCorqQH83EJR2PLa8lkLBh0Lx7DT8F_p6Yn7_K1VHTpNO/pub?gid=1706560007&single=true&output=tsv",
   
   // Тестовые фото удалены! Теперь все тянется ТОЛЬКО из таблицы по ссылке выше.
-  gallery: []
+  gallery: [],
+
+  // --- ФУТЕР И ПРАВОВАЯ ИНФОРМАЦИЯ ---
+  footer: {
+    copyrightYear: "2026",
+    creatorText: "DESIGN & CODE BY ELENA SOTNIKOVA",
+    creatorLink: "https://nice-app.ru/",
+    policyTitle: "Политика конфиденциальности",
+    policyText: "здесь будет политика....",
+    agreementTitle: "Пользовательское соглашение",
+    agreementText: "здесь будет пользовательское...."
+  }
 };
 // =========================================================================
 // ⬆️⬆️⬆️ КОНЕЦ БЛОКА РЕДАКТИРОВАНИЯ ⬆️⬆️⬆️
@@ -218,37 +229,44 @@ const SecretClubModal = ({ isOpen, onClose }) => {
   };
 
   return (
-    <div className={`fixed inset-0 z-[110] flex items-center justify-center transition-all duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] ${isOpen ? 'opacity-100 visible' : 'opacity-0 invisible pointer-events-none'}`}>
-      <div className="absolute inset-0 bg-slate-900/70 backdrop-blur-md" onClick={onClose}></div>
+    <div className={`fixed inset-0 z-[160] flex items-center justify-center transition-all duration-300 ease-out ${isOpen ? 'opacity-100 visible' : 'opacity-0 invisible pointer-events-none'}`}>
+      {/* Очень темный, густой блюр для эффекта "закрытой двери" */}
+      <div className="absolute inset-0 bg-slate-950/90 backdrop-blur-lg" onClick={onClose}></div>
       
-      <div className={`w-full max-w-sm mx-4 bg-white/10 backdrop-blur-2xl border border-white/20 rounded-[2.5rem] p-8 shadow-2xl relative transform transition-all duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] ${isOpen ? 'translate-y-0 scale-100' : 'translate-y-16 scale-95'}`}>
-        <button onClick={onClose} className="absolute top-5 right-5 p-2 bg-white/10 rounded-full text-white/70 hover:text-white hover:bg-white/20 transition-all">
-          <X className="w-5 h-5" />
-        </button>
-
+      <div className={`w-full max-w-sm mx-4 relative transform transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] ${isOpen ? 'translate-y-0 scale-100' : 'translate-y-10 scale-95'}`}>
+        
         {!isUnlocked ? (
-          <div className="flex flex-col items-center animate-in fade-in zoom-in-95 duration-500">
-            <div className="w-14 h-14 bg-white/10 rounded-full flex items-center justify-center mb-4 border border-white/20">
-              <Lock className="w-6 h-6 text-sky-400" />
-            </div>
-            <h3 className="font-serif text-2xl text-white mb-2 text-center font-light tracking-wide">Private Club</h3>
-            <p className="text-xs text-white/60 mb-8 text-center font-light tracking-wider">Введите PIN для доступа к эксклюзивной коллекции</p>
+          <div className="flex flex-col items-center animate-in fade-in zoom-in-95 duration-500 bg-slate-900/50 p-10 rounded-[3rem] border border-white/10 shadow-[0_0_50px_rgba(0,0,0,0.5)] relative overflow-hidden">
+            {/* Декоративный блик */}
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-[1px] bg-gradient-to-r from-transparent via-sky-400/50 to-transparent"></div>
+            
+            <button onClick={onClose} className="absolute top-6 right-6 text-white/30 hover:text-white transition-colors">
+              <X className="w-5 h-5" />
+            </button>
 
-            <div className="flex gap-4 mb-8">
+            <h3 className="font-serif text-2xl text-white mb-2 text-center font-light tracking-widest uppercase">Private</h3>
+            <div className="w-8 h-[1px] bg-sky-500/50 mb-6"></div>
+            <p className="text-[10px] text-white/40 mb-10 text-center font-light tracking-[0.2em] uppercase">Введите код доступа</p>
+
+            {/* Точки PIN-кода */}
+            <div className="flex gap-6 mb-10">
               {[0, 1, 2, 3].map(i => (
-                <div key={i} className={`w-4 h-4 rounded-full border transition-all duration-300 ${pin.length > i ? 'bg-sky-400 border-sky-400 shadow-[0_0_10px_rgba(56,189,248,0.5)]' : error ? 'border-red-500 bg-red-500/30' : 'border-white/30 bg-transparent'}`} />
+                <div key={i} className="relative flex items-center justify-center w-4 h-4">
+                  <div className={`absolute w-1.5 h-1.5 rounded-full transition-all duration-300 ${pin.length > i ? 'bg-sky-400 scale-[2] shadow-[0_0_12px_rgba(56,189,248,0.8)]' : error ? 'bg-red-500 scale-100' : 'bg-white/20 scale-100'}`} />
+                </div>
               ))}
             </div>
 
-            <div className="grid grid-cols-3 gap-x-8 gap-y-4 w-full max-w-[240px]">
+            {/* Клавиатура */}
+            <div className="grid grid-cols-3 gap-x-8 gap-y-6 w-full max-w-[260px]">
               {[1, 2, 3, 4, 5, 6, 7, 8, 9, '', 0, 'del'].map((val, i) => (
-                <div key={i} className="flex justify-center items-center h-14">
+                <div key={i} className="flex justify-center items-center h-12">
                   {val !== '' ? (
                     <button 
                       onClick={() => handlePress(val)}
-                      className="w-14 h-14 rounded-full flex items-center justify-center text-white text-2xl font-light hover:bg-white/10 active:bg-white/20 transition-colors"
+                      className="w-12 h-12 flex items-center justify-center text-white/60 hover:text-white text-3xl font-serif font-light transition-all hover:scale-110 active:scale-95"
                     >
-                      {val === 'del' ? <X className="w-6 h-6" /> : val}
+                      {val === 'del' ? <X className="w-6 h-6 text-white/60" /> : val}
                     </button>
                   ) : null}
                 </div>
@@ -256,25 +274,31 @@ const SecretClubModal = ({ isOpen, onClose }) => {
             </div>
           </div>
         ) : (
-          <div className="flex flex-col items-center animate-in fade-in slide-in-from-bottom-4 duration-700">
-             <div className="w-14 h-14 bg-emerald-500/20 rounded-full flex items-center justify-center mb-4 border border-emerald-500/30">
-              <Unlock className="w-6 h-6 text-emerald-400" />
-            </div>
-            <h3 className="font-serif text-2xl text-white mb-2 text-center font-light tracking-wide">Доступ открыт</h3>
-            <p className="text-xs text-white/60 mb-6 text-center font-light tracking-wider">Эксклюзивное предложение для вас</p>
-            
-            <div className="w-full bg-white/5 border border-white/10 rounded-2xl overflow-hidden mb-6 group cursor-pointer hover:bg-white/10 transition-all">
-              <img src={DATA.secretTour.img} alt="Secret" className="w-full h-32 object-cover group-hover:scale-105 transition-transform duration-700" />
-              <div className="p-4">
-                <h4 className="font-serif text-lg text-white mb-1 font-light tracking-wide">{DATA.secretTour.title}</h4>
-                <p className="text-[10px] text-white/60 mb-3 font-light tracking-wider">{DATA.secretTour.desc}</p>
-                <div className="text-sky-400 font-medium tracking-wide text-sm">{DATA.secretTour.price}</div>
-              </div>
-            </div>
+          /* СОСТОЯНИЕ: РАЗБЛОКИРОВАНО (Элитная карточка-приглашение) */
+          <div className="flex flex-col items-center animate-in fade-in slide-in-from-bottom-8 duration-1000">
+            <div className="w-full bg-gradient-to-b from-slate-800 to-slate-950 border border-slate-700/50 rounded-[2.5rem] p-8 md:p-10 shadow-[0_20px_60px_rgba(0,0,0,0.8)] relative overflow-hidden text-center group">
+              {/* Эффект свечения на фоне */}
+              <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-1/2 bg-sky-500/10 blur-[50px] pointer-events-none"></div>
+              
+              <button onClick={onClose} className="absolute top-5 right-5 text-white/30 hover:text-white transition-colors z-20">
+                <X className="w-5 h-5" />
+              </button>
 
-            <a href={DATA.socials.tg} target="_blank" rel="noreferrer" className="w-full bg-sky-500 text-slate-900 font-medium tracking-wide rounded-xl py-3 hover:bg-sky-400 transition-colors shadow-[0_0_20px_rgba(14,165,233,0.3)] text-center block">
-              Связаться в Telegram
-            </a>
+              <div className="w-16 h-16 rounded-full border border-sky-400/30 flex items-center justify-center mx-auto mb-8 relative">
+                <div className="absolute inset-0 rounded-full bg-sky-400/10 animate-ping opacity-20"></div>
+                <Unlock className="w-6 h-6 text-sky-400 relative z-10" />
+              </div>
+
+              <h3 className="font-serif text-2xl md:text-3xl text-white mb-4 font-light tracking-wide">Доступ открыт</h3>
+              <p className="text-sm md:text-base text-slate-400 mb-10 font-light tracking-wide leading-relaxed">
+                Добро пожаловать в закрытую коллекцию и VIP-сообщество. Здесь начинается самое интересное.
+              </p>
+
+              {/* Ссылка на закрытую группу (Использует Telegram из DATA.socials) */}
+              <a href={DATA.socials.tg} target="_blank" rel="noreferrer" className="relative inline-flex items-center justify-center gap-3 w-full bg-white text-slate-900 font-medium tracking-widest uppercase text-xs md:text-sm py-5 rounded-2xl hover:bg-sky-50 transition-colors overflow-hidden group/btn shadow-[0_0_20px_rgba(255,255,255,0.1)]">
+                <span className="relative z-10 flex items-center gap-2">Перейти в клуб <ArrowUpRight className="w-4 h-4" /></span>
+              </a>
+            </div>
           </div>
         )}
       </div>
@@ -531,6 +555,7 @@ export default function App() {
   
   const [isCruiseWidgetOpen, setIsCruiseWidgetOpen] = useState(false); // Состояние для виджета круизов
   const [isReviewModalOpen, setIsReviewModalOpen] = useState(false); // Состояние для модалки отзыва
+  const [legalDoc, setLegalDoc] = useState(null); // Модалка правовых документов
 
   // Привязываем листалку к новому массиву reviewsList
   const nextRev = () => setActiveReview(p => (p + 1) % (reviewsList.length || 1));
@@ -804,6 +829,24 @@ export default function App() {
     {/* МОДАЛКА ДЛЯ ОТЗЫВОВ */}
     <LeaveReviewModal isOpen={isReviewModalOpen} onClose={() => setIsReviewModalOpen(false)} />
 
+    {/* МОДАЛКА ДЛЯ ДОКУМЕНТОВ */}
+    <div className={`fixed inset-0 z-[160] flex items-center justify-center transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] ${legalDoc ? 'opacity-100 visible' : 'opacity-0 invisible pointer-events-none'}`}>
+      <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-md" onClick={() => setLegalDoc(null)}></div>
+      <div className={`relative w-full max-w-2xl mx-4 max-h-[80vh] flex flex-col bg-white rounded-[2rem] shadow-2xl p-6 md:p-8 transition-all duration-500 transform ${legalDoc ? 'translate-y-0 scale-100' : 'translate-y-10 scale-95'}`}>
+        <div className="flex justify-between items-center mb-6">
+          <h3 className="font-serif text-xl md:text-2xl text-slate-800 font-light tracking-wide pr-8">
+            {legalDoc === 'policy' ? DATA.footer.policyTitle : DATA.footer.agreementTitle}
+          </h3>
+          <button onClick={() => setLegalDoc(null)} className="p-2 bg-slate-100 rounded-full text-slate-500 hover:text-slate-800 hover:bg-slate-200 transition-colors shrink-0">
+            <X className="w-4 h-4 md:w-5 md:h-5" />
+          </button>
+        </div>
+        <div className="flex-1 overflow-y-auto text-slate-600 font-light tracking-wide text-sm md:text-base leading-relaxed pr-2 whitespace-pre-wrap">
+          {legalDoc === 'policy' ? DATA.footer.policyText : DATA.footer.agreementText}
+        </div>
+      </div>
+    </div>
+
     {/* МОДАЛКА ВИДЖЕТА КРУИЗОВ */}
     <div className={`fixed inset-0 z-[145] flex items-center justify-center transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] ${isCruiseWidgetOpen ? 'opacity-100 visible' : 'opacity-0 invisible pointer-events-none'}`}>
       <div className="absolute inset-0 bg-slate-900/80 backdrop-blur-md" onClick={() => setIsCruiseWidgetOpen(false)}></div>
@@ -1049,16 +1092,19 @@ export default function App() {
               onClick={showWish}
               className={`relative cursor-pointer group rounded-[2rem] overflow-hidden bg-gradient-to-br from-white/40 to-white/10 backdrop-blur-md border border-white/40 p-8 md:p-14 shadow-[0_8px_30px_rgba(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgba(14,165,233,0.1)] transition-all duration-700 min-h-[160px] md:min-h-[200px] flex items-center justify-center`}
             >
-              <Sparkles className={`absolute top-6 left-6 w-5 h-5 text-sky-400 transition-opacity duration-1000 ${isWishVisible ? 'opacity-100' : 'opacity-20'}`} />
+              <Sparkles className={`absolute top-6 left-6 w-5 h-5 text-sky-400 transition-opacity duration-1000 ${isWishVisible ? 'opacity-100' : 'opacity-0'}`} />
 
-              {/* Инструкция до клика */}
+              {/* Инструкция до клика (Премиальный дизайн) */}
               <div className={`absolute inset-0 z-20 flex flex-col items-center justify-center pointer-events-none transition-opacity duration-700 ease-in-out ${isWishVisible ? 'opacity-0' : 'opacity-100'}`}>
-                <span className="font-serif text-slate-500 text-sm md:text-base tracking-widest px-4 text-center">Коснитесь, чтобы открыть послание</span>
-                <div className="w-16 h-[1px] bg-gradient-to-r from-transparent via-sky-300 to-transparent mt-4 opacity-70"></div>
+                <div className="w-12 h-12 md:w-16 md:h-16 rounded-full bg-white/20 border border-white/40 flex items-center justify-center backdrop-blur-md shadow-[0_0_20px_rgba(255,255,255,0.4)] mb-3 md:mb-4 animate-[pulse_3s_ease-in-out_infinite]">
+                  <Sparkles className="w-5 h-5 md:w-7 md:h-7 text-sky-600" />
+                </div>
+                <span className="font-serif text-slate-700 text-lg md:text-xl tracking-[0.1em] px-4 text-center">Ваше послание</span>
+                <span className="text-[10px] md:text-xs text-slate-500 tracking-[0.2em] uppercase font-light mt-2">Коснитесь, чтобы открыть</span>
               </div>
 
               {/* Само послание (размыто до клика) */}
-              <div className={`relative z-10 w-full text-center transition-all duration-1000 ease-[cubic-bezier(0.25,0.8,0.25,1)] ${isWishVisible ? 'blur-none opacity-100 scale-100' : 'blur-[8px] md:blur-[12px] opacity-20 scale-95 select-none'}`}>
+              <div className={`relative z-10 w-full text-center transition-all duration-1000 ease-[cubic-bezier(0.25,0.8,0.25,1)] ${isWishVisible ? 'blur-none opacity-100 scale-100' : 'blur-[12px] opacity-0 scale-95 select-none'}`}>
                 <p className="font-serif text-slate-700 text-lg md:text-2xl leading-relaxed tracking-wide px-2 md:px-8">
                   {randomWish ? `"${randomWish}"` : 'Настройка волн...'}
                 </p>
@@ -1192,7 +1238,7 @@ export default function App() {
                   </div>
                   
                   <div className="px-2 pb-2 flex flex-col flex-1">
-                    <h4 className="font-serif text-lg md:text-xl font-light tracking-wide text-slate-800 line-clamp-2 h-[56px] md:h-[60px]">{deal.hotelName}</h4>
+                    <h4 className="font-serif text-lg md:text-xl font-light tracking-wide text-slate-800 line-clamp-2 h-[56px] md:h-[60px] capitalize">{deal.hotelName}</h4>
                     <div className="flex flex-col gap-1.5 text-slate-500 font-light tracking-wide text-xs md:text-sm mt-2 mb-4 md:mb-6 flex-1">
                       <div className="flex items-center gap-1.5">
                         <MapPin className="w-3.5 h-3.5 shrink-0 text-cyan-500" /> <span className="truncate">{deal.title || deal.loc}</span>
@@ -1280,10 +1326,14 @@ export default function App() {
               <h2 className="font-serif text-2xl md:text-4xl text-slate-800 font-light tracking-wide">Атмосфера <br className="md:hidden"/><span className="text-sky-500 font-light tracking-wide md:ml-2">наших путешествий</span></h2>
             </div>
             
-            <div className="w-full overflow-hidden relative z-10">
+            <div className="w-full overflow-hidden relative z-10 group/gallery">
               <div 
-                className={`flex w-max ${selectedImage ? '' : 'hover:[animation-play-state:paused] active:[animation-play-state:paused]'} cursor-pointer`}
-                style={{ animation: 'marquee 40s linear infinite', animationPlayState: selectedImage ? 'paused' : 'running' }}
+                className={`flex w-max cursor-pointer ${selectedImage ? '' : 'md:group-hover/gallery:[animation-play-state:paused]'}`}
+                style={{ 
+                  animation: 'marquee 40s linear infinite', 
+                  animationPlayState: selectedImage ? 'paused' : 'running',
+                  WebkitAnimationPlayState: selectedImage ? 'paused' : 'running'
+                }}
               >
                 <div className="flex gap-4 md:gap-6 pr-4 md:pr-6 pl-5 md:pl-0">
                   {galleryList.map((img, i) => (
@@ -1395,17 +1445,25 @@ export default function App() {
 
         {/* --- СЕКРЕТНЫЙ КЛУБ --- */}
       <Reveal>
-        <div className="w-full mb-12 md:mb-20 px-5 md:px-0 relative z-10 max-w-md mx-auto">
-          <button onClick={() => setIsSecretOpen(true)} className="w-full bg-sky-600/10 border border-sky-600/20 text-sky-700 py-4 md:py-5 rounded-2xl flex items-center justify-center gap-3 md:gap-4 group hover:bg-sky-600/20 transition-all backdrop-blur-md">
-            <Lock className="w-4 h-4 md:w-5 md:h-5 opacity-70 group-hover:scale-110 transition-transform" />
-            <span className="font-serif font-light tracking-wide text-lg md:text-xl">Закрытая коллекция</span>
+        <div className="w-full mb-12 md:mb-20 px-5 md:px-0 max-w-md mx-auto">
+          <button onClick={() => setIsSecretOpen(true)} className="relative w-full overflow-hidden rounded-2xl p-[1px] group transition-all duration-700 hover:shadow-[0_10px_40px_rgba(14,165,233,0.15)] hover:-translate-y-1">
+            <div className="absolute inset-0 bg-gradient-to-r from-sky-400/0 via-sky-400/50 to-sky-400/0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 -translate-x-full group-hover:animate-[marquee_3s_linear_infinite]"></div>
+            
+            <div className="relative w-full bg-gradient-to-b from-slate-800 to-slate-950 px-8 py-5 md:py-6 rounded-2xl flex items-center justify-center gap-4 transition-all overflow-hidden border border-slate-700/50 group-hover:border-slate-600">
+              <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(56,189,248,0.15)_0%,transparent_70%)] opacity-50 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"></div>
+              
+              <Lock className="w-5 h-5 md:w-6 md:h-6 text-sky-400/80 group-hover:text-sky-300 group-hover:scale-110 transition-all z-10" />
+              <span className="font-serif font-light tracking-[0.15em] text-lg md:text-xl text-white/90 group-hover:text-white transition-colors z-10 uppercase">
+                Закрытая коллекция
+              </span>
+            </div>
           </button>
         </div>
       </Reveal>
 
       {/* --- ФУТЕР --- */}
         <Reveal>
-          <div className="mb-8 md:mb-12 w-full">
+          <div className="mb-8 w-full">
             <div className="flex flex-col items-center px-5 md:px-0">
               <div className="flex items-center justify-center gap-3 mb-6 md:mb-8 w-full max-w-[200px] md:max-w-[400px]">
                 <div className="h-[1px] flex-1 bg-sky-200/50"></div>
@@ -1425,9 +1483,23 @@ export default function App() {
                 </a>
               </div>
               
-              <p className="text-center text-[9px] md:text-xs uppercase tracking-widest font-light text-slate-400 mt-10 md:mt-16 pb-4">
-                © {DATA.name} {DATA.lastName} • Quiet Luxury
+              <div className="flex flex-col md:flex-row items-center justify-center gap-3 md:gap-4 mt-10 md:mt-16 mb-6">
+                <button onClick={() => setLegalDoc('policy')} className="text-[9px] md:text-[10px] uppercase tracking-widest font-light text-slate-400 hover:text-sky-500 transition-colors border-b border-transparent hover:border-sky-500 pb-0.5">
+                  {DATA.footer.policyTitle}
+                </button>
+                <span className="hidden md:inline text-slate-300">•</span>
+                <button onClick={() => setLegalDoc('agreement')} className="text-[9px] md:text-[10px] uppercase tracking-widest font-light text-slate-400 hover:text-sky-500 transition-colors border-b border-transparent hover:border-sky-500 pb-0.5">
+                  {DATA.footer.agreementTitle}
+                </button>
+              </div>
+
+              <p className="text-center text-[10px] md:text-xs uppercase tracking-widest font-light text-slate-400 mb-4">
+                © {DATA.footer.copyrightYear} {DATA.name} {DATA.lastName}. Все права защищены.
               </p>
+              
+              <a href={DATA.footer.creatorLink} target="_blank" rel="noreferrer" className="text-[8px] md:text-[9px] uppercase tracking-[0.25em] font-medium text-slate-300 hover:text-sky-500 transition-colors pb-8 inline-block">
+                {DATA.footer.creatorText}
+              </a>
             </div>
           </div>
         </Reveal>
