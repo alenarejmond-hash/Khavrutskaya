@@ -94,12 +94,12 @@ const DATA = {
   news: [],
   
   // --- ПОЖЕЛАНИЯ ДНЯ (Случайный выбор) ---
-  wishes: [
-    "Пусть сегодняшний день подарит вам столько же тепла, сколько солнце на Мальдивах. ☀️",
-    "Вы заслуживаете лучшего. Пусть ваши мечты о путешествиях начнут сбываться уже сегодня. 🌊",
-    "Вдохновение повсюду. Желаю вам найти его в каждой мелочи этого дня! ✨",
-    "Пусть ваш день будет таким же безупречным, как сервис в пятизвездочном отеле. 🥂"
-  ],
+  // Вставьте ссылку на опубликованную вкладку "ПОЖЕЛАНИЯ" (Формат TSV)
+  // ПОДСКАЗКА: Просто пишите тексты пожеланий в первый столбец друг под другом.
+  wishesSheetUrl: "https://docs.google.com/spreadsheets/d/e/2PACX-1vRXue1d4HdwJdKy2Q68NuZxGEyQiV-I34yoCorqQH83EJR2PLa8lkLBh0Lx7DT8F_p6Yn7_K1VHTpNO/pub?gid=43878386&single=true&output=tsv",
+  
+  // Старые тексты удалены! Теперь они подтягиваются из Google Таблицы
+  wishes: [],
   
   // --- ОТЗЫВЫ КЛИЕНТОВ ---
   // 1. Ссылка на опубликованную вкладку "ОПУБЛИКОВАННЫЕ ОТЗЫВЫ" (Формат TSV)
@@ -523,6 +523,7 @@ export default function App() {
   const [hotToursList, setHotToursList] = useState(DATA.hotTours); // Данные спецпредложений
   const [galleryList, setGalleryList] = useState([]); // Данные галереи теперь строго пустые по умолчанию, ждем загрузки из таблицы
   const [reviewsList, setReviewsList] = useState([]); // Отзывы из таблицы
+  const [wishesList, setWishesList] = useState(DATA.wishes); // Пожелания из таблицы
   
   // Состояние для Пожелания дня
   const [randomWish, setRandomWish] = useState('');
@@ -541,10 +542,42 @@ export default function App() {
   };
 
   const showWish = () => {
-    const w = DATA.wishes[Math.floor(Math.random() * DATA.wishes.length)];
-    setRandomWish(w);
+    if (!randomWish && wishesList.length > 0) {
+      setRandomWish(wishesList[Math.floor(Math.random() * wishesList.length)]);
+    }
     setIsWishVisible(true);
   };
+
+  // Сигнал для загрузки пожеланий из вкладки Google Таблицы
+  useEffect(() => {
+    if (DATA.wishesSheetUrl) {
+      const correctUrl = DATA.wishesSheetUrl.replace('output=csv', 'output=tsv');
+      fetch(correctUrl)
+        .then(res => {
+          if (!res.ok) throw new Error('Сетевой ответ не ок');
+          return res.text();
+        })
+        .then(tsv => {
+          const rows = tsv.split(/[\n\r]+/);
+          const fetchedWishes = rows
+            .map(row => row.replace(/^"|"$/g, '').trim())
+            .filter(item => item.length > 5); // Отсеиваем пустые и слишком короткие строки
+          
+          if (fetchedWishes.length > 0) {
+            setWishesList(fetchedWishes);
+            setRandomWish(fetchedWishes[Math.floor(Math.random() * fetchedWishes.length)]);
+          }
+        })
+        .catch(() => {
+          // Тихо обрабатываем прерывание запроса при обновлении страницы, без красных ошибок
+          if (wishesList.length > 0 && !randomWish) {
+            setRandomWish(wishesList[Math.floor(Math.random() * wishesList.length)]);
+          }
+        });
+    } else if (wishesList.length > 0 && !randomWish) {
+      setRandomWish(wishesList[Math.floor(Math.random() * wishesList.length)]);
+    }
+  }, []);
 
   // Сигнал для загрузки новостей из вкладки Google Таблицы
   useEffect(() => {
@@ -1009,22 +1042,27 @@ export default function App() {
           </div>
         </Reveal>
 
-        {/* --- ПОЖЕЛАНИЕ ДНЯ (Отцентрировано после переноса блока Обо мне) --- */}
+        {/* --- ПОЖЕЛАНИЕ ДНЯ (Эффект матового стекла) --- */}
         <Reveal delay={100}>
-          <div className="mb-14 md:mb-20 max-w-2xl mx-auto px-2">
-            <div className="bg-gradient-to-br from-sky-50 to-white/60 backdrop-blur-md border border-sky-200/60 p-6 md:p-10 rounded-3xl shadow-sm relative overflow-hidden flex flex-col items-center justify-center text-center">
-              <Sparkles className="w-8 h-8 text-sky-400 mb-3 md:mb-5 opacity-80" />
-              <h2 className="font-serif text-xl md:text-2xl text-slate-800 font-light tracking-wide mb-2 md:mb-4">Пожелание дня</h2>
-              
-              {!isWishVisible ? (
-                <button onClick={showWish} className="mt-2 px-6 py-3 bg-sky-600/10 text-sky-700 hover:bg-sky-600/20 rounded-full font-medium tracking-wide transition-colors text-sm md:text-base border border-sky-600/20">
-                  ✨ Открыть послание
-                </button>
-              ) : (
-                <p className="text-slate-700 font-serif font-light tracking-wide text-[15px] md:text-lg leading-relaxed animate-in fade-in zoom-in-95 duration-500">
-                  "{randomWish}"
+          <div className="mb-14 md:mb-20 max-w-2xl mx-auto px-5 md:px-0">
+            <div 
+              onClick={showWish}
+              className={`relative cursor-pointer group rounded-[2rem] overflow-hidden bg-gradient-to-br from-white/40 to-white/10 backdrop-blur-md border border-white/40 p-8 md:p-14 shadow-[0_8px_30px_rgba(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgba(14,165,233,0.1)] transition-all duration-700 min-h-[160px] md:min-h-[200px] flex items-center justify-center`}
+            >
+              <Sparkles className={`absolute top-6 left-6 w-5 h-5 text-sky-400 transition-opacity duration-1000 ${isWishVisible ? 'opacity-100' : 'opacity-20'}`} />
+
+              {/* Инструкция до клика */}
+              <div className={`absolute inset-0 z-20 flex flex-col items-center justify-center pointer-events-none transition-opacity duration-700 ease-in-out ${isWishVisible ? 'opacity-0' : 'opacity-100'}`}>
+                <span className="font-serif text-slate-500 text-sm md:text-base tracking-widest px-4 text-center">Коснитесь, чтобы открыть послание</span>
+                <div className="w-16 h-[1px] bg-gradient-to-r from-transparent via-sky-300 to-transparent mt-4 opacity-70"></div>
+              </div>
+
+              {/* Само послание (размыто до клика) */}
+              <div className={`relative z-10 w-full text-center transition-all duration-1000 ease-[cubic-bezier(0.25,0.8,0.25,1)] ${isWishVisible ? 'blur-none opacity-100 scale-100' : 'blur-[8px] md:blur-[12px] opacity-20 scale-95 select-none'}`}>
+                <p className="font-serif text-slate-700 text-lg md:text-2xl leading-relaxed tracking-wide px-2 md:px-8">
+                  {randomWish ? `"${randomWish}"` : 'Настройка волн...'}
                 </p>
-              )}
+              </div>
             </div>
           </div>
         </Reveal>
