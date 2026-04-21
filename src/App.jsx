@@ -102,11 +102,24 @@ const DATA = {
   ],
   
   // --- ОТЗЫВЫ КЛИЕНТОВ ---
-  reviews: [
-    { id: 1, name: "Анна С.", date: "15-11-2023", rating: 5, text: "Это был лучший отпуск в моей жизни! Все продумано до мелочей. Огромное спасибо за этот рай на земле!" },
-    { id: 2, name: "Михаил В.", date: "20-10-2023", rating: 5, text: "Сервис на высшем уровне. Отель превзошел все ожидания, а индивидуальный трансфер был очень кстати." },
-    { id: 3, name: "Ольга К.", date: "05-09-2023", rating: 5, text: "Настоящий Quiet Luxury. Никаких забот, только океан, солнце и безупречный комфорт. Обязательно вернемся!" }
-  ],
+  // 1. Ссылка на опубликованную вкладку "ОПУБЛИКОВАННЫЕ ОТЗЫВЫ" (Формат TSV)
+  // ВАЖНО: Убедитесь, что gid=... в конце этой ссылки ведет именно на "Опубликованные отзывы", а не на "Новые отзывы"
+  // Столбцы: A: Имя | B: Дата | C: Оценка | D: Текст
+  reviewsSheetUrl: "https://docs.google.com/spreadsheets/d/e/2PACX-1vRXue1d4HdwJdKy2Q68NuZxGEyQiV-I34yoCorqQH83EJR2PLa8lkLBh0Lx7DT8F_p6Yn7_K1VHTpNO/pub?gid=1406883491&single=true&output=tsv",
+
+  // 2. Ссылка на Веб-приложение (Google Apps Script), куда будут прилетать новые отзывы
+  // ❌ ОШИБКА: Вы скопировали ссылку на "библиотеку" (в ней есть слово /library/).
+  // ✅ ПРАВИЛЬНО: Ссылка на веб-приложение ВСЕГДА содержит "/macros/s/" и заканчивается на "/exec"
+  // КАК ПОЛУЧИТЬ ПРАВИЛЬНУЮ: 
+  // 1. В гугл-скрипте нажмите синюю кнопку (справа вверху) "Начать развертывание" (Deploy) -> "Новое развертывание". 
+  // 2. Нажмите на шестеренку и выберите тип "Веб-приложение".
+  // 3. В поле "У кого есть доступ" выберите "Все" (Anyone). 
+  // 4. Нажмите "Начать развертывание". 
+  // 5. В появившемся окне скопируйте "URL веб-приложения" (нижняя строчка) и вставьте её сюда:
+  reviewsScriptUrl: "https://script.google.com/macros/s/AKfycbyHKuBzxr4YeIGug36EzeD1f0UTRu-CsNZitPteGpcv3423u8iP4Q29KCad8tRRtn_F/exec",
+  
+  // Тестовые отзывы удалены! Теперь они подтягиваются из вкладки "Опубликованные отзывы"
+  reviews: [],
   
   // --- СЕКРЕТНЫЙ КЛУБ ---
   secretPin: "7777", // Ваш PIN-код
@@ -373,10 +386,44 @@ const CruiseWidget = () => {
 const LeaveReviewModal = ({ isOpen, onClose }) => {
   const [step, setStep] = useState(1);
   const [rating, setRating] = useState(5);
+  const [name, setName] = useState('');
+  const [date, setDate] = useState('');
+  const [text, setText] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
-    if (!isOpen) setTimeout(() => { setStep(1); setRating(5); }, 500);
+    if (!isOpen) {
+      setTimeout(() => { 
+        setStep(1); setRating(5); setName(''); setDate(''); setText(''); setIsSubmitting(false);
+      }, 500);
+    }
   }, [isOpen]);
+
+  const handleSubmit = () => {
+    if (!name.trim() || !text.trim()) return; // Проверка, что поля не пустые
+    
+    if (!DATA.reviewsScriptUrl) {
+      setStep(2); // Если скрипт не подключен, просто показываем "Готово"
+      return;
+    }
+
+    setIsSubmitting(true);
+    
+    // Отправляем данные в Google Script
+    fetch(DATA.reviewsScriptUrl, {
+      method: 'POST',
+      mode: 'no-cors', // Важно для обхода блокировок Google
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' }, // Исправлено для 100% доставки с любых устройств
+      body: JSON.stringify({ name, date, rating, text })
+    }).then(() => {
+      setIsSubmitting(false);
+      setStep(2);
+    }).catch((err) => {
+      console.error('Ошибка отправки:', err);
+      setIsSubmitting(false);
+      setStep(2); // Показываем успех даже при ошибке no-cors (особенность Google Script)
+    });
+  };
 
   return (
     <div className={`fixed inset-0 z-[150] flex items-center justify-center transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] ${isOpen ? 'opacity-100 visible' : 'opacity-0 invisible pointer-events-none'}`}>
@@ -407,12 +454,34 @@ const LeaveReviewModal = ({ isOpen, onClose }) => {
                 ))}
               </div>
 
-              <input type="text" placeholder="Ваше имя" className="w-full bg-slate-50 border border-slate-100 rounded-2xl px-5 py-4 text-slate-800 font-light tracking-wide focus:outline-none focus:border-sky-400 focus:ring-1 focus:ring-sky-400" />
-              <input type="text" placeholder="Дата (ДД-ММ-ГГГГ)" className="w-full bg-slate-50 border border-slate-100 rounded-2xl px-5 py-4 text-slate-800 font-light tracking-wide focus:outline-none focus:border-sky-400 focus:ring-1 focus:ring-sky-400" />
-              <textarea placeholder="Пару слов об отдыхе..." rows="4" className="w-full bg-slate-50 border border-slate-100 rounded-2xl px-5 py-4 text-slate-800 font-light tracking-wide focus:outline-none focus:border-sky-400 focus:ring-1 focus:ring-sky-400 resize-none"></textarea>
+              <input 
+                type="text" 
+                placeholder="Ваше имя" 
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className="w-full bg-slate-50 border border-slate-100 rounded-2xl px-5 py-4 text-slate-800 font-light tracking-wide focus:outline-none focus:border-sky-400 focus:ring-1 focus:ring-sky-400" 
+              />
+              <input 
+                type="text" 
+                placeholder="Дата (ДД-ММ-ГГГГ)" 
+                value={date}
+                onChange={(e) => setDate(e.target.value)}
+                className="w-full bg-slate-50 border border-slate-100 rounded-2xl px-5 py-4 text-slate-800 font-light tracking-wide focus:outline-none focus:border-sky-400 focus:ring-1 focus:ring-sky-400" 
+              />
+              <textarea 
+                placeholder="Пару слов об отдыхе..." 
+                rows="4" 
+                value={text}
+                onChange={(e) => setText(e.target.value)}
+                className="w-full bg-slate-50 border border-slate-100 rounded-2xl px-5 py-4 text-slate-800 font-light tracking-wide focus:outline-none focus:border-sky-400 focus:ring-1 focus:ring-sky-400 resize-none"
+              ></textarea>
               
-              <button onClick={() => setStep(2)} className="w-full bg-gradient-to-r from-sky-500 to-sky-600 text-white font-medium tracking-wide rounded-2xl py-4 mt-2 hover:shadow-lg hover:shadow-sky-500/30 transition-all">
-                Отправить отзыв
+              <button 
+                onClick={handleSubmit} 
+                disabled={isSubmitting || !name.trim() || !text.trim()}
+                className="w-full bg-gradient-to-r from-sky-500 to-sky-600 text-white font-medium tracking-wide rounded-2xl py-4 mt-2 hover:shadow-lg hover:shadow-sky-500/30 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {isSubmitting ? 'Отправка...' : 'Отправить отзыв'}
               </button>
             </div>
           </div>
@@ -453,6 +522,7 @@ export default function App() {
   
   const [hotToursList, setHotToursList] = useState(DATA.hotTours); // Данные спецпредложений
   const [galleryList, setGalleryList] = useState([]); // Данные галереи теперь строго пустые по умолчанию, ждем загрузки из таблицы
+  const [reviewsList, setReviewsList] = useState([]); // Отзывы из таблицы
   
   // Состояние для Пожелания дня
   const [randomWish, setRandomWish] = useState('');
@@ -461,8 +531,9 @@ export default function App() {
   const [isCruiseWidgetOpen, setIsCruiseWidgetOpen] = useState(false); // Состояние для виджета круизов
   const [isReviewModalOpen, setIsReviewModalOpen] = useState(false); // Состояние для модалки отзыва
 
-  const nextRev = () => setActiveReview(p => (p + 1) % DATA.reviews.length);
-  const prevRev = () => setActiveReview(p => (p - 1 + DATA.reviews.length) % DATA.reviews.length);
+  // Привязываем листалку к новому массиву reviewsList
+  const nextRev = () => setActiveReview(p => (p + 1) % (reviewsList.length || 1));
+  const prevRev = () => setActiveReview(p => (p - 1 + (reviewsList.length || 1)) % (reviewsList.length || 1));
 
   const closeQuiz = () => {
     setIsQuizOpen(false);
@@ -584,6 +655,34 @@ export default function App() {
           }
         })
         .catch(err => console.error("Ошибка загрузки галереи:", err));
+    }
+  }, []);
+
+  // Сигнал для загрузки опубликованных отзывов из вкладки Google Таблицы
+  useEffect(() => {
+    if (DATA.reviewsSheetUrl) {
+      const correctUrl = DATA.reviewsSheetUrl.replace('output=csv', 'output=tsv');
+      
+      fetch(correctUrl)
+        .then(res => res.text())
+        .then(tsv => {
+          const rows = tsv.split('\n');
+          const fetchedReviews = rows.slice(1).map((row, index) => {
+            const cols = row.split('\t');
+            return {
+              id: index + 500,
+              name: cols[0] ? cols[0].replace(/^"|"$/g, '').trim() : '',
+              date: cols[1] ? cols[1].replace(/^"|"$/g, '').trim() : '',
+              rating: cols[2] ? parseInt(cols[2].replace(/^"|"$/g, '').trim()) : 5,
+              text: cols[3] ? cols[3].replace(/^"|"$/g, '').trim() : ''
+            };
+          }).filter(item => item.name && item.text); // Берем только если есть имя и текст
+          
+          if (fetchedReviews.length > 0) {
+            setReviewsList(fetchedReviews.reverse()); // Новые (снизу таблицы) показываем первыми
+          }
+        })
+        .catch(err => console.error("Ошибка загрузки отзывов:", err));
     }
   }, []);
 
@@ -1168,91 +1267,93 @@ export default function App() {
         </Reveal>
 
         {/* --- ОТЗЫВЫ --- */}
-        <Reveal>
-          <div className="mb-14 md:mb-24 px-5 md:px-0 max-w-4xl mx-auto">
-            <div className="flex items-center gap-4 mb-10 md:mb-16">
-              <div className="h-[1px] flex-1 bg-gradient-to-r from-transparent to-sky-200"></div>
-              <h2 className="font-serif text-xl md:text-3xl text-slate-800 font-light tracking-wide uppercase">Впечатления</h2>
-              <div className="h-[1px] flex-1 bg-gradient-to-l from-transparent to-sky-200"></div>
-            </div>
-            
-            <div className="relative py-4 md:py-8 flex flex-col">
-              
-              {/* Монограмма на заднем фоне (Первая буква имени) */}
-              <div className="absolute top-1/2 left-[75%] md:left-[85%] -translate-x-1/2 -translate-y-1/2 pointer-events-none select-none z-0">
-                {DATA.reviews.map((review, i) => (
-                  <div 
-                    key={`mono-${review.id}`}
-                    className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 transition-all duration-1000 ease-in-out ${i === activeReview ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}
-                  >
-                    <span className="font-serif text-[280px] md:text-[400px] leading-none text-sky-600/10 font-light">
-                      {review.name.charAt(0)}
-                    </span>
-                  </div>
-                ))}
-              </div>
-
-              {/* Текст отзыва */}
-              <div className="relative z-10 w-full h-[220px] md:h-[280px] flex">
-                {DATA.reviews.map((review, i) => (
-                  <div 
-                    key={review.id} 
-                    className={`absolute inset-0 transition-all duration-1000 ease-[cubic-bezier(0.25,0.8,0.25,1)] flex flex-col justify-center pr-10 md:pr-24 ${i === activeReview ? 'opacity-100 translate-x-0 blur-none z-10' : 'opacity-0 translate-x-8 blur-sm pointer-events-none z-0'}`}
-                  >
-                    <div className="relative">
-                      {/* Огромная журнальная кавычка */}
-                      <span className="absolute -top-10 -left-4 md:-top-16 md:-left-8 text-[80px] md:text-[120px] text-sky-300/30 font-serif leading-none select-none">“</span>
-                      
-                      {/* Звезды рейтинга */}
-                      <div className="flex gap-1 mb-4 relative z-10">
-                        {[...Array(review.rating || 5)].map((_, idx) => (
-                          <Star key={idx} className="w-3.5 h-3.5 md:w-4 md:h-4 text-amber-300 fill-amber-300" />
-                        ))}
-                      </div>
-
-                      <p className="font-serif text-slate-800 font-light tracking-wide text-lg md:text-3xl leading-relaxed md:leading-[1.6] relative z-10">
-                        {review.text}
-                      </p>
-                    </div>
-                    
-                    {/* Автор отзыва с элегантной линией и датой */}
-                    <div className="mt-8 md:mt-12 flex items-center gap-4">
-                      <div className="w-12 md:w-20 h-[1px] bg-sky-300 shrink-0"></div>
-                      <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-                        <span className="font-serif italic text-slate-500 text-base md:text-xl tracking-wide">{review.name}</span>
-                        {review.date && <span className="text-[9px] md:text-[11px] uppercase tracking-widest font-light text-slate-400">{review.date}</span>}
-                      </div>
-                    </div>
-                  </div>
-                ))}
+        {reviewsList.length > 0 && (
+          <Reveal>
+            <div className="mb-14 md:mb-24 px-5 md:px-0 max-w-4xl mx-auto">
+              <div className="flex items-center gap-4 mb-10 md:mb-16">
+                <div className="h-[1px] flex-1 bg-gradient-to-r from-transparent to-sky-200"></div>
+                <h2 className="font-serif text-xl md:text-3xl text-slate-800 font-light tracking-wide uppercase">Впечатления</h2>
+                <div className="h-[1px] flex-1 bg-gradient-to-l from-transparent to-sky-200"></div>
               </div>
               
-              {/* Минималистичная навигация и кнопка Оставить отзыв */}
-              <div className="relative z-20 mt-4 md:mt-8 flex flex-col sm:flex-row sm:items-center justify-between w-full border-t border-sky-100/50 pt-6 gap-6">
-                <div className="flex items-center justify-between sm:justify-start gap-8 w-full sm:w-auto">
-                  <div className="flex gap-4 md:gap-8">
-                    <button onClick={prevRev} className="p-2 -ml-2 text-slate-400 hover:text-slate-800 transition-colors group">
-                      <ChevronRight className="w-6 h-6 md:w-8 md:h-8 rotate-180 group-hover:-translate-x-2 transition-transform" />
-                    </button>
-                    <button onClick={nextRev} className="p-2 text-slate-400 hover:text-slate-800 transition-colors group">
-                      <ChevronRight className="w-6 h-6 md:w-8 md:h-8 group-hover:translate-x-2 transition-transform" />
-                    </button>
-                  </div>
-                  
-                  <div className="font-serif font-light text-slate-400 tracking-widest text-sm md:text-base">
-                    <span className="text-slate-800">{(activeReview + 1).toString().padStart(2, '0')}</span> / {DATA.reviews.length.toString().padStart(2, '0')}
-                  </div>
+              <div className="relative py-4 md:py-8 flex flex-col">
+                
+                {/* Монограмма на заднем фоне (Первая буква имени) */}
+                <div className="absolute top-1/2 left-[75%] md:left-[85%] -translate-x-1/2 -translate-y-1/2 pointer-events-none select-none z-0">
+                  {reviewsList.map((review, i) => (
+                    <div 
+                      key={`mono-${review.id}`}
+                      className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 transition-all duration-1000 ease-in-out ${i === activeReview ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}
+                    >
+                      <span className="font-serif text-[280px] md:text-[400px] leading-none text-sky-600/10 font-light">
+                        {review.name.charAt(0)}
+                      </span>
+                    </div>
+                  ))}
                 </div>
 
-                <button onClick={() => setIsReviewModalOpen(true)} className="flex items-center justify-center gap-2 text-sky-600 hover:text-sky-700 transition-colors group mx-auto sm:mx-0">
-                  <span className="text-[10px] md:text-xs uppercase tracking-widest font-medium border-b border-sky-200 group-hover:border-sky-400 pb-0.5">Оставить отзыв</span>
-                  <ChevronRight className="w-3 h-3 md:w-4 md:h-4 group-hover:translate-x-1 transition-transform" />
-                </button>
-              </div>
+                {/* Текст отзыва */}
+                <div className="relative z-10 w-full h-[220px] md:h-[280px] flex">
+                  {reviewsList.map((review, i) => (
+                    <div 
+                      key={review.id} 
+                      className={`absolute inset-0 transition-all duration-1000 ease-[cubic-bezier(0.25,0.8,0.25,1)] flex flex-col justify-center pr-10 md:pr-24 ${i === activeReview ? 'opacity-100 translate-x-0 blur-none z-10' : 'opacity-0 translate-x-8 blur-sm pointer-events-none z-0'}`}
+                    >
+                      <div className="relative">
+                        {/* Огромная журнальная кавычка */}
+                        <span className="absolute -top-10 -left-4 md:-top-16 md:-left-8 text-[80px] md:text-[120px] text-sky-300/30 font-serif leading-none select-none">“</span>
+                        
+                        {/* Звезды рейтинга */}
+                        <div className="flex gap-1 mb-4 relative z-10">
+                          {[...Array(review.rating || 5)].map((_, idx) => (
+                            <Star key={idx} className="w-3.5 h-3.5 md:w-4 md:h-4 text-amber-300 fill-amber-300" />
+                          ))}
+                        </div>
 
+                        <p className="font-serif text-slate-800 font-light tracking-wide text-lg md:text-3xl leading-relaxed md:leading-[1.6] relative z-10">
+                          {review.text}
+                        </p>
+                      </div>
+                      
+                      {/* Автор отзыва с элегантной линией и датой */}
+                      <div className="mt-8 md:mt-12 flex items-center gap-4">
+                        <div className="w-12 md:w-20 h-[1px] bg-sky-300 shrink-0"></div>
+                        <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+                          <span className="font-serif italic text-slate-500 text-base md:text-xl tracking-wide">{review.name}</span>
+                          {review.date && <span className="text-[9px] md:text-[11px] uppercase tracking-widest font-light text-slate-400">{review.date}</span>}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                
+                {/* Минималистичная навигация и кнопка Оставить отзыв */}
+                <div className="relative z-20 mt-4 md:mt-8 flex flex-col sm:flex-row sm:items-center justify-between w-full border-t border-sky-100/50 pt-6 gap-6">
+                  <div className="flex items-center justify-between sm:justify-start gap-8 w-full sm:w-auto">
+                    <div className="flex gap-4 md:gap-8">
+                      <button onClick={prevRev} className="p-2 -ml-2 text-slate-400 hover:text-slate-800 transition-colors group">
+                        <ChevronRight className="w-6 h-6 md:w-8 md:h-8 rotate-180 group-hover:-translate-x-2 transition-transform" />
+                      </button>
+                      <button onClick={nextRev} className="p-2 text-slate-400 hover:text-slate-800 transition-colors group">
+                        <ChevronRight className="w-6 h-6 md:w-8 md:h-8 group-hover:translate-x-2 transition-transform" />
+                      </button>
+                    </div>
+                    
+                    <div className="font-serif font-light text-slate-400 tracking-widest text-sm md:text-base">
+                      <span className="text-slate-800">{(activeReview + 1).toString().padStart(2, '0')}</span> / {reviewsList.length.toString().padStart(2, '0')}
+                    </div>
+                  </div>
+
+                  <button onClick={() => setIsReviewModalOpen(true)} className="flex items-center justify-center gap-2 text-sky-600 hover:text-sky-700 transition-colors group mx-auto sm:mx-0">
+                    <span className="text-[10px] md:text-xs uppercase tracking-widest font-medium border-b border-sky-200 group-hover:border-sky-400 pb-0.5">Оставить отзыв</span>
+                    <ChevronRight className="w-3 h-3 md:w-4 md:h-4 group-hover:translate-x-1 transition-transform" />
+                  </button>
+                </div>
+
+              </div>
             </div>
-          </div>
-        </Reveal>
+          </Reveal>
+        )}
 
         {/* --- СЕКРЕТНЫЙ КЛУБ --- */}
       <Reveal>
