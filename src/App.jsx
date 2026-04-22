@@ -104,7 +104,7 @@ const DATA = {
   // --- ОТЗЫВЫ КЛИЕНТОВ ---
   // 1. Ссылка на опубликованную вкладку "ОПУБЛИКОВАННЫЕ ОТЗЫВЫ" (Формат TSV)
   // ВАЖНО: Убедитесь, что gid=... в конце этой ссылки ведет именно на "Опубликованные отзывы", а не на "Новые отзывы"
-  // Столбцы: A: Имя | B: Дата | C: Оценка | D: Текст
+  // Столбцы: A: Имя | B: Дата | C: Оценка | D: Текст | E: Фото (ссылка, необязательно)
   reviewsSheetUrl: "https://docs.google.com/spreadsheets/d/e/2PACX-1vRXue1d4HdwJdKy2Q68NuZxGEyQiV-I34yoCorqQH83EJR2PLa8lkLBh0Lx7DT8F_p6Yn7_K1VHTpNO/pub?gid=1406883491&single=true&output=tsv",
 
   // 2. Ссылка на Веб-приложение (Google Apps Script), куда будут прилетать новые отзывы
@@ -116,7 +116,7 @@ const DATA = {
   // 3. В поле "У кого есть доступ" выберите "Все" (Anyone). 
   // 4. Нажмите "Начать развертывание". 
   // 5. В появившемся окне скопируйте "URL веб-приложения" (нижняя строчка) и вставьте её сюда:
-  reviewsScriptUrl: "https://script.google.com/macros/s/AKfycbyHKuBzxr4YeIGug36EzeD1f0UTRu-CsNZitPteGpcv3423u8iP4Q29KCad8tRRtn_F/exec",
+  reviewsScriptUrl: "https://script.google.com/macros/s/AKfycbxdfO2VfxBAjwaghkhYqExp4gt-UVF0Bn_f9LpE4IkJrAXKfVefN6W5_LwX1rvYG00J/exec",
   
   // Тестовые отзывы удалены! Теперь они подтягиваются из вкладки "Опубликованные отзывы"
   reviews: [],
@@ -413,12 +413,13 @@ const LeaveReviewModal = ({ isOpen, onClose }) => {
   const [name, setName] = useState('');
   const [date, setDate] = useState('');
   const [text, setText] = useState('');
+  const [photo, setPhoto] = useState(''); // Добавлено поле для фото
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     if (!isOpen) {
       setTimeout(() => { 
-        setStep(1); setRating(5); setName(''); setDate(''); setText(''); setIsSubmitting(false);
+        setStep(1); setRating(5); setName(''); setDate(''); setText(''); setPhoto(''); setIsSubmitting(false);
       }, 500);
     }
   }, [isOpen]);
@@ -438,7 +439,7 @@ const LeaveReviewModal = ({ isOpen, onClose }) => {
       method: 'POST',
       mode: 'no-cors', // Важно для обхода блокировок Google
       headers: { 'Content-Type': 'text/plain;charset=utf-8' }, // Исправлено для 100% доставки с любых устройств
-      body: JSON.stringify({ name, date, rating, text })
+      body: JSON.stringify({ name, date, rating, text, photo }) // Добавили фото
     }).then(() => {
       setIsSubmitting(false);
       setStep(2);
@@ -483,21 +484,28 @@ const LeaveReviewModal = ({ isOpen, onClose }) => {
                 placeholder="Ваше имя" 
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="w-full bg-slate-50 border border-slate-100 rounded-2xl px-5 py-4 text-slate-800 font-light tracking-wide focus:outline-none focus:border-sky-400 focus:ring-1 focus:ring-sky-400" 
+                className="w-full bg-slate-50 border border-slate-100 rounded-2xl px-5 py-3 md:py-4 text-slate-800 font-light tracking-wide focus:outline-none focus:border-sky-400 focus:ring-1 focus:ring-sky-400" 
               />
               <input 
                 type="text" 
                 placeholder="Дата (ДД-ММ-ГГГГ)" 
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
-                className="w-full bg-slate-50 border border-slate-100 rounded-2xl px-5 py-4 text-slate-800 font-light tracking-wide focus:outline-none focus:border-sky-400 focus:ring-1 focus:ring-sky-400" 
+                className="w-full bg-slate-50 border border-slate-100 rounded-2xl px-5 py-3 md:py-4 text-slate-800 font-light tracking-wide focus:outline-none focus:border-sky-400 focus:ring-1 focus:ring-sky-400" 
+              />
+              <input 
+                type="text" 
+                placeholder="Ссылка на фото (по желанию)" 
+                value={photo}
+                onChange={(e) => setPhoto(e.target.value)}
+                className="w-full bg-slate-50 border border-slate-100 rounded-2xl px-5 py-3 md:py-4 text-slate-800 font-light tracking-wide focus:outline-none focus:border-sky-400 focus:ring-1 focus:ring-sky-400" 
               />
               <textarea 
                 placeholder="Пару слов об отдыхе..." 
-                rows="4" 
+                rows="3" 
                 value={text}
                 onChange={(e) => setText(e.target.value)}
-                className="w-full bg-slate-50 border border-slate-100 rounded-2xl px-5 py-4 text-slate-800 font-light tracking-wide focus:outline-none focus:border-sky-400 focus:ring-1 focus:ring-sky-400 resize-none"
+                className="w-full bg-slate-50 border border-slate-100 rounded-2xl px-5 py-3 md:py-4 text-slate-800 font-light tracking-wide focus:outline-none focus:border-sky-400 focus:ring-1 focus:ring-sky-400 resize-none"
               ></textarea>
               
               <button 
@@ -613,6 +621,7 @@ export default function App() {
   const [isCruiseWidgetOpen, setIsCruiseWidgetOpen] = useState(false); // Состояние для виджета круизов
   const [isReviewModalOpen, setIsReviewModalOpen] = useState(false); // Состояние для модалки отзыва
   const [legalDoc, setLegalDoc] = useState(null); // Модалка правовых документов
+  const [selectedReview, setSelectedReview] = useState(null); // Модалка полного отзыва
 
   // Привязываем листалку к новому массиву reviewsList
   const nextRev = () => setActiveReview(p => (p + 1) % (reviewsList.length || 1));
@@ -789,7 +798,8 @@ export default function App() {
               name: cols[0] ? cols[0].replace(/^"|"$/g, '').trim() : '',
               date: cols[1] ? cols[1].replace(/^"|"$/g, '').trim() : '',
               rating: cols[2] ? parseInt(cols[2].replace(/^"|"$/g, '').trim()) : 5,
-              text: cols[3] ? cols[3].replace(/^"|"$/g, '').trim() : ''
+              text: cols[3] ? cols[3].replace(/^"|"$/g, '').trim() : '',
+              photo: cols[4] ? cols[4].replace(/^"|"$/g, '').trim() : '' // Добавлено фото
             };
           }).filter(item => item.name && item.text); // Берем только если есть имя и текст
           
@@ -901,6 +911,46 @@ export default function App() {
         <div className="flex-1 overflow-y-auto text-slate-600 font-light tracking-wide text-sm md:text-base leading-relaxed pr-2 whitespace-pre-wrap">
           {legalDoc === 'policy' ? DATA.footer.policyText : DATA.footer.agreementText}
         </div>
+      </div>
+    </div>
+
+    {/* МОДАЛКА ПОЛНОГО ОТЗЫВА */}
+    <div className={`fixed inset-0 z-[160] flex items-center justify-center transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] ${selectedReview ? 'opacity-100 visible' : 'opacity-0 invisible pointer-events-none'}`}>
+      <div className="absolute inset-0 bg-slate-900/70 backdrop-blur-md" onClick={() => setSelectedReview(null)}></div>
+      <div className={`relative w-full max-w-2xl mx-4 max-h-[85vh] flex flex-col bg-white rounded-[2rem] shadow-2xl p-6 md:p-10 transition-all duration-500 transform ${selectedReview ? 'translate-y-0 scale-100' : 'translate-y-10 scale-95'}`}>
+        <button onClick={() => setSelectedReview(null)} className="absolute top-4 right-4 md:top-6 md:right-6 p-2 bg-slate-100 rounded-full text-slate-500 hover:text-slate-800 hover:bg-slate-200 transition-colors z-10">
+          <X className="w-5 h-5" />
+        </button>
+        
+        {selectedReview && (
+          <div className="flex flex-col h-full overflow-hidden">
+            <div className="flex items-center gap-4 mb-6 shrink-0 pr-8">
+              <div>
+                <h3 className="font-serif text-xl md:text-2xl text-slate-800 font-light tracking-wide">{selectedReview.name}</h3>
+                <div className="flex items-center gap-3 mt-1">
+                  <div className="flex gap-1">
+                    {[...Array(selectedReview.rating || 5)].map((_, idx) => (
+                      <Star key={idx} className="w-3.5 h-3.5 text-amber-300 fill-amber-300" />
+                    ))}
+                  </div>
+                  {selectedReview.date && <span className="text-[10px] md:text-xs uppercase tracking-widest font-light text-slate-400">{selectedReview.date}</span>}
+                </div>
+              </div>
+            </div>
+            
+            <div className="flex-1 overflow-y-auto pr-2 space-y-6">
+              <p className="font-serif text-slate-700 font-light tracking-wide text-base md:text-lg leading-relaxed whitespace-pre-wrap">
+                {selectedReview.text}
+              </p>
+              {/* БОЛЬШОЕ ФОТО ИЗ ПУТЕШЕСТВИЯ В МОДАЛКЕ */}
+              {selectedReview.photo && (
+                <div className="rounded-2xl md:rounded-[2rem] overflow-hidden shadow-md border border-slate-100 cursor-pointer group" onClick={() => setSelectedImage(selectedReview.photo)}>
+                  <img src={selectedReview.photo} alt="Фото из путешествия" className="w-full max-h-[300px] md:max-h-[400px] object-cover group-hover:scale-105 transition-transform duration-700" />
+                </div>
+              )}
+            </div>
+          </div>
+        )}
       </div>
     </div>
 
@@ -1451,31 +1501,53 @@ export default function App() {
                   {reviewsList.map((review, i) => (
                     <div 
                       key={review.id} 
-                      className={`absolute inset-0 transition-all duration-1000 ease-[cubic-bezier(0.25,0.8,0.25,1)] flex flex-col justify-center pr-10 md:pr-24 ${i === activeReview ? 'opacity-100 translate-x-0 blur-none z-10' : 'opacity-0 translate-x-8 blur-sm pointer-events-none z-0'}`}
+                      className={`absolute inset-0 transition-all duration-1000 ease-[cubic-bezier(0.25,0.8,0.25,1)] flex items-center ${i === activeReview ? 'opacity-100 translate-x-0 blur-none z-10' : 'opacity-0 translate-x-8 blur-sm pointer-events-none z-0'}`}
                     >
-                      <div className="relative">
-                        {/* Огромная журнальная кавычка */}
-                        <span className="absolute -top-10 -left-4 md:-top-16 md:-left-8 text-[80px] md:text-[120px] text-sky-300/30 font-serif leading-none select-none">“</span>
-                        
-                        {/* Звезды рейтинга */}
-                        <div className="flex gap-1 mb-4 relative z-10">
-                          {[...Array(review.rating || 5)].map((_, idx) => (
-                            <Star key={idx} className="w-3.5 h-3.5 md:w-4 md:h-4 text-amber-300 fill-amber-300" />
-                          ))}
+                      <div className="flex w-full items-center justify-between gap-4 md:gap-8 pr-4 md:pr-8">
+                        <div className="flex-1 relative">
+                          {/* Огромная журнальная кавычка */}
+                          <span className="absolute -top-10 -left-4 md:-top-16 md:-left-8 text-[80px] md:text-[120px] text-sky-300/30 font-serif leading-none select-none">“</span>
+                          
+                          {/* Звезды рейтинга */}
+                          <div className="flex gap-1 mb-4 relative z-10">
+                            {[...Array(review.rating || 5)].map((_, idx) => (
+                              <Star key={idx} className="w-3.5 h-3.5 md:w-4 md:h-4 text-amber-300 fill-amber-300" />
+                            ))}
+                          </div>
+
+                          <p className="font-serif text-slate-800 font-light tracking-wide text-lg md:text-3xl leading-relaxed md:leading-[1.6] relative z-10 line-clamp-3 md:line-clamp-4">
+                            {review.text}
+                          </p>
+                          
+                          {/* Кнопка Читать полностью, если текст длинный */}
+                          {review.text.length > 120 && (
+                            <button onClick={() => setSelectedReview(review)} className="relative z-10 mt-3 flex items-center gap-1 text-[10px] md:text-xs text-sky-500 uppercase tracking-widest font-medium hover:text-sky-600 transition-colors group/btn">
+                              Читать полностью <ChevronRight className="w-3 h-3 group-hover/btn:translate-x-1 transition-transform" />
+                            </button>
+                          )}
+                          
+                          {/* Автор отзыва с элегантной линией и датой */}
+                          <div className="mt-6 md:mt-10 flex items-center gap-3 md:gap-4">
+                            <div className="h-[1px] bg-sky-300 shrink-0 w-12 md:w-20"></div>
+                            <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+                              <span className="font-serif italic text-slate-500 text-base md:text-xl tracking-wide">{review.name}</span>
+                              {review.date && <span className="text-[9px] md:text-[11px] uppercase tracking-widest font-light text-slate-400">{review.date}</span>}
+                            </div>
+                          </div>
                         </div>
 
-                        <p className="font-serif text-slate-800 font-light tracking-wide text-lg md:text-3xl leading-relaxed md:leading-[1.6] relative z-10">
-                          {review.text}
-                        </p>
-                      </div>
-                      
-                      {/* Автор отзыва с элегантной линией и датой */}
-                      <div className="mt-8 md:mt-12 flex items-center gap-4">
-                        <div className="w-12 md:w-20 h-[1px] bg-sky-300 shrink-0"></div>
-                        <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-                          <span className="font-serif italic text-slate-500 text-base md:text-xl tracking-wide">{review.name}</span>
-                          {review.date && <span className="text-[9px] md:text-[11px] uppercase tracking-widest font-light text-slate-400">{review.date}</span>}
-                        </div>
+                        {/* ФОТО ИЗ ПУТЕШЕСТВИЯ (справа от текста) */}
+                        {review.photo && (
+                          <div 
+                            className="shrink-0 w-[100px] h-[130px] md:w-[180px] md:h-[240px] rounded-2xl md:rounded-[2rem] overflow-hidden shadow-[0_10px_30px_rgba(0,0,0,0.1)] border border-white/80 rotate-2 hover:rotate-0 transition-all duration-500 cursor-pointer group/photo relative"
+                            onClick={() => setSelectedImage(review.photo)}
+                          >
+                            <img src={review.photo} alt="Travel" className="w-full h-full object-cover group-hover/photo:scale-110 transition-transform duration-700" />
+                            <div className="absolute inset-0 bg-black/0 group-hover/photo:bg-black/10 transition-colors duration-500 flex items-center justify-center">
+                              <Sparkles className="w-5 h-5 md:w-8 md:h-8 text-white opacity-0 group-hover/photo:opacity-100 transition-opacity duration-500 scale-50 group-hover/photo:scale-100" />
+                            </div>
+                          </div>
+                        )}
                       </div>
                     </div>
                   ))}
