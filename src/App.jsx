@@ -790,7 +790,6 @@ export default function App() {
 
   // --- ДРАГ И АВТО-СКРОЛЛ ДЛЯ ГАЛЕРЕИ ---
   const galleryRef = React.useRef(null);
-  const exactScrollLeft = React.useRef(0);
   const [isGalleryDragging, setIsGalleryDragging] = useState(false);
   const [isGalleryHovered, setIsGalleryHovered] = useState(false);
   const galleryStartX = React.useRef(0);
@@ -819,56 +818,31 @@ export default function App() {
     if (Math.abs(walk) > 10) galleryDragged.current = true;
     galleryRef.current.scrollLeft = galleryScrollLeft.current - walk;
   };
-  const handleGalleryTouchStart = (e) => { 
-    setIsGalleryDragging(true); 
-    setIsGalleryHovered(false); 
-    galleryDragged.current = false;
-    if (e.touches && e.touches[0]) galleryStartX.current = e.touches[0].clientX;
-  };
-  const handleGalleryTouchMove = (e) => {
-    if (e.touches && e.touches[0] && Math.abs(e.touches[0].clientX - galleryStartX.current) > 10) {
-      galleryDragged.current = true;
-    }
-  };
-  const handleGalleryTouchEnd = () => { 
-    setIsGalleryDragging(false); 
-    setIsGalleryHovered(false); 
-    setTimeout(() => { galleryDragged.current = false; }, 50);
-  };
+  const handleGalleryTouchStart = () => setIsGalleryDragging(true);
+  const handleGalleryTouchEnd = () => setIsGalleryDragging(false);
 
-  // Авто-скролл галереи (Сверхплавный алгоритм Delta Time)
+  // Авто-скролл галереи
   useEffect(() => {
     let animationId;
-    let lastTime = null;
-    const speed = 40; // Пикселей в секунду
-    
-    const step = (time) => {
-      if (!lastTime) lastTime = time;
-      const dt = time - lastTime;
-      lastTime = time;
-
+    let accumulator = 0; // Накопитель для сверхплавной скорости на 120hz экранах
+    const step = () => {
       if (galleryRef.current && !isGalleryHovered && !isGalleryDragging && !selectedImage && galleryList.length > 0) {
-        if (exactScrollLeft.current === 0 && galleryRef.current.scrollLeft > 0) {
-          exactScrollLeft.current = galleryRef.current.scrollLeft;
-        }
-
-        const move = (dt * speed) / 1000;
-        exactScrollLeft.current += move;
-        galleryRef.current.scrollLeft = exactScrollLeft.current;
+        accumulator += 0.3; // Плавная, комфортная скорость
         
-        if (galleryRef.current.children.length > 2) {
-          const spacerWidth = galleryRef.current.children[0].offsetWidth;
-          const setWidth = galleryRef.current.children[1].offsetWidth;
+        if (accumulator >= 1) {
+          galleryRef.current.scrollLeft += 1;
+          accumulator -= 1;
           
-          // Бесшовный бесконечный цикл
-          if (setWidth > 0 && exactScrollLeft.current >= spacerWidth + setWidth * 2) {
-            exactScrollLeft.current -= setWidth;
-            galleryRef.current.scrollLeft = exactScrollLeft.current;
+          if (galleryRef.current.children.length > 2) {
+            const spacerWidth = galleryRef.current.children[0].offsetWidth;
+            const setWidth = galleryRef.current.children[1].offsetWidth;
+            
+            // Бесшовный бесконечный цикл
+            if (galleryRef.current.scrollLeft >= spacerWidth + setWidth * 2) {
+              galleryRef.current.scrollLeft -= setWidth;
+            }
           }
         }
-      } else if (galleryRef.current) {
-        // Синхронизируем точное значение при ручном скролле
-        exactScrollLeft.current = galleryRef.current.scrollLeft;
       }
       animationId = requestAnimationFrame(step);
     };
@@ -1138,8 +1112,11 @@ export default function App() {
   };
 
   return (
-    // Светлый, небесно-голубой фон с мягким скроллом
-    <div className="min-h-screen text-slate-800 font-sans relative overflow-x-hidden pb-6 w-full">
+    // Светлый, небесно-голубой фон с мягким скроллом, отключено выделение и вызов контекстного меню
+    <div 
+      className="min-h-screen text-slate-800 font-sans relative overflow-x-hidden pb-12 w-full select-none [-webkit-touch-callout:none]"
+      onContextMenu={(e) => e.preventDefault()}
+    >
       
       <style>{`
         @keyframes textReveal {
@@ -1269,9 +1246,9 @@ export default function App() {
     </div>
 
     {/* МОДАЛКА ВИДЖЕТА КРУИЗОВ */}
-    <div className={`fixed inset-0 z-[145] flex items-center justify-center px-4 transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] ${isCruiseWidgetOpen ? 'opacity-100 visible' : 'opacity-0 invisible pointer-events-none'}`}>
+    <div className={`fixed inset-0 z-[145] flex items-center justify-center transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] ${isCruiseWidgetOpen ? 'opacity-100 visible' : 'opacity-0 invisible pointer-events-none'}`}>
       <div className="absolute inset-0 bg-slate-900/80 backdrop-blur-md" onClick={() => setIsCruiseWidgetOpen(false)}></div>
-      <div className={`relative w-full max-w-6xl h-[85dvh] md:h-[90vh] bg-white rounded-[2rem] shadow-2xl p-2 md:p-6 transition-all duration-500 transform flex flex-col overflow-hidden ${isCruiseWidgetOpen ? 'translate-y-0 scale-100' : 'translate-y-10 scale-95'}`}>
+      <div className={`relative w-full max-w-6xl h-[95vh] md:h-[90vh] mx-4 bg-white rounded-[2rem] shadow-2xl p-2 md:p-6 transition-all duration-500 transform flex flex-col overflow-hidden ${isCruiseWidgetOpen ? 'translate-y-0 scale-100' : 'translate-y-10 scale-95'}`}>
         <div className="flex justify-between items-center px-4 pt-4 md:px-2 md:pt-0 mb-4 shrink-0">
           <h3 className="font-serif text-2xl md:text-3xl text-slate-800 font-light tracking-wide">Подбор круиза</h3>
           <button onClick={() => setIsCruiseWidgetOpen(false)} className="p-2 bg-slate-100 rounded-full text-slate-500 hover:text-slate-800 hover:bg-slate-200 transition-colors">
@@ -1323,7 +1300,7 @@ export default function App() {
       
       <div className={`w-full md:w-[500px] h-[100dvh] bg-white/95 backdrop-blur-2xl border-l border-white/50 shadow-2xl relative transform transition-transform duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] flex flex-col ${isAllNewsOpen ? 'translate-x-0' : 'translate-x-full'}`}>
         <div className="flex items-center justify-between p-6 border-b border-slate-100">
-          <h2 className="font-serif text-2xl text-slate-800 font-light tracking-wide">Новости туризма</h2>
+          <h2 className="font-serif text-2xl text-slate-800 font-light tracking-wide">Все новости</h2>
           <button onClick={() => setIsAllNewsOpen(false)} className="p-2 bg-slate-100 rounded-full text-slate-500 hover:text-slate-800 hover:bg-slate-200 transition-colors">
             <X className="w-5 h-5" />
           </button>
@@ -1520,7 +1497,7 @@ export default function App() {
                 <div className="w-12 h-12 md:w-16 md:h-16 rounded-full bg-white/20 border border-white/40 flex items-center justify-center backdrop-blur-md shadow-[0_0_20px_rgba(255,255,255,0.4)] mb-3 md:mb-4 animate-[pulse_3s_ease-in-out_infinite]">
                   <Sparkles className="w-5 h-5 md:w-7 md:h-7 text-sky-600" />
                 </div>
-                <span className="font-serif text-slate-700 text-lg md:text-xl tracking-[0.1em] px-4 text-center">Ваше пожелание</span>
+                <span className="font-serif text-slate-700 text-lg md:text-xl tracking-[0.1em] px-4 text-center">Ваше послание</span>
                 <span className="text-[10px] md:text-xs text-slate-500 tracking-[0.2em] uppercase font-light mt-2">Коснитесь, чтобы открыть</span>
               </div>
 
@@ -1547,7 +1524,7 @@ export default function App() {
         {/* --- 3. БЛОК: 3D-ГЛОБУС & КВИЗ --- */}
         <Reveal>
           <div className="relative mb-14 md:mb-24">
-            <h2 className="text-center font-serif text-[22px] md:text-4xl text-slate-800 font-light tracking-wide mb-8">Куда отправимся <span className="text-sky-500 font-light tracking-wide md:ml-2">в этот раз?</span></h2>
+            <h2 className="text-center font-serif text-2xl md:text-4xl text-slate-800 font-light tracking-wide mb-8">Куда отправимся <br className="md:hidden"/><span className="text-sky-500 font-light tracking-wide md:ml-2">в этот раз?</span></h2>
             
             <div className="relative flex justify-center items-center h-[280px] md:h-[360px]">
               <button 
@@ -1584,7 +1561,7 @@ export default function App() {
         <Reveal>
           <div className="mb-14 md:mb-24">
             <div className="flex justify-between items-end mb-6 md:mb-10">
-              <h2 className="font-serif text-[22px] md:text-4xl text-slate-800 font-light tracking-wide">Авторские <span className="text-sky-500 font-light tracking-wide md:ml-2">маршруты</span></h2>
+              <h2 className="font-serif text-2xl md:text-4xl text-slate-800 font-light tracking-wide">Авторские <br className="md:hidden"/><span className="text-sky-500 font-light tracking-wide md:ml-2">маршруты</span></h2>
             </div>
             
             {toursList.length > 0 && (
@@ -1613,7 +1590,7 @@ export default function App() {
         <Reveal>
           <div className="mb-14 md:mb-24">
             <div className="flex justify-between items-end mb-6 md:mb-10">
-              <h2 className="font-serif text-[22px] md:text-4xl text-slate-800 font-light tracking-wide">Морские и речные <span className="text-cyan-600 font-light tracking-wide md:ml-2">круизы по всему миру</span></h2>
+              <h2 className="font-serif text-2xl md:text-4xl text-slate-800 font-light tracking-wide">Морские и речные<br className="md:hidden"/><span className="text-cyan-600 font-light tracking-wide md:ml-2">круизы по всему миру</span></h2>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
               {DATA.cruises.map(cruise => (
@@ -1640,7 +1617,7 @@ export default function App() {
         <Reveal>
           <div className="mb-14 md:mb-24 -mx-5 md:mx-0">
             <div className="px-5 md:px-0 mb-6 md:mb-10">
-              <h2 className="font-serif text-[22px] md:text-4xl text-slate-800 font-light tracking-wide">Специальные <span className="text-sky-500 font-light tracking-wide md:ml-2">предложения</span></h2>
+              <h2 className="font-serif text-2xl md:text-4xl text-slate-800 font-light tracking-wide">Специальные <br className="md:hidden"/><span className="text-sky-500 font-light tracking-wide md:ml-2">предложения</span></h2>
             </div>
             
             <div className="flex overflow-x-auto gap-5 px-5 md:px-0 pb-8 pt-2 snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
@@ -1704,10 +1681,10 @@ export default function App() {
             <div className="flex justify-between items-end mb-6 md:mb-10">
               <div className="flex items-center gap-3">
                 <Newspaper className="w-6 h-6 md:w-8 md:h-8 text-sky-500" />
-                <h2 className="font-serif text-[22px] md:text-4xl text-slate-800 font-light tracking-wide">Новости <span className="text-sky-500 font-light tracking-wide">туризма</span></h2>
+                <h2 className="font-serif text-2xl md:text-4xl text-slate-800 font-light tracking-wide">Новости <span className="text-sky-500 font-light tracking-wide">туризма</span></h2>
               </div>
               <button onClick={() => setIsAllNewsOpen(true)} className="flex items-center gap-1 text-sky-600 hover:text-sky-700 transition-colors group">
-                <span className="text-[10px] md:text-sm uppercase tracking-widest font-medium border-b border-sky-200 group-hover:border-sky-400 pb-0.5">Новости туризма</span>
+                <span className="text-[10px] md:text-sm uppercase tracking-widest font-medium border-b border-sky-200 group-hover:border-sky-400 pb-0.5">Все новости</span>
                 <ChevronRight className="w-3 h-3 md:w-4 md:h-4 group-hover:translate-x-1 transition-transform" />
               </button>
             </div>
@@ -1746,7 +1723,7 @@ export default function App() {
         <Reveal>
           <div className="mb-14 md:mb-24 -mx-5 md:mx-0">
             <div className="px-5 md:px-0 mb-6 md:mb-10">
-              <h2 className="font-serif text-[22px] md:text-4xl text-slate-800 font-light tracking-wide">Атмосфера <span className="text-sky-500 font-light tracking-wide md:ml-2">наших путешествий</span></h2>
+              <h2 className="font-serif text-2xl md:text-4xl text-slate-800 font-light tracking-wide">Атмосфера <br className="md:hidden"/><span className="text-sky-500 font-light tracking-wide md:ml-2">наших путешествий</span></h2>
             </div>
             
             <div className="w-full relative z-10 group/gallery">
@@ -1758,10 +1735,8 @@ export default function App() {
                 onMouseUp={handleGalleryMouseUp}
                 onMouseMove={handleGalleryMouseMove}
                 onTouchStart={handleGalleryTouchStart}
-                onTouchMove={handleGalleryTouchMove}
                 onTouchEnd={handleGalleryTouchEnd}
-                onTouchCancel={handleGalleryTouchEnd}
-                onMouseEnter={() => { if (typeof window !== 'undefined' && window.matchMedia('(hover: hover)').matches) setIsGalleryHovered(true); }}
+                onMouseEnter={() => setIsGalleryHovered(true)}
               >
                 {/* Спейсер для правильного отступа на мобильных */}
                 <div className="w-5 md:w-0 shrink-0 pointer-events-none"></div>
@@ -1801,11 +1776,11 @@ export default function App() {
               <div className="relative py-4 md:py-8 flex flex-col">
                 
                 {/* Монограмма на заднем фоне (Первая буква имени) */}
-                <div className="absolute inset-0 overflow-hidden pointer-events-none select-none z-0">
+                <div className="absolute top-1/2 left-[75%] md:left-[85%] -translate-x-1/2 -translate-y-1/2 pointer-events-none select-none z-0">
                   {reviewsList.map((review, i) => (
                     <div 
                       key={`mono-${review.id}`}
-                      className={`absolute top-1/2 left-[75%] md:left-[85%] -translate-x-1/2 -translate-y-1/2 transition-all duration-1000 ease-in-out ${i === activeReview ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}
+                      className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 transition-all duration-1000 ease-in-out ${i === activeReview ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}
                     >
                       <span className="font-serif text-[280px] md:text-[400px] leading-none text-sky-600/10 font-light">
                         {review.name.charAt(0)}
@@ -1919,7 +1894,7 @@ export default function App() {
 
       {/* --- ФУТЕР --- */}
         <Reveal>
-          <div className="w-full pb-8">
+          <div className="mb-8 w-full">
             <div className="flex flex-col items-center px-5 md:px-0">
               <div className="flex items-center justify-center gap-3 mb-6 md:mb-8 w-full max-w-[200px] md:max-w-[400px]">
                 <div className="h-[1px] flex-1 bg-sky-200/50"></div>
@@ -1958,16 +1933,15 @@ export default function App() {
 
       </div>
 
-      {/* --- СОГЛАСИЕ НА COOKIE (Элегантная светлая версия) --- */}
-      {/* Исправлен отступ для мобильных: bottom-10 вместо bottom-4, чтобы не пряталось за панелью Safari */}
-      <div className={`fixed bottom-10 md:bottom-8 left-1/2 -translate-x-1/2 z-[200] transition-all duration-1000 ease-[cubic-bezier(0.32,0.72,0,1)] w-[calc(100vw-2rem)] md:w-auto ${showCookie ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-10 scale-95 pointer-events-none'}`}>
-        <div className="bg-white/90 backdrop-blur-md border border-white/60 rounded-[1.5rem] md:rounded-full px-5 py-4 md:px-6 md:py-3 flex flex-col md:flex-row items-center justify-between gap-4 md:gap-6 shadow-[0_10px_40px_rgba(14,165,233,0.15)] w-full max-w-3xl mx-auto">
-          <p className="text-slate-500 font-light tracking-wide text-[10px] md:text-[11px] leading-relaxed text-center md:text-left flex-1">
-            Мы используем файлы cookie, чтобы обеспечить вам наилучший опыт на нашем сайте. Продолжая использовать сайт, вы соглашаетесь с нашей Политикой конфиденциальности.
+      {/* --- СОГЛАСИЕ НА COOKIE --- */}
+      <div className={`fixed bottom-4 md:bottom-8 left-1/2 -translate-x-1/2 md:translate-x-0 md:left-8 z-[200] transition-all duration-1000 ease-[cubic-bezier(0.32,0.72,0,1)] ${showCookie ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10 pointer-events-none'}`}>
+        <div className="bg-slate-900/90 backdrop-blur-xl border border-slate-700/50 rounded-2xl p-4 md:p-5 flex flex-col md:flex-row items-center gap-4 md:gap-5 shadow-[0_20px_50px_rgba(0,0,0,0.3)] w-[calc(100vw-2rem)] max-w-[320px] md:max-w-md">
+          <p className="text-slate-300 font-light tracking-wide text-[10px] md:text-xs leading-relaxed text-center md:text-left flex-1">
+            Мы используем файлы cookie, чтобы обеспечить вам максимальный комфорт и персонализировать контент.
           </p>
           <button 
             onClick={acceptCookies}
-            className="w-full md:w-auto px-6 py-2.5 md:py-1.5 bg-sky-50 text-sky-600 rounded-xl md:rounded-full text-[10px] tracking-widest uppercase font-medium hover:bg-sky-100 hover:text-sky-700 transition-colors shrink-0"
+            className="w-full md:w-auto px-5 py-2.5 bg-white text-slate-900 rounded-xl text-[10px] md:text-xs tracking-widest uppercase font-medium hover:bg-sky-50 transition-colors border border-transparent shrink-0"
           >
             Принять
           </button>
