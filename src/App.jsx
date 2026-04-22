@@ -123,6 +123,7 @@ const DATA = {
   
   // --- СЕКРЕТНЫЙ КЛУБ ---
   secretPin: "7777", // Ваш PIN-код
+  secretClubLink: "https://t.me/+GwVuFQ2fzB9lMGE6", // Ссылка на закрытую группу
   secretTour: {
     title: "Private Island Resort",
     desc: "Полная приватность, личный батлер и перелет на гидроплане. Скрыто от посторонних глаз.",
@@ -294,9 +295,9 @@ const SecretClubModal = ({ isOpen, onClose }) => {
                 Добро пожаловать в закрытую коллекцию и VIP-сообщество. Здесь начинается самое интересное.
               </p>
 
-              {/* Ссылка на закрытую группу (Использует Telegram из DATA.socials) */}
-              <a href={DATA.socials.tg} target="_blank" rel="noreferrer" className="relative inline-flex items-center justify-center gap-3 w-full bg-white text-slate-900 font-medium tracking-widest uppercase text-xs md:text-sm py-5 rounded-2xl hover:bg-sky-50 transition-colors overflow-hidden group/btn shadow-[0_0_20px_rgba(255,255,255,0.1)]">
-                <span className="relative z-10 flex items-center gap-2">Перейти в клуб <ArrowUpRight className="w-4 h-4" /></span>
+              {/* Ссылка на закрытую группу */}
+              <a href={DATA.secretClubLink} target="_blank" rel="noreferrer" className="relative inline-flex items-center justify-center gap-2 md:gap-3 w-full bg-white text-slate-900 font-medium tracking-widest uppercase text-[10px] md:text-sm py-4 md:py-5 rounded-2xl hover:bg-sky-50 transition-colors overflow-hidden group/btn shadow-[0_0_20px_rgba(255,255,255,0.1)]">
+                <span className="relative z-10 flex items-center gap-1.5 md:gap-2 whitespace-nowrap">Перейти в клуб <ArrowUpRight className="w-3.5 h-3.5 md:w-4 md:h-4" /></span>
               </a>
             </div>
           </div>
@@ -1587,11 +1588,11 @@ export default function App() {
           <button onClick={() => setIsSecretOpen(true)} className="relative w-full overflow-hidden rounded-2xl p-[1px] group transition-all duration-700 hover:shadow-[0_10px_40px_rgba(14,165,233,0.15)] hover:-translate-y-1">
             <div className="absolute inset-0 bg-gradient-to-r from-sky-400/0 via-sky-400/50 to-sky-400/0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 -translate-x-full group-hover:animate-[marquee_3s_linear_infinite]"></div>
             
-            <div className="relative w-full bg-gradient-to-b from-slate-800 to-slate-950 px-8 py-5 md:py-6 rounded-2xl flex items-center justify-center gap-4 transition-all overflow-hidden border border-slate-700/50 group-hover:border-slate-600">
+            <div className="relative w-full bg-gradient-to-b from-slate-800 to-slate-950 px-4 py-3.5 md:px-8 md:py-6 rounded-2xl flex items-center justify-center gap-2.5 md:gap-4 transition-all overflow-hidden border border-slate-700/50 group-hover:border-slate-600">
               <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(56,189,248,0.15)_0%,transparent_70%)] opacity-50 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"></div>
               
-              <Lock className="w-5 h-5 md:w-6 md:h-6 text-sky-400/80 group-hover:text-sky-300 group-hover:scale-110 transition-all z-10" />
-              <span className="font-serif font-light tracking-[0.15em] text-lg md:text-xl text-white/90 group-hover:text-white transition-colors z-10 uppercase">
+              <Lock className="w-4 h-4 md:w-6 md:h-6 text-sky-400/80 group-hover:text-sky-300 group-hover:scale-110 transition-all z-10 shrink-0" />
+              <span className="font-serif font-light tracking-[0.08em] md:tracking-[0.15em] text-[13px] sm:text-base md:text-xl text-white/90 group-hover:text-white transition-colors z-10 uppercase whitespace-nowrap">
                 Закрытая коллекция
               </span>
             </div>
