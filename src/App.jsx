@@ -818,8 +818,8 @@ export default function App() {
     if (Math.abs(walk) > 10) galleryDragged.current = true;
     galleryRef.current.scrollLeft = galleryScrollLeft.current - walk;
   };
-  const handleGalleryTouchStart = () => setIsGalleryDragging(true);
-  const handleGalleryTouchEnd = () => setIsGalleryDragging(false);
+  const handleGalleryTouchStart = () => { setIsGalleryDragging(true); setIsGalleryHovered(false); };
+  const handleGalleryTouchEnd = () => { setIsGalleryDragging(false); setIsGalleryHovered(false); };
 
   // Авто-скролл галереи (Сверхплавный алгоритм Delta Time)
   useEffect(() => {
@@ -1117,11 +1117,14 @@ export default function App() {
   return (
     // Светлый, небесно-голубой фон с мягким скроллом, отключено выделение и вызов контекстного меню
     <div 
-      className="min-h-screen text-slate-800 font-sans relative overflow-x-hidden pb-12 w-full select-none [-webkit-touch-callout:none]"
+      className="min-h-screen text-slate-800 font-sans relative overflow-x-hidden pb-6 w-full select-none [-webkit-touch-callout:none]"
       onContextMenu={(e) => e.preventDefault()}
     >
       
       <style>{`
+        html, body {
+          overscroll-behavior: none;
+        }
         @keyframes textReveal {
           0% { opacity: 0; transform: translateY(15px); }
           100% { opacity: 1; transform: translateY(0); }
@@ -1249,9 +1252,9 @@ export default function App() {
     </div>
 
     {/* МОДАЛКА ВИДЖЕТА КРУИЗОВ */}
-    <div className={`fixed inset-0 z-[145] flex items-center justify-center transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] ${isCruiseWidgetOpen ? 'opacity-100 visible' : 'opacity-0 invisible pointer-events-none'}`}>
+    <div className={`fixed inset-0 z-[145] flex items-center justify-center px-4 transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] ${isCruiseWidgetOpen ? 'opacity-100 visible' : 'opacity-0 invisible pointer-events-none'}`}>
       <div className="absolute inset-0 bg-slate-900/80 backdrop-blur-md" onClick={() => setIsCruiseWidgetOpen(false)}></div>
-      <div className={`relative w-full max-w-6xl h-[95vh] md:h-[90vh] mx-4 bg-white rounded-[2rem] shadow-2xl p-2 md:p-6 transition-all duration-500 transform flex flex-col overflow-hidden ${isCruiseWidgetOpen ? 'translate-y-0 scale-100' : 'translate-y-10 scale-95'}`}>
+      <div className={`relative w-full max-w-6xl h-[85dvh] md:h-[90vh] bg-white rounded-[2rem] shadow-2xl p-2 md:p-6 transition-all duration-500 transform flex flex-col overflow-hidden ${isCruiseWidgetOpen ? 'translate-y-0 scale-100' : 'translate-y-10 scale-95'}`}>
         <div className="flex justify-between items-center px-4 pt-4 md:px-2 md:pt-0 mb-4 shrink-0">
           <h3 className="font-serif text-2xl md:text-3xl text-slate-800 font-light tracking-wide">Подбор круиза</h3>
           <button onClick={() => setIsCruiseWidgetOpen(false)} className="p-2 bg-slate-100 rounded-full text-slate-500 hover:text-slate-800 hover:bg-slate-200 transition-colors">
@@ -1739,7 +1742,8 @@ export default function App() {
                 onMouseMove={handleGalleryMouseMove}
                 onTouchStart={handleGalleryTouchStart}
                 onTouchEnd={handleGalleryTouchEnd}
-                onMouseEnter={() => setIsGalleryHovered(true)}
+                onTouchCancel={handleGalleryTouchEnd}
+                onMouseEnter={() => { if (typeof window !== 'undefined' && window.matchMedia('(hover: hover)').matches) setIsGalleryHovered(true); }}
               >
                 {/* Спейсер для правильного отступа на мобильных */}
                 <div className="w-5 md:w-0 shrink-0 pointer-events-none"></div>
@@ -1779,11 +1783,11 @@ export default function App() {
               <div className="relative py-4 md:py-8 flex flex-col">
                 
                 {/* Монограмма на заднем фоне (Первая буква имени) */}
-                <div className="absolute top-1/2 left-[75%] md:left-[85%] -translate-x-1/2 -translate-y-1/2 pointer-events-none select-none z-0">
+                <div className="absolute inset-0 overflow-hidden pointer-events-none select-none z-0">
                   {reviewsList.map((review, i) => (
                     <div 
                       key={`mono-${review.id}`}
-                      className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 transition-all duration-1000 ease-in-out ${i === activeReview ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}
+                      className={`absolute top-1/2 left-[75%] md:left-[85%] -translate-x-1/2 -translate-y-1/2 transition-all duration-1000 ease-in-out ${i === activeReview ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}
                     >
                       <span className="font-serif text-[280px] md:text-[400px] leading-none text-sky-600/10 font-light">
                         {review.name.charAt(0)}
@@ -1897,7 +1901,7 @@ export default function App() {
 
       {/* --- ФУТЕР --- */}
         <Reveal>
-          <div className="mb-8 w-full">
+          <div className="w-full pb-8">
             <div className="flex flex-col items-center px-5 md:px-0">
               <div className="flex items-center justify-center gap-3 mb-6 md:mb-8 w-full max-w-[200px] md:max-w-[400px]">
                 <div className="h-[1px] flex-1 bg-sky-200/50"></div>
