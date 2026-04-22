@@ -790,6 +790,7 @@ export default function App() {
 
   // --- ДРАГ И АВТО-СКРОЛЛ ДЛЯ ГАЛЕРЕИ ---
   const galleryRef = React.useRef(null);
+  const exactScrollLeft = React.useRef(0);
   const [isGalleryDragging, setIsGalleryDragging] = useState(false);
   const [isGalleryHovered, setIsGalleryHovered] = useState(false);
   const galleryStartX = React.useRef(0);
@@ -818,14 +819,28 @@ export default function App() {
     if (Math.abs(walk) > 10) galleryDragged.current = true;
     galleryRef.current.scrollLeft = galleryScrollLeft.current - walk;
   };
-  const handleGalleryTouchStart = () => { setIsGalleryDragging(true); setIsGalleryHovered(false); };
-  const handleGalleryTouchEnd = () => { setIsGalleryDragging(false); setIsGalleryHovered(false); };
+  const handleGalleryTouchStart = (e) => { 
+    setIsGalleryDragging(true); 
+    setIsGalleryHovered(false); 
+    galleryDragged.current = false;
+    if (e.touches && e.touches[0]) galleryStartX.current = e.touches[0].clientX;
+  };
+  const handleGalleryTouchMove = (e) => {
+    if (e.touches && e.touches[0] && Math.abs(e.touches[0].clientX - galleryStartX.current) > 10) {
+      galleryDragged.current = true;
+    }
+  };
+  const handleGalleryTouchEnd = () => { 
+    setIsGalleryDragging(false); 
+    setIsGalleryHovered(false); 
+    setTimeout(() => { galleryDragged.current = false; }, 50);
+  };
 
   // Авто-скролл галереи (Сверхплавный алгоритм Delta Time)
   useEffect(() => {
     let animationId;
     let lastTime = null;
-    const speed = 35; // Пикселей в секунду
+    const speed = 40; // Пикселей в секунду
     
     const step = (time) => {
       if (!lastTime) lastTime = time;
@@ -833,19 +848,27 @@ export default function App() {
       lastTime = time;
 
       if (galleryRef.current && !isGalleryHovered && !isGalleryDragging && !selectedImage && galleryList.length > 0) {
-        // Движение рассчитывается точно по времени кадра (dt), что исключает любые микродергания
+        if (exactScrollLeft.current === 0 && galleryRef.current.scrollLeft > 0) {
+          exactScrollLeft.current = galleryRef.current.scrollLeft;
+        }
+
         const move = (dt * speed) / 1000;
-        galleryRef.current.scrollLeft += move;
+        exactScrollLeft.current += move;
+        galleryRef.current.scrollLeft = exactScrollLeft.current;
         
         if (galleryRef.current.children.length > 2) {
           const spacerWidth = galleryRef.current.children[0].offsetWidth;
           const setWidth = galleryRef.current.children[1].offsetWidth;
           
           // Бесшовный бесконечный цикл
-          if (galleryRef.current.scrollLeft >= spacerWidth + setWidth * 2) {
-            galleryRef.current.scrollLeft -= setWidth;
+          if (setWidth > 0 && exactScrollLeft.current >= spacerWidth + setWidth * 2) {
+            exactScrollLeft.current -= setWidth;
+            galleryRef.current.scrollLeft = exactScrollLeft.current;
           }
         }
+      } else if (galleryRef.current) {
+        // Синхронизируем точное значение при ручном скролле
+        exactScrollLeft.current = galleryRef.current.scrollLeft;
       }
       animationId = requestAnimationFrame(step);
     };
@@ -1115,16 +1138,10 @@ export default function App() {
   };
 
   return (
-    // Светлый, небесно-голубой фон с мягким скроллом, отключено выделение и вызов контекстного меню
-    <div 
-      className="min-h-screen text-slate-800 font-sans relative overflow-x-hidden pb-6 w-full select-none [-webkit-touch-callout:none]"
-      onContextMenu={(e) => e.preventDefault()}
-    >
+    // Светлый, небесно-голубой фон с мягким скроллом
+    <div className="min-h-screen text-slate-800 font-sans relative overflow-x-hidden pb-6 w-full">
       
       <style>{`
-        html, body {
-          overscroll-behavior: none;
-        }
         @keyframes textReveal {
           0% { opacity: 0; transform: translateY(15px); }
           100% { opacity: 1; transform: translateY(0); }
@@ -1741,6 +1758,7 @@ export default function App() {
                 onMouseUp={handleGalleryMouseUp}
                 onMouseMove={handleGalleryMouseMove}
                 onTouchStart={handleGalleryTouchStart}
+                onTouchMove={handleGalleryTouchMove}
                 onTouchEnd={handleGalleryTouchEnd}
                 onTouchCancel={handleGalleryTouchEnd}
                 onMouseEnter={() => { if (typeof window !== 'undefined' && window.matchMedia('(hover: hover)').matches) setIsGalleryHovered(true); }}
