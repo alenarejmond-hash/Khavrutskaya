@@ -1303,7 +1303,7 @@ export default function App() {
       
       <div className={`w-full md:w-[500px] h-[100dvh] bg-white/95 backdrop-blur-2xl border-l border-white/50 shadow-2xl relative transform transition-transform duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] flex flex-col ${isAllNewsOpen ? 'translate-x-0' : 'translate-x-full'}`}>
         <div className="flex items-center justify-between p-6 border-b border-slate-100">
-          <h2 className="font-serif text-2xl text-slate-800 font-light tracking-wide">Все новости</h2>
+          <h2 className="font-serif text-2xl text-slate-800 font-light tracking-wide">Новости туризма</h2>
           <button onClick={() => setIsAllNewsOpen(false)} className="p-2 bg-slate-100 rounded-full text-slate-500 hover:text-slate-800 hover:bg-slate-200 transition-colors">
             <X className="w-5 h-5" />
           </button>
@@ -1500,7 +1500,7 @@ export default function App() {
                 <div className="w-12 h-12 md:w-16 md:h-16 rounded-full bg-white/20 border border-white/40 flex items-center justify-center backdrop-blur-md shadow-[0_0_20px_rgba(255,255,255,0.4)] mb-3 md:mb-4 animate-[pulse_3s_ease-in-out_infinite]">
                   <Sparkles className="w-5 h-5 md:w-7 md:h-7 text-sky-600" />
                 </div>
-                <span className="font-serif text-slate-700 text-lg md:text-xl tracking-[0.1em] px-4 text-center">Ваше послание</span>
+                <span className="font-serif text-slate-700 text-lg md:text-xl tracking-[0.1em] px-4 text-center">Ваше пожелание</span>
                 <span className="text-[10px] md:text-xs text-slate-500 tracking-[0.2em] uppercase font-light mt-2">Коснитесь, чтобы открыть</span>
               </div>
 
@@ -1527,7 +1527,7 @@ export default function App() {
         {/* --- 3. БЛОК: 3D-ГЛОБУС & КВИЗ --- */}
         <Reveal>
           <div className="relative mb-14 md:mb-24">
-            <h2 className="text-center font-serif text-2xl md:text-4xl text-slate-800 font-light tracking-wide mb-8">Куда отправимся <br className="md:hidden"/><span className="text-sky-500 font-light tracking-wide md:ml-2">в этот раз?</span></h2>
+            <h2 className="text-center font-serif text-[22px] md:text-4xl text-slate-800 font-light tracking-wide mb-8">Куда отправимся <span className="text-sky-500 font-light tracking-wide md:ml-2">в этот раз?</span></h2>
             
             <div className="relative flex justify-center items-center h-[280px] md:h-[360px]">
               <button 
@@ -1564,7 +1564,7 @@ export default function App() {
         <Reveal>
           <div className="mb-14 md:mb-24">
             <div className="flex justify-between items-end mb-6 md:mb-10">
-              <h2 className="font-serif text-2xl md:text-4xl text-slate-800 font-light tracking-wide">Авторские <br className="md:hidden"/><span className="text-sky-500 font-light tracking-wide md:ml-2">маршруты</span></h2>
+              <h2 className="font-serif text-[22px] md:text-4xl text-slate-800 font-light tracking-wide">Авторские <span className="text-sky-500 font-light tracking-wide md:ml-2">маршруты</span></h2>
             </div>
             
             {toursList.length > 0 && (
@@ -1593,7 +1593,7 @@ export default function App() {
         <Reveal>
           <div className="mb-14 md:mb-24">
             <div className="flex justify-between items-end mb-6 md:mb-10">
-              <h2 className="font-serif text-2xl md:text-4xl text-slate-800 font-light tracking-wide">Морские и речные<br className="md:hidden"/><span className="text-cyan-600 font-light tracking-wide md:ml-2">круизы по всему миру</span></h2>
+              <h2 className="font-serif text-[22px] md:text-4xl text-slate-800 font-light tracking-wide">Морские и речные <span className="text-cyan-600 font-light tracking-wide md:ml-2">круизы по всему миру</span></h2>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
               {DATA.cruises.map(cruise => (
@@ -1620,7 +1620,7 @@ export default function App() {
         <Reveal>
           <div className="mb-14 md:mb-24 -mx-5 md:mx-0">
             <div className="px-5 md:px-0 mb-6 md:mb-10">
-              <h2 className="font-serif text-2xl md:text-4xl text-slate-800 font-light tracking-wide">Специальные <br className="md:hidden"/><span className="text-sky-500 font-light tracking-wide md:ml-2">предложения</span></h2>
+              <h2 className="font-serif text-[22px] md:text-4xl text-slate-800 font-light tracking-wide">Специальные <span className="text-sky-500 font-light tracking-wide md:ml-2">предложения</span></h2>
             </div>
             
             <div className="flex overflow-x-auto gap-5 px-5 md:px-0 pb-8 pt-2 snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
@@ -1684,10 +1684,10 @@ export default function App() {
             <div className="flex justify-between items-end mb-6 md:mb-10">
               <div className="flex items-center gap-3">
                 <Newspaper className="w-6 h-6 md:w-8 md:h-8 text-sky-500" />
-                <h2 className="font-serif text-2xl md:text-4xl text-slate-800 font-light tracking-wide">Новости <span className="text-sky-500 font-light tracking-wide">туризма</span></h2>
+                <h2 className="font-serif text-[22px] md:text-4xl text-slate-800 font-light tracking-wide">Новости <span className="text-sky-500 font-light tracking-wide">туризма</span></h2>
               </div>
               <button onClick={() => setIsAllNewsOpen(true)} className="flex items-center gap-1 text-sky-600 hover:text-sky-700 transition-colors group">
-                <span className="text-[10px] md:text-sm uppercase tracking-widest font-medium border-b border-sky-200 group-hover:border-sky-400 pb-0.5">Все новости</span>
+                <span className="text-[10px] md:text-sm uppercase tracking-widest font-medium border-b border-sky-200 group-hover:border-sky-400 pb-0.5">Новости туризма</span>
                 <ChevronRight className="w-3 h-3 md:w-4 md:h-4 group-hover:translate-x-1 transition-transform" />
               </button>
             </div>
@@ -1726,7 +1726,7 @@ export default function App() {
         <Reveal>
           <div className="mb-14 md:mb-24 -mx-5 md:mx-0">
             <div className="px-5 md:px-0 mb-6 md:mb-10">
-              <h2 className="font-serif text-2xl md:text-4xl text-slate-800 font-light tracking-wide">Атмосфера <br className="md:hidden"/><span className="text-sky-500 font-light tracking-wide md:ml-2">наших путешествий</span></h2>
+              <h2 className="font-serif text-[22px] md:text-4xl text-slate-800 font-light tracking-wide">Атмосфера <span className="text-sky-500 font-light tracking-wide md:ml-2">наших путешествий</span></h2>
             </div>
             
             <div className="w-full relative z-10 group/gallery">
@@ -1937,7 +1937,8 @@ export default function App() {
       </div>
 
       {/* --- СОГЛАСИЕ НА COOKIE (Элегантная светлая версия) --- */}
-      <div className={`fixed bottom-4 md:bottom-8 left-1/2 -translate-x-1/2 z-[200] transition-all duration-1000 ease-[cubic-bezier(0.32,0.72,0,1)] w-[calc(100vw-2rem)] md:w-auto ${showCookie ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-10 scale-95 pointer-events-none'}`}>
+      {/* Исправлен отступ для мобильных: bottom-10 вместо bottom-4, чтобы не пряталось за панелью Safari */}
+      <div className={`fixed bottom-10 md:bottom-8 left-1/2 -translate-x-1/2 z-[200] transition-all duration-1000 ease-[cubic-bezier(0.32,0.72,0,1)] w-[calc(100vw-2rem)] md:w-auto ${showCookie ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-10 scale-95 pointer-events-none'}`}>
         <div className="bg-white/90 backdrop-blur-md border border-white/60 rounded-[1.5rem] md:rounded-full px-5 py-4 md:px-6 md:py-3 flex flex-col md:flex-row items-center justify-between gap-4 md:gap-6 shadow-[0_10px_40px_rgba(14,165,233,0.15)] w-full max-w-3xl mx-auto">
           <p className="text-slate-500 font-light tracking-wide text-[10px] md:text-[11px] leading-relaxed text-center md:text-left flex-1">
             Мы используем файлы cookie, чтобы обеспечить вам наилучший опыт на нашем сайте. Продолжая использовать сайт, вы соглашаетесь с нашей Политикой конфиденциальности.
