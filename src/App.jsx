@@ -821,26 +821,29 @@ export default function App() {
   const handleGalleryTouchStart = () => setIsGalleryDragging(true);
   const handleGalleryTouchEnd = () => setIsGalleryDragging(false);
 
-  // Авто-скролл галереи
+  // Авто-скролл галереи (Сверхплавный алгоритм Delta Time)
   useEffect(() => {
     let animationId;
-    let accumulator = 0; // Накопитель для сверхплавной скорости на 120hz экранах
-    const step = () => {
+    let lastTime = null;
+    const speed = 35; // Пикселей в секунду
+    
+    const step = (time) => {
+      if (!lastTime) lastTime = time;
+      const dt = time - lastTime;
+      lastTime = time;
+
       if (galleryRef.current && !isGalleryHovered && !isGalleryDragging && !selectedImage && galleryList.length > 0) {
-        accumulator += 0.3; // Плавная, комфортная скорость
+        // Движение рассчитывается точно по времени кадра (dt), что исключает любые микродергания
+        const move = (dt * speed) / 1000;
+        galleryRef.current.scrollLeft += move;
         
-        if (accumulator >= 1) {
-          galleryRef.current.scrollLeft += 1;
-          accumulator -= 1;
+        if (galleryRef.current.children.length > 2) {
+          const spacerWidth = galleryRef.current.children[0].offsetWidth;
+          const setWidth = galleryRef.current.children[1].offsetWidth;
           
-          if (galleryRef.current.children.length > 2) {
-            const spacerWidth = galleryRef.current.children[0].offsetWidth;
-            const setWidth = galleryRef.current.children[1].offsetWidth;
-            
-            // Бесшовный бесконечный цикл
-            if (galleryRef.current.scrollLeft >= spacerWidth + setWidth * 2) {
-              galleryRef.current.scrollLeft -= setWidth;
-            }
+          // Бесшовный бесконечный цикл
+          if (galleryRef.current.scrollLeft >= spacerWidth + setWidth * 2) {
+            galleryRef.current.scrollLeft -= setWidth;
           }
         }
       }
@@ -1933,15 +1936,15 @@ export default function App() {
 
       </div>
 
-      {/* --- СОГЛАСИЕ НА COOKIE --- */}
-      <div className={`fixed bottom-4 md:bottom-8 left-1/2 -translate-x-1/2 md:translate-x-0 md:left-8 z-[200] transition-all duration-1000 ease-[cubic-bezier(0.32,0.72,0,1)] ${showCookie ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10 pointer-events-none'}`}>
-        <div className="bg-slate-900/90 backdrop-blur-xl border border-slate-700/50 rounded-2xl p-4 md:p-5 flex flex-col md:flex-row items-center gap-4 md:gap-5 shadow-[0_20px_50px_rgba(0,0,0,0.3)] w-[calc(100vw-2rem)] max-w-[320px] md:max-w-md">
-          <p className="text-slate-300 font-light tracking-wide text-[10px] md:text-xs leading-relaxed text-center md:text-left flex-1">
-            Мы используем файлы cookie, чтобы обеспечить вам максимальный комфорт и персонализировать контент.
+      {/* --- СОГЛАСИЕ НА COOKIE (Элегантная светлая версия) --- */}
+      <div className={`fixed bottom-4 md:bottom-8 left-1/2 -translate-x-1/2 z-[200] transition-all duration-1000 ease-[cubic-bezier(0.32,0.72,0,1)] w-[calc(100vw-2rem)] md:w-auto ${showCookie ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-10 scale-95 pointer-events-none'}`}>
+        <div className="bg-white/90 backdrop-blur-md border border-white/60 rounded-[1.5rem] md:rounded-full px-5 py-4 md:px-6 md:py-3 flex flex-col md:flex-row items-center justify-between gap-4 md:gap-6 shadow-[0_10px_40px_rgba(14,165,233,0.15)] w-full max-w-3xl mx-auto">
+          <p className="text-slate-500 font-light tracking-wide text-[10px] md:text-[11px] leading-relaxed text-center md:text-left flex-1">
+            Мы используем файлы cookie, чтобы обеспечить вам наилучший опыт на нашем сайте. Продолжая использовать сайт, вы соглашаетесь с нашей Политикой конфиденциальности.
           </p>
           <button 
             onClick={acceptCookies}
-            className="w-full md:w-auto px-5 py-2.5 bg-white text-slate-900 rounded-xl text-[10px] md:text-xs tracking-widest uppercase font-medium hover:bg-sky-50 transition-colors border border-transparent shrink-0"
+            className="w-full md:w-auto px-6 py-2.5 md:py-1.5 bg-sky-50 text-sky-600 rounded-xl md:rounded-full text-[10px] tracking-widest uppercase font-medium hover:bg-sky-100 hover:text-sky-700 transition-colors shrink-0"
           >
             Принять
           </button>
