@@ -457,78 +457,82 @@ const LeaveReviewModal = ({ isOpen, onClose }) => {
   return (
     <div className={`fixed inset-0 z-[150] flex items-center justify-center transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] ${isOpen ? 'opacity-100 visible' : 'opacity-0 invisible pointer-events-none'}`}>
       <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-md" onClick={onClose}></div>
-      <div className={`relative w-full max-w-lg mx-4 bg-white border border-white rounded-[2rem] shadow-2xl p-6 md:p-8 transition-all duration-500 transform ${isOpen ? 'translate-y-0 scale-100' : 'translate-y-10 scale-95'}`}>
+      <div className={`relative w-full max-w-lg mx-4 bg-white/95 backdrop-blur-xl border border-white/60 rounded-[2.5rem] shadow-[0_20px_60px_rgba(0,0,0,0.15)] p-8 md:p-10 transition-all duration-500 transform ${isOpen ? 'translate-y-0 scale-100' : 'translate-y-10 scale-95'}`}>
         
-        <div className="flex justify-between items-center mb-6">
-          <span className="text-[10px] md:text-xs text-sky-600 uppercase tracking-widest font-medium">
-            {step === 1 ? 'Новый отзыв' : 'Готово'}
-          </span>
-          <button onClick={onClose} className="p-2 bg-slate-100 rounded-full text-slate-500 hover:text-slate-800 hover:bg-slate-200 transition-colors">
-            <X className="w-4 h-4 md:w-5 md:h-5" />
-          </button>
-        </div>
+        <button onClick={onClose} className="absolute top-6 right-6 p-2 bg-white rounded-full text-slate-400 hover:text-slate-800 shadow-sm border border-slate-100 hover:border-slate-200 transition-all z-10">
+          <X className="w-5 h-5" />
+        </button>
 
         {step === 1 ? (
-          <div className="animate-in fade-in zoom-in-95 duration-300">
-            <h3 className="font-serif text-2xl md:text-3xl font-light tracking-wide text-slate-800 mb-2">Ваши впечатления</h3>
-            <p className="text-sm md:text-base text-slate-500 font-light tracking-wide mb-6">Поделитесь эмоциями от вашего путешествия</p>
+          <div className="animate-in fade-in zoom-in-95 duration-300 relative z-0">
+            <span className="text-[10px] md:text-xs text-sky-500 uppercase tracking-[0.2em] font-medium mb-3 block">Новый отзыв</span>
+            <h3 className="font-serif text-3xl md:text-4xl font-light tracking-wide text-slate-800 mb-2">Ваши впечатления</h3>
+            <div className="w-12 h-[1px] bg-sky-300/60 mb-6"></div>
+            <p className="text-sm md:text-base text-slate-500 font-light tracking-wide mb-8">Поделитесь эмоциями от вашего путешествия</p>
             
-            <div className="space-y-4">
+            <div className="space-y-6">
               {/* Оценка */}
               <div className="flex items-center gap-2 mb-2">
                 {[1, 2, 3, 4, 5].map((star) => (
                   <button key={star} onClick={() => setRating(star)} className="focus:outline-none transition-transform hover:scale-110">
-                    <Star className={`w-8 h-8 md:w-10 md:h-10 ${star <= rating ? 'text-amber-300 fill-amber-300' : 'text-slate-200'}`} />
+                    <Star className={`w-8 h-8 md:w-10 md:h-10 ${star <= rating ? 'text-amber-300 fill-amber-300 drop-shadow-sm' : 'text-slate-200'}`} />
                   </button>
                 ))}
               </div>
 
-              <input 
-                type="text" 
-                placeholder="Ваше имя" 
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                className="w-full bg-slate-50 border border-slate-100 rounded-2xl px-5 py-3 md:py-4 text-slate-800 font-light tracking-wide focus:outline-none focus:border-sky-400 focus:ring-1 focus:ring-sky-400" 
-              />
-              <input 
-                type="text" 
-                placeholder="Дата (ДД-ММ-ГГГГ)" 
-                value={date}
-                onChange={(e) => setDate(e.target.value)}
-                className="w-full bg-slate-50 border border-slate-100 rounded-2xl px-5 py-3 md:py-4 text-slate-800 font-light tracking-wide focus:outline-none focus:border-sky-400 focus:ring-1 focus:ring-sky-400" 
-              />
-              <input 
-                type="text" 
-                placeholder="Ссылка на фото (по желанию)" 
-                value={photo}
-                onChange={(e) => setPhoto(e.target.value)}
-                className="w-full bg-slate-50 border border-slate-100 rounded-2xl px-5 py-3 md:py-4 text-slate-800 font-light tracking-wide focus:outline-none focus:border-sky-400 focus:ring-1 focus:ring-sky-400" 
-              />
-              <textarea 
-                placeholder="Пару слов об отдыхе..." 
-                rows="3" 
-                value={text}
-                onChange={(e) => setText(e.target.value)}
-                className="w-full bg-slate-50 border border-slate-100 rounded-2xl px-5 py-3 md:py-4 text-slate-800 font-light tracking-wide focus:outline-none focus:border-sky-400 focus:ring-1 focus:ring-sky-400 resize-none"
-              ></textarea>
+              <div className="space-y-4">
+                <input 
+                  type="text" 
+                  placeholder="Ваше имя" 
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  className="w-full bg-transparent border-b border-slate-200 px-2 py-3 text-slate-800 font-light tracking-wide focus:outline-none focus:border-sky-400 transition-colors placeholder:text-slate-400" 
+                />
+                <input 
+                  type="text" 
+                  placeholder="Дата (ДД-ММ-ГГГГ)" 
+                  value={date}
+                  onChange={(e) => setDate(e.target.value)}
+                  className="w-full bg-transparent border-b border-slate-200 px-2 py-3 text-slate-800 font-light tracking-wide focus:outline-none focus:border-sky-400 transition-colors placeholder:text-slate-400" 
+                />
+                <input 
+                  type="text" 
+                  placeholder="Ссылка на фото (по желанию)" 
+                  value={photo}
+                  onChange={(e) => setPhoto(e.target.value)}
+                  className="w-full bg-transparent border-b border-slate-200 px-2 py-3 text-slate-800 font-light tracking-wide focus:outline-none focus:border-sky-400 transition-colors placeholder:text-slate-400" 
+                />
+                <textarea 
+                  placeholder="Пару слов об отдыхе..." 
+                  rows="3" 
+                  value={text}
+                  onChange={(e) => setText(e.target.value)}
+                  className="w-full bg-transparent border-b border-slate-200 px-2 py-3 text-slate-800 font-light tracking-wide focus:outline-none focus:border-sky-400 transition-colors placeholder:text-slate-400 resize-none"
+                ></textarea>
+              </div>
               
               <button 
                 onClick={handleSubmit} 
                 disabled={isSubmitting || !name.trim() || !text.trim()}
-                className="w-full bg-gradient-to-r from-sky-500 to-sky-600 text-white font-medium tracking-wide rounded-2xl py-4 mt-2 hover:shadow-lg hover:shadow-sky-500/30 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                className="relative w-full overflow-hidden rounded-2xl p-[1px] group transition-all duration-500 hover:shadow-[0_10px_30px_rgba(14,165,233,0.15)] hover:-translate-y-0.5 mt-6 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0 disabled:hover:shadow-none"
               >
-                {isSubmitting ? 'Отправка...' : 'Отправить отзыв'}
+                <div className="absolute inset-0 bg-gradient-to-r from-sky-400/0 via-sky-400/50 to-sky-400/0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 -translate-x-full group-hover:animate-[marquee_3s_linear_infinite]"></div>
+                <div className="relative w-full bg-gradient-to-b from-slate-800 to-slate-900 px-8 py-4 md:py-5 rounded-2xl flex items-center justify-center gap-3 transition-all border border-slate-700/50 group-hover:border-slate-600">
+                  <span className="font-serif font-light tracking-[0.1em] text-sm md:text-base text-white/90 group-hover:text-white uppercase transition-colors">
+                    {isSubmitting ? 'Отправка...' : 'Отправить отзыв'}
+                  </span>
+                </div>
               </button>
             </div>
           </div>
         ) : (
           <div className="text-center py-6 md:py-10 animate-in zoom-in-90 duration-500">
-            <div className="w-20 h-20 md:w-24 md:h-24 bg-sky-50 rounded-full flex items-center justify-center mx-auto mb-6 md:mb-8 border border-sky-100">
-              <Star className="w-10 h-10 md:w-12 md:h-12 text-sky-500 fill-sky-500" />
+            <div className="w-20 h-20 md:w-24 md:h-24 bg-sky-50/50 rounded-full flex items-center justify-center mx-auto mb-6 md:mb-8 border border-sky-100/50">
+              <Sparkles className="w-10 h-10 md:w-12 md:h-12 text-sky-400" />
             </div>
             <h3 className="font-serif text-2xl md:text-3xl font-light tracking-wide text-slate-800 mb-3">Благодарю!</h3>
-            <p className="text-slate-600 font-light tracking-wide text-sm md:text-base leading-relaxed mb-8">Ваш отзыв очень ценен для меня. Он появится на сайте после модерации.</p>
-            <button onClick={onClose} className="w-full bg-slate-100 text-slate-700 font-medium tracking-wide rounded-2xl py-4 hover:bg-slate-200 transition-colors">
+            <p className="text-slate-500 font-light tracking-wide text-sm md:text-base leading-relaxed mb-8">Ваш отзыв — это лучшая награда. Он появится в коллекции после проверки.</p>
+            <button onClick={onClose} className="w-full bg-slate-50 text-slate-600 border border-slate-100 font-light tracking-widest uppercase text-xs md:text-sm rounded-2xl py-4 hover:bg-slate-100 hover:text-slate-800 transition-colors">
               Вернуться
             </button>
           </div>
@@ -596,17 +600,23 @@ export default function App() {
   // Авто-скролл галереи
   useEffect(() => {
     let animationId;
+    let accumulator = 0; // Накопитель для сверхплавной скорости на 120hz экранах
     const step = () => {
       if (galleryRef.current && !isGalleryHovered && !isGalleryDragging && !selectedImage && galleryList.length > 0) {
-        galleryRef.current.scrollLeft += 1; // Скорость прокрутки
+        accumulator += 0.3; // Плавная, комфортная скорость
         
-        if (galleryRef.current.children.length > 2) {
-          const spacerWidth = galleryRef.current.children[0].offsetWidth;
-          const setWidth = galleryRef.current.children[1].offsetWidth;
+        if (accumulator >= 1) {
+          galleryRef.current.scrollLeft += 1;
+          accumulator -= 1;
           
-          // Бесшовный бесконечный цикл
-          if (galleryRef.current.scrollLeft >= spacerWidth + setWidth * 2) {
-            galleryRef.current.scrollLeft -= setWidth;
+          if (galleryRef.current.children.length > 2) {
+            const spacerWidth = galleryRef.current.children[0].offsetWidth;
+            const setWidth = galleryRef.current.children[1].offsetWidth;
+            
+            // Бесшовный бесконечный цикл
+            if (galleryRef.current.scrollLeft >= spacerWidth + setWidth * 2) {
+              galleryRef.current.scrollLeft -= setWidth;
+            }
           }
         }
       }
