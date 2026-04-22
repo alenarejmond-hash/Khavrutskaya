@@ -43,10 +43,8 @@ const DATA = {
   lastName: "Хавруцкая",
   
   // ФОНОВЫЕ ИЗОБРАЖЕНИЯ (Для мобильного и компьютера)
-  // ВРЕМЕННЫЕ ФОТО ДЛЯ ПРЕДПРОСМОТРА. 
-  // Когда будете загружать на свой сайт, замените обратно на: "/bg-poster.png" и "/bg-poster-desktop.png"
-  bgMobile: "https://images.unsplash.com/photo-1544365558-35aa4afcf11f?w=800&h=1200&fit=crop",          // Вертикальное фото для телефона
-  bgDesktop: "https://images.unsplash.com/photo-1499793983690-e29da59ef1c2?w=1920&q=80", // Горизонтальное фото для широких экранов
+  bgMobile: "/bg-poster.png",          // Вертикальное фото для телефона
+  bgDesktop: "/bg-poster-desktop.png", // Горизонтальное фото для широких экранов
   
   // Должность (текст на одной строке)
   roleText: "Основатель и руководитель турагентства",
@@ -64,11 +62,10 @@ const DATA = {
   },
 
   // --- АВТОРСКИЕ МАРШРУТЫ (Секция с сеткой туров) ---
-  // Сюда вы вставите ссылку на опубликованную вкладку "АВТОРСКИЕ ТУРЫ" в формате TSV
-  // Столбцы: A: Заголовок | B: Подзаголовок | C: Фото (ссылка) | D: Ссылка на тур
-  authorToursSheetUrl: "https://docs.google.com/spreadsheets/d/e/2PACX-1vRXue1d4HdwJdKy2Q68NuZxGEyQiV-I34yoCorqQH83EJR2PLa8lkLBh0Lx7DT8F_p6Yn7_K1VHTpNO/pub?gid=1237523524&single=true&output=tsv",
-  
-  tours: [],
+  tours: [
+    { id: 1, title: "Бали", desc: "Джунгли и океан", img: "https://i0.wp.com/images.unsplash.com/photo-1537996194471-e657df975ab4?w=500&strip=all", link: "https://t.me/turysuper" },
+    { id: 2, title: "Все Авторские туры", desc: "Полная коллекция", img: "https://i0.wp.com/images.unsplash.com/photo-1547448415-e9f5b28e570d?w=500&strip=all", link: "https://t.me/turysuper" }
+  ],
   
   // --- ГОРЯЩИЕ ТУРЫ (Специальные предложения) ---
   // Сюда вы вставите ссылку на опубликованную вкладку "ГОРЯЩИЕ ТУРЫ" в формате TSV
@@ -126,7 +123,6 @@ const DATA = {
   
   // --- СЕКРЕТНЫЙ КЛУБ ---
   secretPin: "7777", // Ваш PIN-код
-  secretClubLink: "https://t.me/+GwVuFQ2fzB9lMGE6", // Ссылка на закрытую группу
   secretTour: {
     title: "Private Island Resort",
     desc: "Полная приватность, личный батлер и перелет на гидроплане. Скрыто от посторонних глаз.",
@@ -149,233 +145,9 @@ const DATA = {
     creatorText: "DESIGN & CODE BY ELENA SOTNIKOVA",
     creatorLink: "https://nice-app.ru/",
     policyTitle: "Политика конфиденциальности",
-    policyText: `ПОЛИТИКА КОНФИДЕНЦИАЛЬНОСТИ
-
-УТВЕРЖДЕНО
-
-приказом № 1 от «01» октября 2021 г.
-
-Индивидуальным Предпринимателем Хавруцкой Мариной Викторовной
-
-1. Основные термины и определения
-
-В настоящей политике используются следующие основные понятия:
-
-- Персональные данные - любая информация, относящаяся к прямо или косвенно определенному или определяемому физическому лицу (субъекту персональных данных);
-
-- Оператор – ИП Хавруцкая Марина Викторовна, (далее -"Оператор"), самостоятельно организующее и осуществляющее обработку персональных данных, а также определяющее цели обработки персональных данных, состав персональных данных, подлежащих обработке, действия (операции), совершаемые с персональными данными;
-
-- Обработка персональных данных - любое действие (операция) или совокупность действий (операций), совершаемых с использованием средств автоматизации или без использования таких средств с персональными данными, включая сбор, запись, систематизацию, накопление, хранение, уточнение (обновление, изменение), извлечение, использование, передачу (распространение, предоставление, доступ), обезличивание, блокирование, удаление, уничтожение персональных данных;
-
-- Автоматизированная обработка персональных данных - обработка персональных данных с помощью средств вычислительной техники;
-
-- Распространение персональных данных - действия, направленные на раскрытие персональных данных неопределенному кругу лиц;
-
-- Предоставление персональных данных - действия, направленные на раскрытие персональных данных определенному лицу или определенному кругу лиц;
-
-- Блокирование персональных данных - временное прекращение обработки персональных данных (за исключением случаев, если обработка необходима для уточнения персональных данных);
-
-- Уничтожение персональных данных - действия, в результате которых становится невозможным восстановить содержание персональных данных в информационной системе персональных данных и (или) в результате которых уничтожаются материальные носители персональных данных;
-
-- Обезличивание персональных данных - действия, в результате которых становится невозможным без использования дополнительной информации определить принадлежность персональных данных конкретному субъекту персональных данных;
-
-- Информационная система персональных данных - совокупность содержащихся в базах данных персональных данных и обеспечивающих их обработку информационных технологий и технических средств;
-
-- Трансграничная передача персональных данных - передача персональных данных на территорию иностранного государства органу власти иностранного государства, иностранному физическому лицу или иностранному юридическому лицу.
-
-2. Общие положения
-
-Оператор, основываясь на целях безусловного выполнения требований законодательства РФ и поддержания своей деловой репутации, считает своими задачами исполнение принципов справедливости, законности, конфиденциальности, безопасности при обработке персональных данных.
-
-Настоящая политика в отношении обработки персональных данных:
-
-- разработана с учетом требований Конституции РФ, законодательства Российской Федерации, нормативных правовых актов Российской Федерации в области персональных данных;
-
-- определяет основные принципы, цели и способы обработки персональных данных, состав субъектов персональных данных и их права, действия Оператора при обработке персональных данных, меры, принимаемые Оператором по защите персональных данных, а также меры по контролю за соблюдением требований законодательства и данной политики;
-
-- является общедоступным документом, которым регулируется деятельность Оператора при обработке персональных данных.
-
-3. Информация об операторе
-
-ИП Хавруцкая Марина Викторовна
-
-ИНН: 432400022740
-
-ОГРНИП : 318435000040582
-
-Адрес: Московская область, с.Домодедово, Бульвар Строителей , д.4 кв.73
-
-Индекс: 142032
-
-E-mail: newbreath@internet.ru
-
-4. Правовые основания обработки персональных данных
-
-Данная политика в отношении обработки персональных данных составлена в соответствии с требованиями следующих нормативно-правовых актов РФ:
-
-- Конституции Российской Федерации;
-
-- Трудового кодекса Российской Федерации;
-
-- Федерального закона от 27 июля 2006 года №152-ФЗ «О персональных данных»;
-
-- Указа Президента Российской Федерации от 06 марта 1997 г. № 188 «Об утверждении Перечня сведений конфиденциального характера»;
-
-- постановления Правительства Российской Федерации от 13 сентября 2008 года №687 «Об утверждении Положения об особенностях обработки персональных данных, осуществляемой без использования средств автоматизации»;
-
-- постановления Правительства Российской Федерации от 06 июля 2008 года №512 «Об утверждении требований к материальным носителям биометрических персональных данных и технологиям хранения таких данных вне информационных систем персональных данных»;
-
-- постановления Правительства Российской Федерации от 01 ноября 2012 года №1119 «Об утверждении требований к защите персональных данных при их обработке в информационных системах персональных данных»;
-
-- приказа ФСТЭК России от 18 февраля 2013 г. №21 «Об утверждении состава и содержания организационных и технических мер по обеспечению безопасности персональных данных при их обработке в информационных системах персональных данных»;
-
-- приказа Роскомнадзора от 05 сентября 2013 №996 «Об утверждении требований и методов по обезличиванию персональных данных»;
-
-- иных нормативно-правовых актов Российской Федерации и нормативных документов уполномоченных органов государственной власти.
-
-5. Цели обработки персональных данных
-
-Оператор обрабатывает персональные данные исключительно в целях:
-
-- осуществления хозяйственной деятельности, как ненаправленной на извлечение прибыли, так и направленной на извлечение прибыли (включая, но, не ограничиваясь, уставную деятельность Оператора);
-
-- исполнения договора, одной из сторон (либо выгодоприобретателем) которого является субъект персональных данных (включая трудовые отношения с работниками Оператора, отношения с контрагентами/поставщиками и с покупателями/клиентами Оператора).
-
-Не допускается обработка персональных данных, которые не отвечают целям обработки.
-
-6. Субъекты и категории персональных данных
-
-В информационных системах персональных данных Оператором обрабатываются персональные данные следующих субъектов персональных данных:
-
-- штатных и нештатных работников, состоящих в трудовых/договорных отношениях с Оператором;
-
-- физических лиц - клиентов Оператора;
-
-- физических лиц - контрагентов по договорам, заключенным Оператором
-
-Оператор осуществляет обработку следующих категорий персональных данных общей категории: фамилия, имя, отчество, дата рождения, месяц рождения, год рождения, данные документов, удостоверяющих личность, адрес (регистрации по месту жительства и фактического проживания), контактные данные (номера телефонов, адреса электронной почты), реквизиты доверенности или иного документа, подтверждающие полномочия, метаданные пользователя сайта (cookie, данные об IP-адресе и местоположении).
-
-7. Основные принципы обработки персональных данных
-
-Обработка персональных данных Оператором ведется с учетом обеспечения защиты прав и свобод как работников Оператора, так и иных лиц при обработке их персональных данных, в том числе прав на неприкосновенность частной жизни, личную и семейную тайну на основе принципов:
-
-- законности и справедливости обработки персональных данных;
-
-- ограничения обработки персональных данных достижением конкретных, заранее определенных и законных целей;
-
-- соответствия целей и способов обработки персональных данных тем целям, которые были заявлены при сборе данных;
-
-- недопустимости объединения баз данных, созданных с разными целями для обработки персональных данных;
-
-- соответствия необходимости и достаточности объема, характера и способов обработки персональных данных заявленным целям их обработки;
-
-- обеспечения точности, достоверности и, при необходимости, актуальности по отношению к целям обработки;
-
-- хранения персональных данных в форме, позволяющей определить субъекта персональных данных не дольше, чем того требуют цели обработки, требования законодательства или договора, по которому выгодоприобретателем является субъект персональных данных;
-
-- уничтожения или обезличивания персональных данных по достижении целей или утраты необходимости в достижении этих целей, если иное не предусмотрено требованиями законодательства.
-
-8. Действия с персональными данными
-
-Оператор осуществляет сбор, запись, систематизацию, накопление, хранение, уточнение (обновление, изменение), извлечение, использование, передачу (распространение, предоставление, доступ), обезличивание, блокирование, удаление, уничтожение персональных данных.
-
-Оператором обработка персональных данных осуществляется следующими способами:
-
-- автоматизированная обработка персональных данных;
-
-- неавтоматизированная обработка персональных данных;
-
-- смешанная обработка персональных данных.
-
-9. Меры по выполнению обязанностей Оператора в обеспечении безопасности персональных данных при их обработке
-
-- Носители информации, содержащие персональные данные, хранятся в специальных строго контролируемых помещениях, расположенных в пределах границ контролируемых и охраняемых зон.
-
-- Информационный доступ к техническим средствам, с помощью которых производится обработка персональных данных, реализован через автоматизированные рабочие места, защищенные от несанкционированного доступа. В зависимости от степени критичности информации разграничение (ограничение) доступа производится программно-аппаратными средствами идентификации и аутентификации пользователей.
-
-- Разграничен (ограничен) доступ персонала и посторонних лиц в защищаемые помещения и помещения, где размещены средства информатизации и коммуникации, а также где хранятся носители с персональными данными.
-
-- Информация доступна лишь для строго определенных работников. Производится запись (логирование) входа/выхода работников в/из операционную(ой) систему(ы), работы в автоматизированных рабочих местах, доступа к базам данных.
-
-- Реализована защита информации от сбоев оборудования и вредоносного программного обеспечения. Применяется система восстановления информации.
-
-- При работе в сетях безопасность информации обеспечивается средствами межсетевого экранирования, созданием демилитаризованных зон, виртуальных частных сетей, защищенных каналов связи, применением защищенных протоколов передачи информации и программно-аппаратных средств шифрования информации.
-
-10.Ответственность и контроль за соблюдением требований настоящей политики и законодательства в области персональных данных.
-
-Ответственным за соблюдением требований законодательства в области персональных данных и настоящей политики является Оператор.
-
-Приказом Оператора назначается лицо, ответственное за организацию обработки и обеспечение безопасности персональных данных.
-
-Лицо, ответственное за организацию и обеспечение безопасности персональных данных, в рамках выполнения положений настоящей политики и законных актов Российской Федерации в области персональных данных уполномочено:
-
-- определять угрозы безопасности персональных данных при их обработке в информационных системах персональных данных;
-
-- планировать применение организационных и технических мер по обеспечению безопасности персональных данных при их обработке в информационных системах персональных данных, необходимых для противодействия угрозам безопасности персональных данных и выполнения требований к защите персональных данных;
-
-- организовывать контроль и/или аудит соответствия принятых мер защиты при обработке персональных данных Федеральному закону от 27.07.2006 №152-ФЗ «О персональных данных», нормативным правовым актам, требованиям нормативных актов к защите персональных данных, локальным актам;
-
-- оценивать эффективность принимаемых мер по обеспечению безопасности персональных данных до ввода в эксплуатацию информационной системы персональных данных и организовывать мониторинг уровня защищенности персональных данных при эксплуатации информационной системы персональных данных;
-
-- проводить анализ по фактам нарушения положений настоящей политики;
-
-- разрабатывать и принимать соответствующие меры на поддержание необходимого уровня защищенности персональных данных;
-
-- организовывать прием и обработку обращений и запросов регулирующих органов РФ, субъектов персональных данных или их представителей.
-
-Лица, виновные в нарушении норм действующего законодательства Российской Федерации в области персональных данных могут быть привлечены к дисциплинарной, административной, гражданской и уголовной ответственности в порядке, установленном действующим законодательством Российской Федерации.
-
-11.Права субъектов персональных данных
-
-Субъект персональных данных имеет право на получение информации об обработке его персональных данных Оператором, в том числе содержащую:
-
-- подтверждение факта обработки персональных данных;
-
-- правовое основание, цели и сроки обработки персональных данных;
-
-- способы обработки персональных данных;
-
-- иные сведения, предусмотренные законодательством Российской Федерации.
-
-Право субъекта персональных данных на доступ к его персональным данным может быть ограничено:
-
-- если обработка персональных данных, включая те, что получены в результате оперативно-розыскной деятельности, выполняется в целях укрепления обороны страны, обеспечения безопасности государства и охраны правопорядка;
-
-- если обработка персональных данных осуществляется в соответствии с законодательством о противодействии легализации (отмыванию) доходов, полученных преступным путем, и финансированию терроризма;
-
-- если доступ субъекта персональных данных нарушает права и законные интересы третьих лиц;
-
-- при условии, что обработка персональных данных производится органами, осуществляющими задержание субъекта персональных данных по подозрению в совершении преступления, либо предъявившими субъекту персональных данных обвинение по уголовному делу, либо применившими к субъекту персональных данных меру пресечения до предъявления обвинения, за исключением предусмотренных уголовно-процессуальным законодательством Российской Федерации случаев, когда допускается ознакомление подозреваемого или обвиняемого с такими персональными данными;
-
-- если обработка персональных данных осуществляется в случаях, предусмотренных законодательством Российской Федерации о транспортной безопасности, в целях обеспечения устойчивого и безопасного функционирования транспортного комплекса, защиты интересов личности, общества и государства в сфере транспортного комплекса от актов незаконного вмешательства.
-
-Субъект персональных данных имеет право на:
-
-- уточнение своих персональных данных, их блокирование или уничтожение, если персональные данные являются неполными, устаревшими, неточными, незаконно полученными или не являются необходимыми для заявленной цели обработки:
-
-- отзыв согласия на обработку персональных данных;
-
-- осуществление иных прав, предусмотренных законодательством Российской Федерации в области персональных данных.
-
-Для реализации своих прав и законных интересов субъект персональных данных может обратиться к Оператору, либо его уполномоченным сотрудникам.
-
-Уполномоченный сотрудник Оператора рассматривает обращения и жалобы со стороны субъектов персональных данных, тщательно расследует факты нарушений и принимает все необходимые меры для их немедленного устранения, наказания виновных лиц и урегулирования спорных и конфликтных ситуации в досудебном порядке.
-
-Субъект персональных данных вправе обжаловать действия или бездействие Оператора путем обращения в уполномоченных орган по защите прав субъектов персональных данных.
-
-Субъект персональных данных имеет право на защиту своих прав и законных интересов , в том числе в судебном порядке.
-
-12. Заключительные положения
-
-Настоящая политика разработана и утверждена приказом Оператора.
-
-Настоящая Политика является внутренним документом Оператора, общедоступной и подлежит размещению на официальном сайте Оператора.
-
-Настоящая Политика подлежит изменению, дополнению в случае появления новых законодательных актов и специальных нормативных документов по обработке и защите персональных данных
-
-Контроль исполнения требований настоящей Политики осуществляется ответственными за обеспечение безопасности персональных данных.
-
-Ответственность должностных лиц Оператора, имеющих доступ к персональным данным, за невыполнение требований норм, регулирующих обработку и защиту персональных данных, определяется в соответствии с законодательством Российской Федерации и внутренними документами Оператора.`
+    policyText: "здесь будет политика....",
+    agreementTitle: "Пользовательское соглашение",
+    agreementText: "здесь будет пользовательское...."
   }
 };
 // =========================================================================
@@ -522,9 +294,9 @@ const SecretClubModal = ({ isOpen, onClose }) => {
                 Добро пожаловать в закрытую коллекцию и VIP-сообщество. Здесь начинается самое интересное.
               </p>
 
-              {/* Ссылка на закрытую группу */}
-              <a href={DATA.secretClubLink} target="_blank" rel="noreferrer" className="relative inline-flex items-center justify-center gap-2 md:gap-3 w-full bg-white text-slate-900 font-medium tracking-widest uppercase text-[10px] md:text-sm py-4 md:py-5 rounded-2xl hover:bg-sky-50 transition-colors overflow-hidden group/btn shadow-[0_0_20px_rgba(255,255,255,0.1)]">
-                <span className="relative z-10 flex items-center gap-1.5 md:gap-2 whitespace-nowrap">Перейти в клуб <ArrowUpRight className="w-3.5 h-3.5 md:w-4 md:h-4" /></span>
+              {/* Ссылка на закрытую группу (Использует Telegram из DATA.socials) */}
+              <a href={DATA.socials.tg} target="_blank" rel="noreferrer" className="relative inline-flex items-center justify-center gap-3 w-full bg-white text-slate-900 font-medium tracking-widest uppercase text-xs md:text-sm py-5 rounded-2xl hover:bg-sky-50 transition-colors overflow-hidden group/btn shadow-[0_0_20px_rgba(255,255,255,0.1)]">
+                <span className="relative z-10 flex items-center gap-2">Перейти в клуб <ArrowUpRight className="w-4 h-4" /></span>
               </a>
             </div>
           </div>
@@ -681,82 +453,78 @@ const LeaveReviewModal = ({ isOpen, onClose }) => {
   return (
     <div className={`fixed inset-0 z-[150] flex items-center justify-center transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] ${isOpen ? 'opacity-100 visible' : 'opacity-0 invisible pointer-events-none'}`}>
       <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-md" onClick={onClose}></div>
-      <div className={`relative w-full max-w-lg mx-4 bg-white/95 backdrop-blur-xl border border-white/60 rounded-[2.5rem] shadow-[0_20px_60px_rgba(0,0,0,0.15)] p-8 md:p-10 transition-all duration-500 transform ${isOpen ? 'translate-y-0 scale-100' : 'translate-y-10 scale-95'}`}>
+      <div className={`relative w-full max-w-lg mx-4 bg-white border border-white rounded-[2rem] shadow-2xl p-6 md:p-8 transition-all duration-500 transform ${isOpen ? 'translate-y-0 scale-100' : 'translate-y-10 scale-95'}`}>
         
-        <button onClick={onClose} className="absolute top-6 right-6 p-2 bg-white rounded-full text-slate-400 hover:text-slate-800 shadow-sm border border-slate-100 hover:border-slate-200 transition-all z-10">
-          <X className="w-5 h-5" />
-        </button>
+        <div className="flex justify-between items-center mb-6">
+          <span className="text-[10px] md:text-xs text-sky-600 uppercase tracking-widest font-medium">
+            {step === 1 ? 'Новый отзыв' : 'Готово'}
+          </span>
+          <button onClick={onClose} className="p-2 bg-slate-100 rounded-full text-slate-500 hover:text-slate-800 hover:bg-slate-200 transition-colors">
+            <X className="w-4 h-4 md:w-5 md:h-5" />
+          </button>
+        </div>
 
         {step === 1 ? (
-          <div className="animate-in fade-in zoom-in-95 duration-300 relative z-0">
-            <span className="text-[10px] md:text-xs text-sky-500 uppercase tracking-[0.2em] font-medium mb-3 block">Новый отзыв</span>
-            <h3 className="font-serif text-3xl md:text-4xl font-light tracking-wide text-slate-800 mb-2">Ваши впечатления</h3>
-            <div className="w-12 h-[1px] bg-sky-300/60 mb-6"></div>
-            <p className="text-sm md:text-base text-slate-500 font-light tracking-wide mb-8">Поделитесь эмоциями от вашего путешествия</p>
+          <div className="animate-in fade-in zoom-in-95 duration-300">
+            <h3 className="font-serif text-2xl md:text-3xl font-light tracking-wide text-slate-800 mb-2">Ваши впечатления</h3>
+            <p className="text-sm md:text-base text-slate-500 font-light tracking-wide mb-6">Поделитесь эмоциями от вашего путешествия</p>
             
-            <div className="space-y-6">
+            <div className="space-y-4">
               {/* Оценка */}
               <div className="flex items-center gap-2 mb-2">
                 {[1, 2, 3, 4, 5].map((star) => (
                   <button key={star} onClick={() => setRating(star)} className="focus:outline-none transition-transform hover:scale-110">
-                    <Star className={`w-8 h-8 md:w-10 md:h-10 ${star <= rating ? 'text-amber-300 fill-amber-300 drop-shadow-sm' : 'text-slate-200'}`} />
+                    <Star className={`w-8 h-8 md:w-10 md:h-10 ${star <= rating ? 'text-amber-300 fill-amber-300' : 'text-slate-200'}`} />
                   </button>
                 ))}
               </div>
 
-              <div className="space-y-4">
-                <input 
-                  type="text" 
-                  placeholder="Ваше имя" 
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  className="w-full bg-transparent border-b border-slate-200 px-2 py-3 text-slate-800 font-light tracking-wide focus:outline-none focus:border-sky-400 transition-colors placeholder:text-slate-400" 
-                />
-                <input 
-                  type="text" 
-                  placeholder="Дата (ДД-ММ-ГГГГ)" 
-                  value={date}
-                  onChange={(e) => setDate(e.target.value)}
-                  className="w-full bg-transparent border-b border-slate-200 px-2 py-3 text-slate-800 font-light tracking-wide focus:outline-none focus:border-sky-400 transition-colors placeholder:text-slate-400" 
-                />
-                <input 
-                  type="text" 
-                  placeholder="Ссылка на фото (по желанию)" 
-                  value={photo}
-                  onChange={(e) => setPhoto(e.target.value)}
-                  className="w-full bg-transparent border-b border-slate-200 px-2 py-3 text-slate-800 font-light tracking-wide focus:outline-none focus:border-sky-400 transition-colors placeholder:text-slate-400" 
-                />
-                <textarea 
-                  placeholder="Пару слов об отдыхе..." 
-                  rows="3" 
-                  value={text}
-                  onChange={(e) => setText(e.target.value)}
-                  className="w-full bg-transparent border-b border-slate-200 px-2 py-3 text-slate-800 font-light tracking-wide focus:outline-none focus:border-sky-400 transition-colors placeholder:text-slate-400 resize-none"
-                ></textarea>
-              </div>
+              <input 
+                type="text" 
+                placeholder="Ваше имя" 
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className="w-full bg-slate-50 border border-slate-100 rounded-2xl px-5 py-3 md:py-4 text-slate-800 font-light tracking-wide focus:outline-none focus:border-sky-400 focus:ring-1 focus:ring-sky-400" 
+              />
+              <input 
+                type="text" 
+                placeholder="Дата (ДД-ММ-ГГГГ)" 
+                value={date}
+                onChange={(e) => setDate(e.target.value)}
+                className="w-full bg-slate-50 border border-slate-100 rounded-2xl px-5 py-3 md:py-4 text-slate-800 font-light tracking-wide focus:outline-none focus:border-sky-400 focus:ring-1 focus:ring-sky-400" 
+              />
+              <input 
+                type="text" 
+                placeholder="Ссылка на фото (по желанию)" 
+                value={photo}
+                onChange={(e) => setPhoto(e.target.value)}
+                className="w-full bg-slate-50 border border-slate-100 rounded-2xl px-5 py-3 md:py-4 text-slate-800 font-light tracking-wide focus:outline-none focus:border-sky-400 focus:ring-1 focus:ring-sky-400" 
+              />
+              <textarea 
+                placeholder="Пару слов об отдыхе..." 
+                rows="3" 
+                value={text}
+                onChange={(e) => setText(e.target.value)}
+                className="w-full bg-slate-50 border border-slate-100 rounded-2xl px-5 py-3 md:py-4 text-slate-800 font-light tracking-wide focus:outline-none focus:border-sky-400 focus:ring-1 focus:ring-sky-400 resize-none"
+              ></textarea>
               
               <button 
                 onClick={handleSubmit} 
                 disabled={isSubmitting || !name.trim() || !text.trim()}
-                className="relative w-full overflow-hidden rounded-2xl p-[1px] group transition-all duration-500 hover:shadow-[0_10px_30px_rgba(14,165,233,0.15)] hover:-translate-y-0.5 mt-6 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0 disabled:hover:shadow-none"
+                className="w-full bg-gradient-to-r from-sky-500 to-sky-600 text-white font-medium tracking-wide rounded-2xl py-4 mt-2 hover:shadow-lg hover:shadow-sky-500/30 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                <div className="absolute inset-0 bg-gradient-to-r from-sky-400/0 via-sky-400/50 to-sky-400/0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 -translate-x-full group-hover:animate-[marquee_3s_linear_infinite]"></div>
-                <div className="relative w-full bg-gradient-to-b from-slate-800 to-slate-900 px-8 py-4 md:py-5 rounded-2xl flex items-center justify-center gap-3 transition-all border border-slate-700/50 group-hover:border-slate-600">
-                  <span className="font-serif font-light tracking-[0.1em] text-sm md:text-base text-white/90 group-hover:text-white uppercase transition-colors">
-                    {isSubmitting ? 'Отправка...' : 'Отправить отзыв'}
-                  </span>
-                </div>
+                {isSubmitting ? 'Отправка...' : 'Отправить отзыв'}
               </button>
             </div>
           </div>
         ) : (
           <div className="text-center py-6 md:py-10 animate-in zoom-in-90 duration-500">
-            <div className="w-20 h-20 md:w-24 md:h-24 bg-sky-50/50 rounded-full flex items-center justify-center mx-auto mb-6 md:mb-8 border border-sky-100/50">
-              <Sparkles className="w-10 h-10 md:w-12 md:h-12 text-sky-400" />
+            <div className="w-20 h-20 md:w-24 md:h-24 bg-sky-50 rounded-full flex items-center justify-center mx-auto mb-6 md:mb-8 border border-sky-100">
+              <Star className="w-10 h-10 md:w-12 md:h-12 text-sky-500 fill-sky-500" />
             </div>
             <h3 className="font-serif text-2xl md:text-3xl font-light tracking-wide text-slate-800 mb-3">Благодарю!</h3>
-            <p className="text-slate-500 font-light tracking-wide text-sm md:text-base leading-relaxed mb-8">Ваш отзыв — это лучшая награда. Он появится в коллекции после проверки.</p>
-            <button onClick={onClose} className="w-full bg-slate-50 text-slate-600 border border-slate-100 font-light tracking-widest uppercase text-xs md:text-sm rounded-2xl py-4 hover:bg-slate-100 hover:text-slate-800 transition-colors">
+            <p className="text-slate-600 font-light tracking-wide text-sm md:text-base leading-relaxed mb-8">Ваш отзыв очень ценен для меня. Он появится на сайте после модерации.</p>
+            <button onClick={onClose} className="w-full bg-slate-100 text-slate-700 font-medium tracking-wide rounded-2xl py-4 hover:bg-slate-200 transition-colors">
               Вернуться
             </button>
           </div>
@@ -785,7 +553,6 @@ export default function App() {
   const [newsList, setNewsList] = useState(DATA.news); // Данные новостей
   
   const [hotToursList, setHotToursList] = useState(DATA.hotTours); // Данные спецпредложений
-  const [toursList, setToursList] = useState([]); // Данные авторских туров
   const [galleryList, setGalleryList] = useState([]); // Данные галереи теперь строго пустые по умолчанию, ждем загрузки из таблицы
 
   // --- ДРАГ И АВТО-СКРОЛЛ ДЛЯ ГАЛЕРЕИ ---
@@ -824,23 +591,17 @@ export default function App() {
   // Авто-скролл галереи
   useEffect(() => {
     let animationId;
-    let accumulator = 0; // Накопитель для сверхплавной скорости на 120hz экранах
     const step = () => {
       if (galleryRef.current && !isGalleryHovered && !isGalleryDragging && !selectedImage && galleryList.length > 0) {
-        accumulator += 0.3; // Плавная, комфортная скорость
+        galleryRef.current.scrollLeft += 1; // Скорость прокрутки
         
-        if (accumulator >= 1) {
-          galleryRef.current.scrollLeft += 1;
-          accumulator -= 1;
+        if (galleryRef.current.children.length > 2) {
+          const spacerWidth = galleryRef.current.children[0].offsetWidth;
+          const setWidth = galleryRef.current.children[1].offsetWidth;
           
-          if (galleryRef.current.children.length > 2) {
-            const spacerWidth = galleryRef.current.children[0].offsetWidth;
-            const setWidth = galleryRef.current.children[1].offsetWidth;
-            
-            // Бесшовный бесконечный цикл
-            if (galleryRef.current.scrollLeft >= spacerWidth + setWidth * 2) {
-              galleryRef.current.scrollLeft -= setWidth;
-            }
+          // Бесшовный бесконечный цикл
+          if (galleryRef.current.scrollLeft >= spacerWidth + setWidth * 2) {
+            galleryRef.current.scrollLeft -= setWidth;
           }
         }
       }
@@ -861,7 +622,6 @@ export default function App() {
   const [isReviewModalOpen, setIsReviewModalOpen] = useState(false); // Состояние для модалки отзыва
   const [legalDoc, setLegalDoc] = useState(null); // Модалка правовых документов
   const [selectedReview, setSelectedReview] = useState(null); // Модалка полного отзыва
-  const [showCookie, setShowCookie] = useState(false); // Состояние для cookie баннера
 
   // Привязываем листалку к новому массиву reviewsList
   const nextRev = () => setActiveReview(p => (p + 1) % (reviewsList.length || 1));
@@ -1001,34 +761,6 @@ export default function App() {
     }
   }, []);
 
-  // Сигнал для загрузки авторских туров из вкладки Google Таблицы
-  useEffect(() => {
-    if (DATA.authorToursSheetUrl) {
-      const correctUrl = DATA.authorToursSheetUrl.replace('output=csv', 'output=tsv');
-      
-      fetch(correctUrl)
-        .then(res => res.text())
-        .then(tsv => {
-          const rows = tsv.split('\n');
-          const fetchedTours = rows.slice(1).map((row, index) => {
-            const cols = row.split('\t');
-            return {
-              id: index + 300,
-              title: cols[0] ? cols[0].replace(/^"|"$/g, '').trim() : '',
-              desc: cols[1] ? cols[1].replace(/^"|"$/g, '').trim() : '',
-              img: cols[2] ? cols[2].replace(/^"|"$/g, '').trim() : '',
-              link: cols[3] ? cols[3].replace(/^"|"$/g, '').trim() : ''
-            };
-          }).filter(item => item.title && item.img); // Берем только если есть заголовок и картинка
-          
-          if (fetchedTours.length > 0) {
-            setToursList(fetchedTours);
-          }
-        })
-        .catch(err => console.error("Ошибка загрузки авторских туров:", err));
-    }
-  }, []);
-
   // Сигнал для загрузки галереи из вкладки Google Таблицы
   useEffect(() => {
     if (DATA.gallerySheetUrl) {
@@ -1098,19 +830,6 @@ export default function App() {
     initVK();
   }, []);
 
-  // Сигнал для Cookie-баннера
-  useEffect(() => {
-    const consent = localStorage.getItem('cookieConsent');
-    if (!consent) {
-      setTimeout(() => setShowCookie(true), 2500); // Показываем элегантно через 2.5 секунды
-    }
-  }, []);
-
-  const acceptCookies = () => {
-    localStorage.setItem('cookieConsent', 'true');
-    setShowCookie(false);
-  };
-
   return (
     // Светлый, небесно-голубой фон с мягким скроллом, отключено выделение и вызов контекстного меню
     <div 
@@ -1141,16 +860,6 @@ export default function App() {
 
       {/* --- ГЛОБАЛЬНЫЙ ФОНОВЫЙ ЦВЕТ --- */}
       <div className="fixed inset-0 z-[-3] bg-[#F0F8FF] pointer-events-none"></div>
-
-      {/* --- ПРЕЛОАДЕР (СПИННЕР ЗАГРУЗКИ) --- */}
-      <div className={`fixed inset-0 z-[999] bg-[#F0F8FF] flex flex-col items-center justify-center transition-opacity duration-1000 ease-in-out ${bgLoaded ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
-        <div className="relative w-16 h-16 flex items-center justify-center">
-          <div className="absolute inset-0 border-t-2 border-l-2 border-sky-400 rounded-full animate-spin"></div>
-          <div className="absolute inset-2 border-r-2 border-b-2 border-sky-300 rounded-full animate-spin" style={{ animationDirection: 'reverse', animationDuration: '1.5s' }}></div>
-          <Sparkles className="w-5 h-5 text-sky-500 animate-pulse" />
-        </div>
-        <span className="mt-6 font-serif text-[10px] uppercase tracking-[0.2em] text-sky-700 animate-pulse font-light">Создаем магию...</span>
-      </div>
 
       {/* --- ФОНОВОЕ ФОТО (Только на первый экран с плавным градиентом) --- */}
       <div className="absolute top-0 left-0 w-full h-[110vh] md:h-[130vh] z-[-2] pointer-events-none overflow-hidden bg-gradient-to-b from-sky-200/40 to-[#F0F8FF]">
@@ -1193,14 +902,14 @@ export default function App() {
       <div className={`relative w-full max-w-2xl mx-4 max-h-[80vh] flex flex-col bg-white rounded-[2rem] shadow-2xl p-6 md:p-8 transition-all duration-500 transform ${legalDoc ? 'translate-y-0 scale-100' : 'translate-y-10 scale-95'}`}>
         <div className="flex justify-between items-center mb-6">
           <h3 className="font-serif text-xl md:text-2xl text-slate-800 font-light tracking-wide pr-8">
-            {DATA.footer.policyTitle}
+            {legalDoc === 'policy' ? DATA.footer.policyTitle : DATA.footer.agreementTitle}
           </h3>
           <button onClick={() => setLegalDoc(null)} className="p-2 bg-slate-100 rounded-full text-slate-500 hover:text-slate-800 hover:bg-slate-200 transition-colors shrink-0">
             <X className="w-4 h-4 md:w-5 md:h-5" />
           </button>
         </div>
         <div className="flex-1 overflow-y-auto text-slate-600 font-light tracking-wide text-sm md:text-base leading-relaxed pr-2 whitespace-pre-wrap">
-          {DATA.footer.policyText}
+          {legalDoc === 'policy' ? DATA.footer.policyText : DATA.footer.agreementText}
         </div>
       </div>
     </div>
@@ -1564,25 +1273,23 @@ export default function App() {
               <h2 className="font-serif text-2xl md:text-4xl text-slate-800 font-light tracking-wide">Авторские <br className="md:hidden"/><span className="text-sky-500 font-light tracking-wide md:ml-2">маршруты</span></h2>
             </div>
             
-            {toursList.length > 0 && (
-              <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
-                {toursList.map((tour, idx) => (
-                  <a key={idx} href={tour.link} target="_blank" rel="noreferrer" className="block relative h-[220px] md:h-[320px] rounded-[2rem] overflow-hidden group cursor-pointer shadow-md hover:shadow-xl transition-shadow bg-sky-100/30 isolate transform-gpu">
-                    <img src={tour.img} alt={tour.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 rounded-[2rem]" />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#0a2e38]/80 via-transparent to-transparent rounded-[2rem]"></div>
-                    
-                    <div className="absolute top-3 right-3 w-8 h-8 md:w-10 md:h-10 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center border border-white/50 text-white group-hover:bg-white group-hover:text-cyan-700 transition-colors">
-                      <ArrowUpRight className="w-4 h-4 md:w-5 md:h-5" />
-                    </div>
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+              {DATA.tours.map((tour, idx) => (
+                <a key={idx} href={tour.link} target="_blank" rel="noreferrer" className="block relative h-[220px] md:h-[320px] rounded-[2rem] overflow-hidden group cursor-pointer shadow-md hover:shadow-xl transition-shadow">
+                  <img src={tour.img} alt={tour.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#0a2e38]/80 via-transparent to-transparent"></div>
+                  
+                  <div className="absolute top-3 right-3 w-8 h-8 md:w-10 md:h-10 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center border border-white/50 text-white group-hover:bg-white group-hover:text-cyan-700 transition-colors">
+                    <ArrowUpRight className="w-4 h-4 md:w-5 md:h-5" />
+                  </div>
 
-                    <div className="absolute bottom-4 left-4 right-4 md:bottom-6 md:left-6 md:right-6 text-white">
-                      <p className="text-[10px] md:text-xs uppercase tracking-widest font-light text-sky-200 mb-1 md:mb-2 drop-shadow-md">{tour.desc}</p>
-                      <h3 className="font-serif text-lg md:text-2xl font-light tracking-wide drop-shadow-md">{tour.title}</h3>
-                    </div>
-                  </a>
-                ))}
-              </div>
-            )}
+                  <div className="absolute bottom-4 left-4 right-4 md:bottom-6 md:left-6 md:right-6 text-white">
+                    <p className="text-[10px] md:text-xs uppercase tracking-widest font-light text-sky-200 mb-1 md:mb-2 drop-shadow-md">{tour.desc}</p>
+                    <h3 className="font-serif text-lg md:text-2xl font-light tracking-wide drop-shadow-md">{tour.title}</h3>
+                  </div>
+                </a>
+              ))}
+            </div>
           </div>
         </Reveal>
 
@@ -1880,11 +1587,11 @@ export default function App() {
           <button onClick={() => setIsSecretOpen(true)} className="relative w-full overflow-hidden rounded-2xl p-[1px] group transition-all duration-700 hover:shadow-[0_10px_40px_rgba(14,165,233,0.15)] hover:-translate-y-1">
             <div className="absolute inset-0 bg-gradient-to-r from-sky-400/0 via-sky-400/50 to-sky-400/0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 -translate-x-full group-hover:animate-[marquee_3s_linear_infinite]"></div>
             
-            <div className="relative w-full bg-gradient-to-b from-slate-800 to-slate-950 px-4 py-3.5 md:px-8 md:py-6 rounded-2xl flex items-center justify-center gap-2.5 md:gap-4 transition-all overflow-hidden border border-slate-700/50 group-hover:border-slate-600">
+            <div className="relative w-full bg-gradient-to-b from-slate-800 to-slate-950 px-8 py-5 md:py-6 rounded-2xl flex items-center justify-center gap-4 transition-all overflow-hidden border border-slate-700/50 group-hover:border-slate-600">
               <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(56,189,248,0.15)_0%,transparent_70%)] opacity-50 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"></div>
               
-              <Lock className="w-4 h-4 md:w-6 md:h-6 text-sky-400/80 group-hover:text-sky-300 group-hover:scale-110 transition-all z-10 shrink-0" />
-              <span className="font-serif font-light tracking-[0.08em] md:tracking-[0.15em] text-[13px] sm:text-base md:text-xl text-white/90 group-hover:text-white transition-colors z-10 uppercase whitespace-nowrap">
+              <Lock className="w-5 h-5 md:w-6 md:h-6 text-sky-400/80 group-hover:text-sky-300 group-hover:scale-110 transition-all z-10" />
+              <span className="font-serif font-light tracking-[0.15em] text-lg md:text-xl text-white/90 group-hover:text-white transition-colors z-10 uppercase">
                 Закрытая коллекция
               </span>
             </div>
@@ -1914,9 +1621,13 @@ export default function App() {
                 </a>
               </div>
               
-              <div className="flex items-center justify-center mt-10 md:mt-16 mb-6">
+              <div className="flex flex-col md:flex-row items-center justify-center gap-3 md:gap-4 mt-10 md:mt-16 mb-6">
                 <button onClick={() => setLegalDoc('policy')} className="text-[9px] md:text-[10px] uppercase tracking-widest font-light text-slate-400 hover:text-sky-500 transition-colors border-b border-transparent hover:border-sky-500 pb-0.5">
                   {DATA.footer.policyTitle}
+                </button>
+                <span className="hidden md:inline text-slate-300">•</span>
+                <button onClick={() => setLegalDoc('agreement')} className="text-[9px] md:text-[10px] uppercase tracking-widest font-light text-slate-400 hover:text-sky-500 transition-colors border-b border-transparent hover:border-sky-500 pb-0.5">
+                  {DATA.footer.agreementTitle}
                 </button>
               </div>
 
@@ -1932,22 +1643,6 @@ export default function App() {
         </Reveal>
 
       </div>
-
-      {/* --- СОГЛАСИЕ НА COOKIE --- */}
-      <div className={`fixed bottom-4 md:bottom-8 left-1/2 -translate-x-1/2 md:translate-x-0 md:left-8 z-[200] transition-all duration-1000 ease-[cubic-bezier(0.32,0.72,0,1)] ${showCookie ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10 pointer-events-none'}`}>
-        <div className="bg-slate-900/90 backdrop-blur-xl border border-slate-700/50 rounded-2xl p-4 md:p-5 flex flex-col md:flex-row items-center gap-4 md:gap-5 shadow-[0_20px_50px_rgba(0,0,0,0.3)] w-[calc(100vw-2rem)] max-w-[320px] md:max-w-md">
-          <p className="text-slate-300 font-light tracking-wide text-[10px] md:text-xs leading-relaxed text-center md:text-left flex-1">
-            Мы используем файлы cookie, чтобы обеспечить вам максимальный комфорт и персонализировать контент.
-          </p>
-          <button 
-            onClick={acceptCookies}
-            className="w-full md:w-auto px-5 py-2.5 bg-white text-slate-900 rounded-xl text-[10px] md:text-xs tracking-widest uppercase font-medium hover:bg-sky-50 transition-colors border border-transparent shrink-0"
-          >
-            Принять
-          </button>
-        </div>
-      </div>
-
     </div>
   );
 }
