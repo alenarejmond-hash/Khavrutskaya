@@ -43,8 +43,10 @@ const DATA = {
   lastName: "Хавруцкая",
   
   // ФОНОВЫЕ ИЗОБРАЖЕНИЯ (Для мобильного и компьютера)
-  bgMobile: "/bg-poster.png",          // Вертикальное фото для телефона
-  bgDesktop: "/bg-poster-desktop.png", // Горизонтальное фото для широких экранов
+  // ВРЕМЕННЫЕ ФОТО ДЛЯ ПРЕДПРОСМОТРА. 
+  // Когда будете загружать на свой сайт, замените обратно на: "/bg-poster.png" и "/bg-poster-desktop.png"
+  bgMobile: "https://images.unsplash.com/photo-1544365558-35aa4afcf11f?w=800&h=1200&fit=crop",          // Вертикальное фото для телефона
+  bgDesktop: "https://images.unsplash.com/photo-1499793983690-e29da59ef1c2?w=1920&q=80", // Горизонтальное фото для широких экранов
   
   // Должность (текст на одной строке)
   roleText: "Основатель и руководитель турагентства",
@@ -62,10 +64,11 @@ const DATA = {
   },
 
   // --- АВТОРСКИЕ МАРШРУТЫ (Секция с сеткой туров) ---
-  tours: [
-    { id: 1, title: "Бали", desc: "Джунгли и океан", img: "https://i0.wp.com/images.unsplash.com/photo-1537996194471-e657df975ab4?w=500&strip=all", link: "https://t.me/turysuper" },
-    { id: 2, title: "Все Авторские туры", desc: "Полная коллекция", img: "https://i0.wp.com/images.unsplash.com/photo-1547448415-e9f5b28e570d?w=500&strip=all", link: "https://t.me/turysuper" }
-  ],
+  // Сюда вы вставите ссылку на опубликованную вкладку "АВТОРСКИЕ ТУРЫ" в формате TSV
+  // Столбцы: A: Заголовок | B: Подзаголовок | C: Фото (ссылка) | D: Ссылка на тур
+  authorToursSheetUrl: "https://docs.google.com/spreadsheets/d/e/2PACX-1vRXue1d4HdwJdKy2Q68NuZxGEyQiV-I34yoCorqQH83EJR2PLa8lkLBh0Lx7DT8F_p6Yn7_K1VHTpNO/pub?gid=1237523524&single=true&output=tsv",
+  
+  tours: [],
   
   // --- ГОРЯЩИЕ ТУРЫ (Специальные предложения) ---
   // Сюда вы вставите ссылку на опубликованную вкладку "ГОРЯЩИЕ ТУРЫ" в формате TSV
@@ -554,6 +557,7 @@ export default function App() {
   const [newsList, setNewsList] = useState(DATA.news); // Данные новостей
   
   const [hotToursList, setHotToursList] = useState(DATA.hotTours); // Данные спецпредложений
+  const [toursList, setToursList] = useState([]); // Данные авторских туров
   const [galleryList, setGalleryList] = useState([]); // Данные галереи теперь строго пустые по умолчанию, ждем загрузки из таблицы
 
   // --- ДРАГ И АВТО-СКРОЛЛ ДЛЯ ГАЛЕРЕИ ---
@@ -762,6 +766,34 @@ export default function App() {
     }
   }, []);
 
+  // Сигнал для загрузки авторских туров из вкладки Google Таблицы
+  useEffect(() => {
+    if (DATA.authorToursSheetUrl) {
+      const correctUrl = DATA.authorToursSheetUrl.replace('output=csv', 'output=tsv');
+      
+      fetch(correctUrl)
+        .then(res => res.text())
+        .then(tsv => {
+          const rows = tsv.split('\n');
+          const fetchedTours = rows.slice(1).map((row, index) => {
+            const cols = row.split('\t');
+            return {
+              id: index + 300,
+              title: cols[0] ? cols[0].replace(/^"|"$/g, '').trim() : '',
+              desc: cols[1] ? cols[1].replace(/^"|"$/g, '').trim() : '',
+              img: cols[2] ? cols[2].replace(/^"|"$/g, '').trim() : '',
+              link: cols[3] ? cols[3].replace(/^"|"$/g, '').trim() : ''
+            };
+          }).filter(item => item.title && item.img); // Берем только если есть заголовок и картинка
+          
+          if (fetchedTours.length > 0) {
+            setToursList(fetchedTours);
+          }
+        })
+        .catch(err => console.error("Ошибка загрузки авторских туров:", err));
+    }
+  }, []);
+
   // Сигнал для загрузки галереи из вкладки Google Таблицы
   useEffect(() => {
     if (DATA.gallerySheetUrl) {
@@ -861,6 +893,16 @@ export default function App() {
 
       {/* --- ГЛОБАЛЬНЫЙ ФОНОВЫЙ ЦВЕТ --- */}
       <div className="fixed inset-0 z-[-3] bg-[#F0F8FF] pointer-events-none"></div>
+
+      {/* --- ПРЕЛОАДЕР (СПИННЕР ЗАГРУЗКИ) --- */}
+      <div className={`fixed inset-0 z-[999] bg-[#F0F8FF] flex flex-col items-center justify-center transition-opacity duration-1000 ease-in-out ${bgLoaded ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
+        <div className="relative w-16 h-16 flex items-center justify-center">
+          <div className="absolute inset-0 border-t-2 border-l-2 border-sky-400 rounded-full animate-spin"></div>
+          <div className="absolute inset-2 border-r-2 border-b-2 border-sky-300 rounded-full animate-spin" style={{ animationDirection: 'reverse', animationDuration: '1.5s' }}></div>
+          <Sparkles className="w-5 h-5 text-sky-500 animate-pulse" />
+        </div>
+        <span className="mt-6 font-serif text-[10px] uppercase tracking-[0.2em] text-sky-700 animate-pulse font-light">Создаем магию...</span>
+      </div>
 
       {/* --- ФОНОВОЕ ФОТО (Только на первый экран с плавным градиентом) --- */}
       <div className="absolute top-0 left-0 w-full h-[110vh] md:h-[130vh] z-[-2] pointer-events-none overflow-hidden bg-gradient-to-b from-sky-200/40 to-[#F0F8FF]">
@@ -1274,23 +1316,25 @@ export default function App() {
               <h2 className="font-serif text-2xl md:text-4xl text-slate-800 font-light tracking-wide">Авторские <br className="md:hidden"/><span className="text-sky-500 font-light tracking-wide md:ml-2">маршруты</span></h2>
             </div>
             
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
-              {DATA.tours.map((tour, idx) => (
-                <a key={idx} href={tour.link} target="_blank" rel="noreferrer" className="block relative h-[220px] md:h-[320px] rounded-[2rem] overflow-hidden group cursor-pointer shadow-md hover:shadow-xl transition-shadow">
-                  <img src={tour.img} alt={tour.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#0a2e38]/80 via-transparent to-transparent"></div>
-                  
-                  <div className="absolute top-3 right-3 w-8 h-8 md:w-10 md:h-10 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center border border-white/50 text-white group-hover:bg-white group-hover:text-cyan-700 transition-colors">
-                    <ArrowUpRight className="w-4 h-4 md:w-5 md:h-5" />
-                  </div>
+            {toursList.length > 0 && (
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+                {toursList.map((tour, idx) => (
+                  <a key={idx} href={tour.link} target="_blank" rel="noreferrer" className="block relative h-[220px] md:h-[320px] rounded-[2rem] overflow-hidden group cursor-pointer shadow-md hover:shadow-xl transition-shadow bg-sky-100/30 isolate transform-gpu">
+                    <img src={tour.img} alt={tour.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 rounded-[2rem]" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#0a2e38]/80 via-transparent to-transparent rounded-[2rem]"></div>
+                    
+                    <div className="absolute top-3 right-3 w-8 h-8 md:w-10 md:h-10 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center border border-white/50 text-white group-hover:bg-white group-hover:text-cyan-700 transition-colors">
+                      <ArrowUpRight className="w-4 h-4 md:w-5 md:h-5" />
+                    </div>
 
-                  <div className="absolute bottom-4 left-4 right-4 md:bottom-6 md:left-6 md:right-6 text-white">
-                    <p className="text-[10px] md:text-xs uppercase tracking-widest font-light text-sky-200 mb-1 md:mb-2 drop-shadow-md">{tour.desc}</p>
-                    <h3 className="font-serif text-lg md:text-2xl font-light tracking-wide drop-shadow-md">{tour.title}</h3>
-                  </div>
-                </a>
-              ))}
-            </div>
+                    <div className="absolute bottom-4 left-4 right-4 md:bottom-6 md:left-6 md:right-6 text-white">
+                      <p className="text-[10px] md:text-xs uppercase tracking-widest font-light text-sky-200 mb-1 md:mb-2 drop-shadow-md">{tour.desc}</p>
+                      <h3 className="font-serif text-lg md:text-2xl font-light tracking-wide drop-shadow-md">{tour.title}</h3>
+                    </div>
+                  </a>
+                ))}
+              </div>
+            )}
           </div>
         </Reveal>
 
