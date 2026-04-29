@@ -1347,7 +1347,7 @@ export default function App() {
         
         <div className="flex justify-between items-center mb-6">
           <span className="text-[10px] md:text-xs text-sky-600 uppercase tracking-widest font-medium">
-            {quizStep < 4 ? `Шаг ${quizStep} из 3` : 'Готово'}
+            {quizStep <= 4 ? `Шаг ${quizStep} из 4` : quizStep === 5 ? 'Финал' : 'Готово'}
           </span>
           <button onClick={closeQuiz} className="p-2 bg-slate-100 rounded-full text-slate-500 hover:text-slate-800 hover:bg-slate-200 transition-colors">
             <X className="w-4 h-4 md:w-5 md:h-5" />
@@ -1356,12 +1356,19 @@ export default function App() {
 
         {quizStep === 1 && (
           <div className="animate-in fade-in zoom-in-95 duration-300">
-            <h3 className="font-serif text-2xl md:text-3xl font-light tracking-wide text-slate-800 mb-2">Куда тянет душу?</h3>
-            <p className="text-sm md:text-base text-slate-500 font-light tracking-wide mb-6">Выберите идеальную картинку отдыха</p>
-            <div className="space-y-3">
-              {['Белоснежные пляжи и релакс', 'Активный отдых и горы', 'Европейские улочки', 'Экзотика и джунгли'].map((option, i) => (
-                <button key={i} onClick={() => setQuizStep(2)} className="w-full text-left px-5 py-4 md:py-5 rounded-2xl bg-slate-50 border border-slate-100 text-sm md:text-base font-light tracking-wide text-slate-700 hover:bg-sky-50 hover:border-sky-200 hover:text-sky-700 transition-colors flex justify-between items-center group">
-                  {option} <ChevronRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity" />
+            <h3 className="font-serif text-xl md:text-2xl font-light tracking-wide text-slate-800 mb-2">Куда тянет душу?</h3>
+            <p className="text-sm text-slate-500 font-light tracking-wide mb-5">Выберите идеальную картинку отдыха</p>
+            <div className="grid grid-cols-2 gap-3">
+              {[
+                { title: 'Пляж и океан', img: 'https://images.unsplash.com/photo-1506929562872-bb421503ef21?w=400&q=80' },
+                { title: 'Горы и природа', img: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=400&q=80' },
+                { title: 'Европейские улочки', img: 'https://images.unsplash.com/photo-1499856871958-5b9627545d1a?w=400&q=80' },
+                { title: 'Экзотика и джунгли', img: 'https://images.unsplash.com/photo-1473448912268-2022ce9509d8?w=400&q=80' }
+              ].map((option, i) => (
+                <button key={i} onClick={() => setQuizStep(2)} className="relative aspect-square rounded-2xl overflow-hidden group border border-slate-100 shadow-sm hover:shadow-md hover:border-sky-300 transition-all text-left">
+                  <img src={option.img} alt={option.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-slate-900/20 to-transparent"></div>
+                  <span className="absolute bottom-3 left-3 right-3 text-white font-medium text-xs md:text-sm tracking-wide leading-tight">{option.title}</span>
                 </button>
               ))}
             </div>
@@ -1370,12 +1377,19 @@ export default function App() {
 
         {quizStep === 2 && (
           <div className="animate-in fade-in slide-in-from-right-4 duration-300">
-            <h3 className="font-serif text-2xl md:text-3xl font-light tracking-wide text-slate-800 mb-2">С кем полетите?</h3>
-            <p className="text-sm md:text-base text-slate-500 font-light tracking-wide mb-6">Это поможет подобрать правильный отель</p>
-            <div className="space-y-3">
-              {['Вдвоем (Романтика)', 'Семьей (С детьми)', 'Соло (Перезагрузка)', 'Шумной компанией'].map((option, i) => (
-                <button key={i} onClick={() => setQuizStep(3)} className="w-full text-left px-5 py-4 md:py-5 rounded-2xl bg-slate-50 border border-slate-100 text-sm md:text-base font-light tracking-wide text-slate-700 hover:bg-sky-50 hover:border-sky-200 hover:text-sky-700 transition-colors flex justify-between items-center group">
-                  {option} <ChevronRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity" />
+            <h3 className="font-serif text-xl md:text-2xl font-light tracking-wide text-slate-800 mb-2">С кем полетите?</h3>
+            <p className="text-sm text-slate-500 font-light tracking-wide mb-5">Это поможет подобрать отель</p>
+            <div className="grid grid-cols-2 gap-3">
+              {[
+                { title: 'Вдвоем (Романтика)', img: 'https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=400&q=80' },
+                { title: 'С семьей (Дети)', img: 'https://images.unsplash.com/photo-1602052793312-b99c2a9ee797?w=400&q=80' },
+                { title: 'Соло (Перезагрузка)', img: 'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=400&q=80' },
+                { title: 'Шумной компанией', img: 'https://images.unsplash.com/photo-1539635278303-d4002c07eae3?w=400&q=80' }
+              ].map((option, i) => (
+                <button key={i} onClick={() => setQuizStep(3)} className="relative aspect-square rounded-2xl overflow-hidden group border border-slate-100 shadow-sm hover:shadow-md hover:border-sky-300 transition-all text-left">
+                  <img src={option.img} alt={option.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-slate-900/20 to-transparent"></div>
+                  <span className="absolute bottom-3 left-3 right-3 text-white font-medium text-xs md:text-sm tracking-wide leading-tight">{option.title}</span>
                 </button>
               ))}
             </div>
@@ -1384,6 +1398,48 @@ export default function App() {
 
         {quizStep === 3 && (
           <div className="animate-in fade-in slide-in-from-right-4 duration-300">
+            <h3 className="font-serif text-xl md:text-2xl font-light tracking-wide text-slate-800 mb-2">Идеальное жилье?</h3>
+            <p className="text-sm text-slate-500 font-light tracking-wide mb-5">Где вы хотите просыпаться?</p>
+            <div className="grid grid-cols-2 gap-3">
+              {[
+                { title: 'Роскошный отель', img: 'https://images.unsplash.com/photo-1512918728675-ed5a9ecdebfd?w=400&q=80' },
+                { title: 'Уютный бутик', img: 'https://images.unsplash.com/photo-1535827841776-24afc1e255ac?w=400&q=80' },
+                { title: 'Приватная вилла', img: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=400&q=80' },
+                { title: 'Эко / Глэмпинг', img: 'https://images.unsplash.com/photo-1533090161767-e6ffed986c88?w=400&q=80' }
+              ].map((option, i) => (
+                <button key={i} onClick={() => setQuizStep(4)} className="relative aspect-square rounded-2xl overflow-hidden group border border-slate-100 shadow-sm hover:shadow-md hover:border-sky-300 transition-all text-left">
+                  <img src={option.img} alt={option.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-slate-900/20 to-transparent"></div>
+                  <span className="absolute bottom-3 left-3 right-3 text-white font-medium text-xs md:text-sm tracking-wide leading-tight">{option.title}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {quizStep === 4 && (
+          <div className="animate-in fade-in slide-in-from-right-4 duration-300">
+            <h3 className="font-serif text-xl md:text-2xl font-light tracking-wide text-slate-800 mb-2">Темп отдыха?</h3>
+            <p className="text-sm text-slate-500 font-light tracking-wide mb-5">Как планируете проводить время?</p>
+            <div className="grid grid-cols-2 gap-3">
+              {[
+                { title: 'Полный релакс', img: 'https://images.unsplash.com/photo-1540555700478-4be289fbecef?w=400&q=80' },
+                { title: 'Экскурсии', img: 'https://images.unsplash.com/photo-1533669955142-6a73332af4db?w=400&q=80' },
+                { title: 'Тусовки / Бары', img: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=400&q=80' },
+                { title: 'Спорт / Экстрим', img: 'https://images.unsplash.com/photo-1530866495561-507c9faab2ed?w=400&q=80' }
+              ].map((option, i) => (
+                <button key={i} onClick={() => setQuizStep(5)} className="relative aspect-square rounded-2xl overflow-hidden group border border-slate-100 shadow-sm hover:shadow-md hover:border-sky-300 transition-all text-left">
+                  <img src={option.img} alt={option.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-slate-900/20 to-transparent"></div>
+                  <span className="absolute bottom-3 left-3 right-3 text-white font-medium text-xs md:text-sm tracking-wide leading-tight">{option.title}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {quizStep === 5 && (
+          <div className="animate-in fade-in slide-in-from-right-4 duration-300">
             <h3 className="font-serif text-2xl md:text-3xl font-light tracking-wide text-slate-800 mb-2">Ваш контакт?</h3>
             <p className="text-sm md:text-base text-slate-500 font-light tracking-wide mb-6">Оставьте Telegram или WhatsApp, я пришлю 3 лучших варианта под ваш запрос.</p>
             <div className="space-y-4">
@@ -1391,11 +1447,18 @@ export default function App() {
                 type="tel" 
                 placeholder="+7 (999) 000-00-00" 
                 value={phone}
-                onChange={(e) => setPhone(e.target.value)}
+                onChange={(e) => {
+                  const val = e.target.value;
+                  // Разрешаем только цифры, плюс, пробелы, скобки и тире
+                  if (/^[+\d\s()-]*$/.test(val)) {
+                    setPhone(val);
+                  }
+                }}
+                maxLength={20}
                 className="w-full bg-white border border-slate-200 rounded-2xl px-5 py-4 md:py-5 text-slate-800 font-light tracking-wide focus:outline-none focus:border-sky-400 focus:ring-1 focus:ring-sky-400 md:text-lg"
               />
               <button 
-                onClick={() => setQuizStep(4)} 
+                onClick={() => setQuizStep(6)} 
                 className="w-full bg-gradient-to-r from-sky-500 to-sky-600 text-white font-medium tracking-wide rounded-2xl py-4 md:py-5 text-lg hover:shadow-lg hover:shadow-sky-500/30 transition-all"
               >
                 Получить подборку
@@ -1404,7 +1467,7 @@ export default function App() {
           </div>
         )}
 
-        {quizStep === 4 && (
+        {quizStep === 6 && (
           <div className="text-center py-6 md:py-10 animate-in zoom-in-90 duration-500">
             <div className="w-20 h-20 md:w-24 md:h-24 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-6 md:mb-8 border border-emerald-200">
               <CheckCircle2 className="w-10 h-10 md:w-12 md:h-12 text-emerald-500" />
@@ -1584,25 +1647,36 @@ export default function App() {
         <Reveal>
           <div className="mb-14 md:mb-24">
             <div className="flex justify-between items-end mb-6 md:mb-10">
-              <h2 className="font-serif text-[22px] md:text-4xl text-slate-800 font-light tracking-wide">Морские и речные <span className="text-cyan-600 font-light tracking-wide md:ml-2">круизы по всему миру</span></h2>
+              <h2 className="font-serif text-[22px] md:text-4xl text-slate-800 font-light tracking-wide">Морские и речные <br className="md:hidden"/><span className="text-cyan-600 font-light tracking-wide md:ml-2">круизы по всему миру</span></h2>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
-              {DATA.cruises.map(cruise => (
-                <div key={cruise.id} onClick={() => setIsCruiseWidgetOpen(true)} className="group relative h-32 md:h-48 rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all flex border border-white/80 bg-white/40 cursor-pointer">
-                  <img src={cruise.img} alt={cruise.title} className="w-1/3 md:w-2/5 h-full object-cover group-hover:scale-105 transition-transform duration-700" />
-                  <div className="w-2/3 md:w-3/5 bg-white/70 backdrop-blur-md p-4 md:p-8 flex flex-col justify-center relative">
-                    <div className="absolute top-3 right-4 md:top-5 md:right-6 text-cyan-600/40 group-hover:text-cyan-500 transition-colors">
-                      <Ship className="w-5 h-5 md:w-8 md:h-8" />
-                    </div>
-                    <h3 className="font-serif text-lg md:text-2xl text-slate-800 font-light tracking-wide leading-tight">{cruise.title}</h3>
-                    <p className="text-[10px] md:text-xs uppercase tracking-widest font-light text-slate-500 mt-2 md:mt-4">{cruise.ship}</p>
-                    {/* Подсказка для клика */}
-                    <div className="absolute bottom-3 right-4 md:bottom-5 md:right-6 opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1 text-cyan-600 text-[10px] md:text-xs font-medium">
-                      Подобрать <ChevronRight className="w-3 h-3" />
-                    </div>
-                  </div>
+            
+            <div 
+              onClick={() => setIsCruiseWidgetOpen(true)}
+              className="relative w-full min-h-[280px] sm:h-[300px] md:h-[360px] flex rounded-[2rem] overflow-hidden group cursor-pointer shadow-lg hover:shadow-2xl transition-all duration-500 border border-white/50"
+            >
+              <img 
+                src="https://images.unsplash.com/photo-1599640842225-85d111c60e6b?w=1200&q=80" 
+                alt="Поиск круизов" 
+                className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-900/95 via-slate-900/50 to-transparent"></div>
+              
+              <div className="absolute inset-0 flex flex-col justify-end p-5 sm:p-6 md:p-10 text-white">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 md:w-16 md:h-16 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center border border-white/30 mb-3 sm:mb-4 md:mb-6 text-cyan-300 group-hover:bg-cyan-500 group-hover:text-white group-hover:border-cyan-400 transition-all duration-500">
+                  <Ship className="w-5 h-5 sm:w-6 sm:h-6 md:w-8 md:h-8" />
                 </div>
-              ))}
+                
+                <h3 className="font-serif text-[22px] sm:text-2xl md:text-4xl font-light tracking-wide mb-1.5 sm:mb-2 md:mb-3 drop-shadow-md leading-tight">
+                  Умный поиск <span className="text-cyan-400 font-medium">круизов</span>
+                </h3>
+                <p className="text-slate-200 font-light tracking-wide text-[11px] sm:text-xs md:text-base max-w-xl drop-shadow-sm mb-4 sm:mb-5 md:mb-6 line-clamp-2 md:line-clamp-none">
+                  Откройте для себя более 5000 маршрутов: от неспешных речных прогулок до грандиозных морских путешествий на роскошных лайнерах.
+                </p>
+                
+                <div className="inline-flex items-center gap-1.5 sm:gap-2 text-[10px] sm:text-[11px] md:text-sm font-medium tracking-widest uppercase text-cyan-300 group-hover:text-cyan-400 transition-colors">
+                  Открыть подбор <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 md:w-5 md:h-5 group-hover:translate-x-2 transition-transform" />
+                </div>
+              </div>
             </div>
           </div>
         </Reveal>
@@ -1909,7 +1983,7 @@ export default function App() {
               </div>
               
               <div className="flex items-center justify-center mt-10 md:mt-16 mb-6">
-                <button onClick={() => setLegalDoc('policy')} className="text-[9px] md:text-[10px] uppercase tracking-widest font-light text-slate-400 hover:text-sky-500 transition-colors border-b border-transparent hover:border-sky-500 pb-0.5">
+                <button onClick={() => setLegalDoc('policy')} className="text-xs md:text-sm uppercase tracking-widest font-light text-slate-400 hover:text-sky-500 transition-colors border-b border-transparent hover:border-sky-500 pb-0.5">
                   {DATA.footer.policyTitle}
                 </button>
               </div>
