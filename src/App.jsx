@@ -19,7 +19,7 @@ const Instagram = ({ className }) => (
 // Кастомная иконка VK
 const VKIcon = ({ className }) => (
   <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor" className={className}>
-    <path d="M15.08 2H8.92C3.39 2 2 3.39 2 8.92v6.16C2 20.61 3.39 22 8.92 22h6.16C20.61 22 22 20.61 22 15.08V8.92C22 3.39 20.61 2 15.08 2zM16.5 15.46c.15.2.35.43.68.74.3.28.53.51.68.68.22.25.37.45.45.6.14.28.09.52-.16.73-.24.22-.64.33-1.19.33h-1.57c-.45 0-.82-.1-1.12-.29-.31-.19-.57-.46-.78-.81-.22-.38-.45-.71-.69-.99-.25-.29-.48-.48-.68-.58-.28-.13-.53-.13-.75 0-.22.13-.37.36-.45.69-.11.45-.16.92-.16 1.4 0 .38-.11.66-.34.84-.22.18-.55.27-.98.27h-.79c-1.14 0-2.12-.28-2.94-.84-1.13-.77-2.11-1.92-2.94-3.46-1.12-2.11-1.97-4.28-2.54-6.52-.08-.34-.05-.6.1-.79.16-.19.43-.28.82-.28h1.61c.3 0 .54.08.7.23.16.16.28.38.35.67.43 1.58.98 2.94 1.64 4.08.62 1.05 1.22 1.58 1.8 1.58.17 0 .31-.08.41-.23.11-.15.16-.42.16-.81V10.1c0-.46-.08-.79-.23-.99-.15-.2-.36-.31-.61-.31-.14 0-.32.04-.54.12.16-.45.43-.77.81-.97.38-.2.83-.3 1.34-.3h1.22c.31 0 .53.07.66.2.14.13.21.36.21.68v2.96c0 .53.11.85.34.97.23.12.51.05.85-.2.43-.31.85-.82 1.25-1.52.41-.75.76-1.55 1.06-2.42.09-.27.23-.46.42-.58.19-.13.43-.19.72-.19h1.7c.56 0 .94.13 1.14.39.2.26.15.58-.16.96-.34.45-.74.96-1.21 1.52-.46.57-.9 1.1-1.31 1.61-.3.37-.42.66-.35.88.08.21.33.52.75.92z"/>
+    <path d="M13.162 18.994c.609 0 .858-.406.851-.915-.031-1.917.714-2.949 2.059-1.604 1.488 1.488 1.796 2.519 3.603 2.519h3.2c.808 0 1.126-.26 1.126-.668 0-.863-1.421-2.386-2.625-3.504-1.686-1.543-1.724-1.6-1.02-2.813 2.06-3.226 3.392-6.01 3.392-8.07 0-.714-.541-.893-1.182-.893h-3.612c-.607 0-.74.346-.96.9-1.415 3.65-2.943 5.908-4.346 5.908-.539 0-.743-.33-.743-1.02V5.006c0-.539-.214-.714-.741-.714H8.441c-.495 0-.808.336-.808.668 0 .668.96.863 1.056 2.628v3.17c0 .79-.215 1.058-.618 1.058-1.346 0-2.81-2.483-4.14-5.698-.31-.762-.51-1.058-1.258-1.058H.443C.141 5.06 0 5.26 0 5.568c0 .548 1.761 4.545 4.394 8.647 2.115 3.3 4.417 4.779 6.84 4.779z"/>
   </svg>
 );
 
@@ -1360,10 +1360,10 @@ export default function App() {
             <p className="text-sm text-slate-500 font-light tracking-wide mb-5">Выберите идеальную картинку отдыха</p>
             <div className="grid grid-cols-2 gap-3">
               {[
-                { title: 'Пляж и океан', img: 'https://images.unsplash.com/photo-1506929562872-bb421503ef21?w=400&q=80' },
-                { title: 'Горы и природа', img: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=400&q=80' },
-                { title: 'Европейские улочки', img: 'https://images.unsplash.com/photo-1499856871958-5b9627545d1a?w=400&q=80' },
-                { title: 'Экзотика и джунгли', img: 'https://images.unsplash.com/photo-1473448912268-2022ce9509d8?w=400&q=80' }
+                { title: 'Пляж и океан', img: 'https://i0.wp.com/images.unsplash.com/photo-1506929562872-bb421503ef21?w=400&strip=all' },
+                { title: 'Горы и природа', img: 'https://i0.wp.com/images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=400&strip=all' },
+                { title: 'Европейские улочки', img: 'https://i0.wp.com/images.unsplash.com/photo-1499856871958-5b9627545d1a?w=400&strip=all' },
+                { title: 'Экзотика и джунгли', img: 'https://i0.wp.com/images.unsplash.com/photo-1473448912268-2022ce9509d8?w=400&strip=all' }
               ].map((option, i) => (
                 <button key={i} onClick={() => setQuizStep(2)} className="relative aspect-square rounded-2xl overflow-hidden group border border-slate-100 shadow-sm hover:shadow-md hover:border-sky-300 transition-all text-left">
                   <img src={option.img} alt={option.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
@@ -1381,10 +1381,10 @@ export default function App() {
             <p className="text-sm text-slate-500 font-light tracking-wide mb-5">Это поможет подобрать отель</p>
             <div className="grid grid-cols-2 gap-3">
               {[
-                { title: 'Вдвоем (Романтика)', img: 'https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=400&q=80' },
-                { title: 'С семьей (Дети)', img: 'https://images.unsplash.com/photo-1602052793312-b99c2a9ee797?w=400&q=80' },
-                { title: 'Соло (Перезагрузка)', img: 'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=400&q=80' },
-                { title: 'Шумной компанией', img: 'https://images.unsplash.com/photo-1539635278303-d4002c07eae3?w=400&q=80' }
+                { title: 'Вдвоем (Романтика)', img: 'https://i0.wp.com/images.unsplash.com/photo-1469334031218-e382a71b716b?w=400&strip=all' },
+                { title: 'С семьей (Дети)', img: 'https://i0.wp.com/images.unsplash.com/photo-1602052793312-b99c2a9ee797?w=400&strip=all' },
+                { title: 'Соло (Перезагрузка)', img: 'https://i0.wp.com/images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=400&strip=all' },
+                { title: 'Шумной компанией', img: 'https://i0.wp.com/images.unsplash.com/photo-1539635278303-d4002c07eae3?w=400&strip=all' }
               ].map((option, i) => (
                 <button key={i} onClick={() => setQuizStep(3)} className="relative aspect-square rounded-2xl overflow-hidden group border border-slate-100 shadow-sm hover:shadow-md hover:border-sky-300 transition-all text-left">
                   <img src={option.img} alt={option.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
@@ -1402,10 +1402,10 @@ export default function App() {
             <p className="text-sm text-slate-500 font-light tracking-wide mb-5">Где вы хотите просыпаться?</p>
             <div className="grid grid-cols-2 gap-3">
               {[
-                { title: 'Роскошный отель', img: 'https://images.unsplash.com/photo-1512918728675-ed5a9ecdebfd?w=400&q=80' },
-                { title: 'Уютный бутик', img: 'https://images.unsplash.com/photo-1535827841776-24afc1e255ac?w=400&q=80' },
-                { title: 'Приватная вилла', img: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=400&q=80' },
-                { title: 'Эко / Глэмпинг', img: 'https://images.unsplash.com/photo-1533090161767-e6ffed986c88?w=400&q=80' }
+                { title: 'Роскошный отель', img: 'https://i0.wp.com/images.unsplash.com/photo-1512918728675-ed5a9ecdebfd?w=400&strip=all' },
+                { title: 'Уютный бутик', img: 'https://i0.wp.com/images.unsplash.com/photo-1535827841776-24afc1e255ac?w=400&strip=all' },
+                { title: 'Приватная вилла', img: 'https://i0.wp.com/images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=400&strip=all' },
+                { title: 'Эко / Глэмпинг', img: 'https://i0.wp.com/images.unsplash.com/photo-1533090161767-e6ffed986c88?w=400&strip=all' }
               ].map((option, i) => (
                 <button key={i} onClick={() => setQuizStep(4)} className="relative aspect-square rounded-2xl overflow-hidden group border border-slate-100 shadow-sm hover:shadow-md hover:border-sky-300 transition-all text-left">
                   <img src={option.img} alt={option.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
@@ -1423,10 +1423,10 @@ export default function App() {
             <p className="text-sm text-slate-500 font-light tracking-wide mb-5">Как планируете проводить время?</p>
             <div className="grid grid-cols-2 gap-3">
               {[
-                { title: 'Полный релакс', img: 'https://images.unsplash.com/photo-1540555700478-4be289fbecef?w=400&q=80' },
-                { title: 'Экскурсии', img: 'https://images.unsplash.com/photo-1533669955142-6a73332af4db?w=400&q=80' },
-                { title: 'Тусовки / Бары', img: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=400&q=80' },
-                { title: 'Спорт / Экстрим', img: 'https://images.unsplash.com/photo-1530866495561-507c9faab2ed?w=400&q=80' }
+                { title: 'Полный релакс', img: 'https://i0.wp.com/images.unsplash.com/photo-1540555700478-4be289fbecef?w=400&strip=all' },
+                { title: 'Экскурсии', img: 'https://i0.wp.com/images.unsplash.com/photo-1533669955142-6a73332af4db?w=400&strip=all' },
+                { title: 'Тусовки / Бары', img: 'https://i0.wp.com/images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=400&strip=all' },
+                { title: 'Спорт / Экстрим', img: 'https://i0.wp.com/images.unsplash.com/photo-1530866495561-507c9faab2ed?w=400&strip=all' }
               ].map((option, i) => (
                 <button key={i} onClick={() => setQuizStep(5)} className="relative aspect-square rounded-2xl overflow-hidden group border border-slate-100 shadow-sm hover:shadow-md hover:border-sky-300 transition-all text-left">
                   <img src={option.img} alt={option.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
