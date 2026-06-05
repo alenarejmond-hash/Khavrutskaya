@@ -126,7 +126,7 @@ const DATA = {
 
   // --- КВИЗ (СБОР ДАННЫХ) ---
   // Ссылка на Google Script для получения заявок с квиза
-  quizScriptUrl: "https://script.google.com/macros/s/AKfycbzMPq24dY8rDF_yvGV1j_Iun2InHqpQAuxJ1gMBWZmp4B5RuGg5sPYdFR3lo4bYZFH-/exec",
+  quizScriptUrl: "https://script.google.com/macros/s/AKfycbwF4ZY4g7fH3lSMe5linXb9rCM_0iEDSjf46zyufiC88NG3-UdN2HGhwpZdm1WsAOY8/exec",
   
   // --- СЕКРЕТНЫЙ КЛУБ ---
   secretPin: "8347", // Ваш PIN-код
