@@ -59,7 +59,7 @@ const DATA = {
   // --- СОЦИАЛЬНЫЕ СЕТИ И КОНТАКТЫ ---
   socials: {
     tg: "https://t.me/turysuper",
-    vk: "https://vk.com/turysuper777",
+    vk: "https://vk.com/letiia",
     insta: "https://www.instagram.com/newbreath.travel?igsh=czgydGwzMnRtZndu&utm_source=qr"
   },
 
@@ -91,7 +91,7 @@ const DATA = {
   
   // --- НОВОСТИ ---
   // Сюда вы вставите ссылку на опубликованную вкладку "Новости" в формате TSV (инструкция ниже)
-  newsSheetUrl: "https://docs.google.com/spreadsheets/d/e/2PACX-1vTrEIxf7RjorBv2_SfnngsQ5Ts3hU4t2REiEhXmpS68-gOidooeEBaxAvlz4jHU4EvzjPyoZZYD_Xuv/pub?gid=0&single=true&output=tsv",
+  newsSheetUrl: "https://docs.google.com/spreadsheets/d/e/2PACX-1vRXue1d4HdwJdKy2Q68NuZxGEyQiV-I34yoCorqQH83EJR2PLa8lkLBh0Lx7DT8F_p6Yn7_K1VHTpNO/pub?output=csv",
 
   // Старые новости удалены. Теперь они подтягиваются СТРОГО из Google Таблицы
   news: [],
@@ -123,9 +123,13 @@ const DATA = {
   
   // Тестовые отзывы удалены! Теперь они подтягиваются из вкладки "Опубликованные отзывы"
   reviews: [],
+
+  // --- КВИЗ (СБОР ДАННЫХ) ---
+  // Ссылка на Google Script для получения заявок с квиза
+  quizScriptUrl: "https://script.google.com/macros/s/AKfycbzMPq24dY8rDF_yvGV1j_Iun2InHqpQAuxJ1gMBWZmp4B5RuGg5sPYdFR3lo4bYZFH-/exec",
   
   // --- СЕКРЕТНЫЙ КЛУБ ---
-  secretPin: "7777", // Ваш PIN-код
+  secretPin: "8347", // Ваш PIN-код
   secretClubLink: "https://t.me/+GwVuFQ2fzB9lMGE6", // Ссылка на закрытую группу
   secretTour: {
     title: "Private Island Resort",
@@ -181,7 +185,7 @@ const DATA = {
 
 - Информационная система персональных данных - совокупность содержащихся в базах данных персональных данных и обеспечивающих их обработку информационных технологий и технических средств;
 
-- Трансграничная передача персональных данных - передача персональных данных на территорию иностранного государства органу власти иностранного государства, иностранному физическому лицу или иностранному юридическому лицу.
+- Трансграничная передача персональных данных - передача персональных данных на territory иностранного государства органу власти иностранного государства, иностранному физическому лицу или иностранному юридическому лицу.
 
 2. Общие положения
 
@@ -773,7 +777,12 @@ export default function App() {
   const [isQuizOpen, setIsQuizOpen] = useState(false);
   const [isAboutOpen, setIsAboutOpen] = useState(false); // Состояние для панели "Обо мне"
   const [quizStep, setQuizStep] = useState(1);
-  const [phone, setPhone] = useState('');
+  
+  // Добавлено состояние имени для квиза, а телефон инициализирован с +7
+  const [userName, setUserName] = useState('');
+  const [phone, setPhone] = useState('+7');
+  const [quizAnswers, setQuizAnswers] = useState({ q1: '', q2: '', q3: '', q4: '' }); // Ответы квиза
+  
   const [activeReview, setActiveReview] = useState(0);
   const [isSecretOpen, setIsSecretOpen] = useState(false);
   const [bgLoaded, setBgLoaded] = useState(false);
@@ -863,7 +872,10 @@ export default function App() {
 
   const closeQuiz = () => {
     setIsQuizOpen(false);
-    setTimeout(() => setQuizStep(1), 500);
+    setTimeout(() => {
+      setQuizStep(1);
+      setQuizAnswers({ q1: '', q2: '', q3: '', q4: '' });
+    }, 500);
   };
 
   const showWish = () => {
@@ -989,7 +1001,8 @@ export default function App() {
             };
           }).filter(item => item.title && item.hotelName && item.price && item.img && item.img.includes('http')); // Строгий фильтр, чтобы не лезли пустые/сломанные карточки
           
-          setHotToursList(fetchedTours);
+          // Показываем последние добавленные варианты (снизу таблицы) в самом начале списка (слева)
+          setHotToursList(fetchedTours.reverse());
         })
         .catch(err => console.error("Ошибка загрузки спецпредложений:", err));
     }
@@ -1105,6 +1118,21 @@ export default function App() {
     setShowCookie(false);
   };
 
+  // БЛОКИРОВКА ПРОКРУТКИ САЙТА ПРИ ОТКРЫТЫХ МОДАЛКАХ
+  useEffect(() => {
+    const isAnyModalOpen = isQuizOpen || isAboutOpen || isSecretOpen || isReviewModalOpen || !!legalDoc || !!selectedReview || isCruiseWidgetOpen || !!selectedNews || isAllNewsOpen || !!selectedImage;
+    
+    if (isAnyModalOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isQuizOpen, isAboutOpen, isSecretOpen, isReviewModalOpen, legalDoc, selectedReview, isCruiseWidgetOpen, selectedNews, isAllNewsOpen, selectedImage]);
+
   return (
     // Светлый, небесно-голубой фон с мягким скроллом, отключено выделение и вызов контекстного меню
     <div 
@@ -1158,6 +1186,7 @@ export default function App() {
             src={DATA.bgMobile} 
             alt="Luxury Background" 
             onLoad={() => setBgLoaded(true)}
+            onError={() => setBgLoaded(true)}
             className={`w-full h-full object-cover transition-opacity duration-[1500ms] ease-in-out ${bgLoaded ? 'opacity-100' : 'opacity-0'}`}
             style={{ animation: 'livingBackground 28s ease-in-out infinite alternate' }}
           />
@@ -1365,7 +1394,7 @@ export default function App() {
                 { title: 'Европейские улочки', img: 'https://i0.wp.com/images.unsplash.com/photo-1499856871958-5b9627545d1a?w=400&strip=all' },
                 { title: 'Экзотика и джунгли', img: 'https://i0.wp.com/images.unsplash.com/photo-1473448912268-2022ce9509d8?w=400&strip=all' }
               ].map((option, i) => (
-                <button key={i} onClick={() => setQuizStep(2)} className="relative aspect-square rounded-2xl overflow-hidden group border border-slate-100 shadow-sm hover:shadow-md hover:border-sky-300 transition-all text-left">
+                <button key={i} onClick={() => { setQuizAnswers(p => ({...p, q1: option.title})); setQuizStep(2); }} className="relative aspect-square rounded-2xl overflow-hidden group border border-slate-100 shadow-sm hover:shadow-md hover:border-sky-300 transition-all text-left">
                   <img src={option.img} alt={option.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-slate-900/20 to-transparent"></div>
                   <span className="absolute bottom-3 left-3 right-3 text-white font-medium text-xs md:text-sm tracking-wide leading-tight">{option.title}</span>
@@ -1382,11 +1411,11 @@ export default function App() {
             <div className="grid grid-cols-2 gap-3">
               {[
                 { title: 'Вдвоем (Романтика)', img: 'https://i0.wp.com/images.unsplash.com/photo-1469334031218-e382a71b716b?w=400&strip=all' },
-                { title: 'С семьей (Дети)', img: 'https://i0.wp.com/images.unsplash.com/photo-1602052793312-b99c2a9ee797?w=400&strip=all' },
+                { title: 'С семьей (Дети)', img: 'https://i0.wp.com/images.unsplash.com/photo-1602052793312-b99c2a9ee797?w=400&strip=all' },
                 { title: 'Соло (Перезагрузка)', img: 'https://i0.wp.com/images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=400&strip=all' },
                 { title: 'Шумной компанией', img: 'https://i0.wp.com/images.unsplash.com/photo-1539635278303-d4002c07eae3?w=400&strip=all' }
               ].map((option, i) => (
-                <button key={i} onClick={() => setQuizStep(3)} className="relative aspect-square rounded-2xl overflow-hidden group border border-slate-100 shadow-sm hover:shadow-md hover:border-sky-300 transition-all text-left">
+                <button key={i} onClick={() => { setQuizAnswers(p => ({...p, q2: option.title})); setQuizStep(3); }} className="relative aspect-square rounded-2xl overflow-hidden group border border-slate-100 shadow-sm hover:shadow-md hover:border-sky-300 transition-all text-left">
                   <img src={option.img} alt={option.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-slate-900/20 to-transparent"></div>
                   <span className="absolute bottom-3 left-3 right-3 text-white font-medium text-xs md:text-sm tracking-wide leading-tight">{option.title}</span>
@@ -1407,7 +1436,7 @@ export default function App() {
                 { title: 'Приватная вилла', img: 'https://i0.wp.com/images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=400&strip=all' },
                 { title: 'Эко / Глэмпинг', img: 'https://i0.wp.com/images.unsplash.com/photo-1533090161767-e6ffed986c88?w=400&strip=all' }
               ].map((option, i) => (
-                <button key={i} onClick={() => setQuizStep(4)} className="relative aspect-square rounded-2xl overflow-hidden group border border-slate-100 shadow-sm hover:shadow-md hover:border-sky-300 transition-all text-left">
+                <button key={i} onClick={() => { setQuizAnswers(p => ({...p, q3: option.title})); setQuizStep(4); }} className="relative aspect-square rounded-2xl overflow-hidden group border border-slate-100 shadow-sm hover:shadow-md hover:border-sky-300 transition-all text-left">
                   <img src={option.img} alt={option.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-slate-900/20 to-transparent"></div>
                   <span className="absolute bottom-3 left-3 right-3 text-white font-medium text-xs md:text-sm tracking-wide leading-tight">{option.title}</span>
@@ -1428,7 +1457,7 @@ export default function App() {
                 { title: 'Тусовки / Бары', img: 'https://i0.wp.com/images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=400&strip=all' },
                 { title: 'Спорт / Экстрим', img: 'https://i0.wp.com/images.unsplash.com/photo-1530866495561-507c9faab2ed?w=400&strip=all' }
               ].map((option, i) => (
-                <button key={i} onClick={() => setQuizStep(5)} className="relative aspect-square rounded-2xl overflow-hidden group border border-slate-100 shadow-sm hover:shadow-md hover:border-sky-300 transition-all text-left">
+                <button key={i} onClick={() => { setQuizAnswers(p => ({...p, q4: option.title})); setQuizStep(5); }} className="relative aspect-square rounded-2xl overflow-hidden group border border-slate-100 shadow-sm hover:shadow-md hover:border-sky-300 transition-all text-left">
                   <img src={option.img} alt={option.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-slate-900/20 to-transparent"></div>
                   <span className="absolute bottom-3 left-3 right-3 text-white font-medium text-xs md:text-sm tracking-wide leading-tight">{option.title}</span>
@@ -1440,16 +1469,27 @@ export default function App() {
 
         {quizStep === 5 && (
           <div className="animate-in fade-in slide-in-from-right-4 duration-300">
-            <h3 className="font-serif text-2xl md:text-3xl font-light tracking-wide text-slate-800 mb-2">Ваш контакт?</h3>
-            <p className="text-sm md:text-base text-slate-500 font-light tracking-wide mb-6">Оставьте Telegram или WhatsApp, я пришлю 3 лучших варианта под ваш запрос.</p>
+            <h3 className="font-serif text-2xl md:text-3xl font-light tracking-wide text-slate-800 mb-2">Ваши контакты</h3>
+            <p className="text-sm md:text-base text-slate-500 font-light tracking-wide mb-6">Оставьте ваше имя и номер (Telegram/WhatsApp), я пришлю 3 лучших варианта под ваш запрос.</p>
             <div className="space-y-4">
+              <input 
+                type="text" 
+                placeholder="Как к вам обращаться?" 
+                value={userName}
+                onChange={(e) => setUserName(e.target.value)}
+                className="w-full bg-white border border-slate-200 rounded-2xl px-5 py-4 md:py-5 text-slate-800 font-light tracking-wide focus:outline-none focus:border-sky-400 focus:ring-1 focus:ring-sky-400 md:text-lg"
+              />
               <input 
                 type="tel" 
                 placeholder="+7 (999) 000-00-00" 
                 value={phone}
                 onChange={(e) => {
-                  const val = e.target.value;
-                  // Разрешаем только цифры, плюс, пробелы, скобки и тире
+                  let val = e.target.value;
+                  // Если поле стерто почти полностью
+                  if (val === '' || val === '+') val = '+7';
+                  // Всегда принудительно начинаем с +7, если пользователь пытался ввести "8"
+                  if (!val.startsWith('+7')) val = '+7' + val.replace(/^\+?[78]?/, '');
+                  
                   if (/^[+\d\s()-]*$/.test(val)) {
                     setPhone(val);
                   }
@@ -1458,8 +1498,29 @@ export default function App() {
                 className="w-full bg-white border border-slate-200 rounded-2xl px-5 py-4 md:py-5 text-slate-800 font-light tracking-wide focus:outline-none focus:border-sky-400 focus:ring-1 focus:ring-sky-400 md:text-lg"
               />
               <button 
-                onClick={() => setQuizStep(6)} 
-                className="w-full bg-gradient-to-r from-sky-500 to-sky-600 text-white font-medium tracking-wide rounded-2xl py-4 md:py-5 text-lg hover:shadow-lg hover:shadow-sky-500/30 transition-all"
+                disabled={!userName.trim() || phone.length < 11}
+                onClick={() => {
+                  // ОТПРАВКА ДАННЫХ В ВАШ GOOGLE SCRIPT
+                  if (DATA.quizScriptUrl) {
+                    fetch(DATA.quizScriptUrl, {
+                      method: 'POST',
+                      mode: 'no-cors', // Важно для работы без ошибок CORS
+                      headers: { 'Content-Type': 'text/plain;charset=utf-8' }, // Текстовый формат, чтобы Google не блокировал запрос
+                      body: JSON.stringify({ 
+                        name: userName, 
+                        phone: phone,
+                        q1: quizAnswers.q1,
+                        q2: quizAnswers.q2,
+                        q3: quizAnswers.q3,
+                        q4: quizAnswers.q4
+                      })
+                    }).catch(err => console.error('Ошибка отправки:', err));
+                  }
+                  
+                  // ПЕРЕХОД НА СЛЕДУЮЩИЙ ШАГ
+                  setQuizStep(6);
+                }} 
+                className="w-full bg-gradient-to-r from-sky-500 to-sky-600 text-white font-medium tracking-wide rounded-2xl py-4 md:py-5 text-lg hover:shadow-lg hover:shadow-sky-500/30 transition-all disabled:opacity-50 disabled:hover:shadow-none"
               >
                 Получить подборку
               </button>
@@ -1473,7 +1534,7 @@ export default function App() {
               <CheckCircle2 className="w-10 h-10 md:w-12 md:h-12 text-emerald-500" />
             </div>
             <h3 className="font-serif text-2xl md:text-3xl font-light tracking-wide text-slate-800 mb-3 md:mb-4">Запрос принят!</h3>
-            <p className="text-slate-600 font-light tracking-wide text-sm md:text-base leading-relaxed mb-8 md:mb-10">Я уже начала готовить для вас идеальные варианты. Напишу в ближайшее время.</p>
+            <p className="text-slate-600 font-light tracking-wide text-sm md:text-base leading-relaxed mb-8 md:mb-10">{userName ? `${userName}, я` : 'Я'} уже начала готовить для вас идеальные варианты. Напишу в ближайшее время.</p>
             <button onClick={closeQuiz} className="w-full bg-slate-100 text-slate-700 font-medium tracking-wide rounded-2xl py-4 md:py-5 text-lg hover:bg-slate-200 transition-colors">
               Отлично, жду
             </button>
@@ -1614,7 +1675,6 @@ export default function App() {
       </Reveal>
 
       {/* --- 4. БЛОК: АВТОРСКИЕ ТУРЫ (СЕТКА) --- */}
-        {/* --- 4. БЛОК: АВТОРСКИЕ ТУРЫ (СЕТКА) --- */}
         <Reveal>
           <div className="mb-14 md:mb-24">
             <div className="flex justify-between items-end mb-6 md:mb-10">
@@ -1692,7 +1752,12 @@ export default function App() {
               {hotToursList.map((deal) => (
                 <div 
                   key={deal.id} 
-                  onClick={() => deal.bookingLink && window.open(deal.bookingLink, '_blank')}
+                  onClick={(e) => {
+                    if (deal.bookingLink) {
+                      e.preventDefault();
+                      window.open(deal.bookingLink, '_blank', 'noopener,noreferrer');
+                    }
+                  }}
                   className="min-w-[260px] max-w-[260px] md:min-w-[320px] md:max-w-[320px] shrink-0 snap-center bg-white border border-white rounded-[2rem] p-3 md:p-4 shadow-[0_12px_30px_rgba(0,0,0,0.08)] hover:shadow-xl transition-shadow cursor-pointer group flex flex-col"
                 >
                   <div className="relative h-[160px] md:h-[220px] shrink-0 rounded-2xl overflow-hidden mb-4">
@@ -1732,9 +1797,9 @@ export default function App() {
                           <span className="text-[10px] md:text-xs font-normal text-slate-400 ml-1">/ чел</span>
                         </p>
                       </div>
-                      <button className="w-10 h-10 md:w-12 md:h-12 shrink-0 rounded-full bg-cyan-50 flex items-center justify-center text-cyan-600 group-hover:bg-cyan-600 group-hover:text-white transition-colors shadow-sm">
+                      <div className="w-10 h-10 md:w-12 md:h-12 shrink-0 rounded-full bg-cyan-50 flex items-center justify-center text-cyan-600 group-hover:bg-cyan-600 group-hover:text-white transition-colors shadow-sm pointer-events-none">
                         <ArrowUpRight className="w-5 h-5 md:w-6 md:h-6" />
-                      </button>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -2003,14 +2068,14 @@ export default function App() {
 
       {/* --- СОГЛАСИЕ НА COOKIE (Элегантная светлая версия) --- */}
       {/* Исправлен отступ для мобильных: bottom-10 вместо bottom-4, чтобы не пряталось за панелью Safari */}
-      <div className={`fixed bottom-10 md:bottom-8 left-1/2 -translate-x-1/2 z-[200] transition-all duration-1000 ease-[cubic-bezier(0.32,0.72,0,1)] w-[calc(100vw-2rem)] md:w-auto ${showCookie ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-10 scale-95 pointer-events-none'}`}>
-        <div className="bg-white/90 backdrop-blur-md border border-white/60 rounded-[1.5rem] md:rounded-full px-5 py-4 md:px-6 md:py-3 flex flex-col md:flex-row items-center justify-between gap-4 md:gap-6 shadow-[0_10px_40px_rgba(14,165,233,0.15)] w-full max-w-3xl mx-auto">
+      <div className={`fixed bottom-10 md:bottom-8 left-1/2 -translate-x-1/2 z-[200] transition-all duration-1000 ease-[cubic-bezier(0.32,0.72,0,1)] w-[calc(100%-2rem)] max-w-2xl ${showCookie ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-10 scale-95 pointer-events-none'}`}>
+        <div className="bg-white/90 backdrop-blur-md border border-white/60 rounded-[1.5rem] px-5 py-4 md:px-8 md:py-5 flex flex-col md:flex-row items-center justify-between gap-4 md:gap-6 shadow-[0_10px_40px_rgba(14,165,233,0.15)] w-full mx-auto">
           <p className="text-slate-500 font-light tracking-wide text-[10px] md:text-[11px] leading-relaxed text-center md:text-left flex-1">
             Мы используем файлы cookie, чтобы обеспечить вам наилучший опыт на нашем сайте. Продолжая использовать сайт, вы соглашаетесь с нашей Политикой конфиденциальности.
           </p>
           <button 
             onClick={acceptCookies}
-            className="w-full md:w-auto px-6 py-2.5 md:py-1.5 bg-sky-50 text-sky-600 rounded-xl md:rounded-full text-[10px] tracking-widest uppercase font-medium hover:bg-sky-100 hover:text-sky-700 transition-colors shrink-0"
+            className="w-full md:w-auto px-6 py-2.5 bg-sky-50 text-sky-600 rounded-xl text-[10px] tracking-widest uppercase font-medium hover:bg-sky-100 hover:text-sky-700 transition-colors shrink-0"
           >
             Принять
           </button>
